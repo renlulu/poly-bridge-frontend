@@ -1,0 +1,45 @@
+<template>
+  <button v-bind="$attrs" :class="b({ fade })" v-on="$listeners">
+    <slot />
+  </button>
+</template>
+
+<script>
+export default {
+  name: 'CButton',
+  inheritAttrs: false,
+  props: {
+    fade: {
+      type: Boolean,
+      default: true,
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+@include block(c-button) {
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  transition: filter 0.3s;
+  cursor: pointer;
+
+  > * {
+    vertical-align: middle;
+  }
+
+  @include modifier(fade) {
+    &:hover {
+      filter: brightness(0.8);
+    }
+  }
+
+  &:disabled {
+    filter: brightness(0.6);
+    cursor: not-allowed;
+  }
+}
+</style>

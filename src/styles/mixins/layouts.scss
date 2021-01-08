@@ -1,0 +1,11 @@
+@mixin child-margin-h($size, $skip: 1) {
+  > :nth-child(n + #{$skip + 1}) {
+    margin-left: $size;
+  }
+}
+
+@mixin child-margin-v($size, $skip: 1) {
+  > :nth-child(n + #{$skip + 1}) {
+    margin-top: $size;
+  }
+}

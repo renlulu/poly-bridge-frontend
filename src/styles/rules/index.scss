@@ -1,0 +1,23 @@
+@import './element-ui.scss'; // import before custom css
+@import './fonts.scss';
+@import './animations.scss';
+@import './transitions.scss';
+
+html {
+  --color-primary: #2fd8ca;
+
+  --color-text-primary: #ffffff;
+  --color-text-primary-inverse: #091225;
+
+  --background-color-base: #091225;
+  --background-color-base-inverse: #ffffff;
+
+  --background-image: linear-gradient(147deg, #151d37 0%, #3a5b73 100%);
+}
+
+body {
+  background: var(--background-color-base);
+  color: var(--color-text-primary);
+  font-family: 'Poppins', 'Avenlr', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    Arial, sans-serif;
+}

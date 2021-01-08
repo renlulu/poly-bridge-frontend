@@ -1,0 +1,14 @@
+@import '~element-ui/packages/theme-chalk/src/index.scss';
+
+.v-modal {
+  backdrop-filter: blur(10px);
+  opacity: 1;
+  background: rgba(#000000, 0.5);
+}
+
+@include b(popper) {
+  .popper__arrow::after {
+    border-top-color: #1c1c1c !important;
+    border-bottom-color: #1c1c1c !important;
+  }
+}

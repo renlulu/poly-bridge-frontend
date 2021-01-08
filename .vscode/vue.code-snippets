@@ -1,0 +1,47 @@
+{
+  "Vue init file": {
+    "scope": "vue",
+    "prefix": "<template>",
+    "body": [
+      "<template>",
+      "  <div :class=\"b()\">$0</div>",
+      "</template>",
+      "",
+      "<script>",
+      "export default {",
+      "  name: '$1',",
+      "};",
+      "</script>",
+      "",
+      "<style lang=\"scss\">",
+      "@include block($1) {",
+      "}",
+      "</style>",
+      ""
+    ]
+  },
+
+  "Vue html :class": {
+    "scope": "vue-html",
+    "prefix": ":class",
+    "body": [":class=\"b($1)\"$0"]
+  },
+
+  "Scss directive @include": {
+    "scope": "scss",
+    "prefix": "@include",
+    "body": ["@include $0"]
+  },
+
+  "Scss mixin child-margin-h": {
+    "scope": "scss",
+    "prefix": "child-margin-h",
+    "body": ["@include child-margin-h($1);$0"]
+  },
+
+  "Scss mixin child-margin-v": {
+    "scope": "scss",
+    "prefix": "child-margin-v",
+    "body": ["@include child-margin-v($1);$0"]
+  }
+}
