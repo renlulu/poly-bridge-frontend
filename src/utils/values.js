@@ -9,16 +9,16 @@ export const WALLET_SYMBOL_O3 = 'O3';
 export const WALLET_SYMBOL_BINANCE = 'Binance';
 
 export const CHAIN_ID_POLY = 0;
-export const CHAIN_ID_ETHEREUM = 2;
+export const CHAIN_ID_ETH = 2;
 export const CHAIN_ID_NEO = TARGET_MAINNET ? 4 : 5;
-export const CHAIN_ID_BINANCE = 10; // TODO
-export const CHAIN_ID_HUOBI = 11; // TODO
+export const CHAIN_ID_BSC = 10; // TODO
+export const CHAIN_ID_HECO = 11; // TODO
 
 export const WALLETS = [
   {
     symbol: WALLET_SYMBOL_METAMASK,
     name: 'Metamask',
-    supportedChainIds: [CHAIN_ID_ETHEREUM, CHAIN_ID_BINANCE, CHAIN_ID_HUOBI],
+    supportedChainIds: [CHAIN_ID_ETH, CHAIN_ID_BSC, CHAIN_ID_HECO],
     icon: require('@/assets/svg/metamask.svg'),
     downloadUrl:
       'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn',
@@ -39,12 +39,12 @@ export const WALLETS = [
     downloadUrl: 'https://o3.network/#download',
   },
   {
-    symbol: WALLET_SYMBOL_BINANCE, // TODO
+    symbol: WALLET_SYMBOL_BINANCE,
     name: 'Binance',
-    supportedChainIds: [CHAIN_ID_BINANCE],
-    icon: require('@/assets/svg/metamask.svg'),
+    supportedChainIds: [CHAIN_ID_BSC],
+    icon: require('@/assets/svg/binance.svg'),
     downloadUrl:
-      'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn',
+      'https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp',
   },
 ];
 
@@ -60,8 +60,9 @@ export const CHAINS = [
       : 'http://explorer.poly.network/testnet/tx/{txHash}',
   },
   {
-    id: CHAIN_ID_ETHEREUM,
+    id: CHAIN_ID_ETH,
     name: 'Ethereum',
+    icon: require('@/assets/svg/eth.svg'),
     explorerName: 'Etherscan',
     explorerUrl: TARGET_MAINNET
       ? 'https://etherscan.io/tx/0x{txHash}'
@@ -76,6 +77,7 @@ export const CHAINS = [
   {
     id: CHAIN_ID_NEO,
     name: 'Neo',
+    icon: require('@/assets/svg/neo.svg'),
     explorerName: 'NeoTube',
     explorerUrl: TARGET_MAINNET
       ? 'https://neotube.io/transaction/0x{txHash}'
@@ -88,12 +90,13 @@ export const CHAINS = [
       : 'e1695b1314a1331e3935481620417ed835669407',
   },
   {
-    id: CHAIN_ID_BINANCE, // TODO
+    id: CHAIN_ID_BSC, // TODO
     name: 'Binance Smart Chain',
-    explorerName: 'Etherscan',
+    icon: require('@/assets/svg/binance.svg'),
+    explorerName: 'BscScan',
     explorerUrl: TARGET_MAINNET
-      ? 'https://etherscan.io/tx/0x{txHash}'
-      : 'https://ropsten.etherscan.io/tx/0x{txHash}',
+      ? 'https://bscscan.com/tx/0x{txHash}'
+      : 'https://testnet.bscscan.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
       ? '0x250e76987d838a75310c34bf422ea9f1AC4Cc906'
       : '0xD8aE73e06552E270340b63A8bcAbf9277a1aac99',
@@ -102,12 +105,13 @@ export const CHAINS = [
       : '0x726532586C50ec9f4080B71f906a3d9779bbd64F',
   },
   {
-    id: CHAIN_ID_HUOBI, // TODO
+    id: CHAIN_ID_HECO, // TODO
     name: 'Huobi ECO Chain',
-    explorerName: 'Etherscan',
+    icon: require('@/assets/svg/heco.svg'),
+    explorerName: 'HecoScan',
     explorerUrl: TARGET_MAINNET
-      ? 'https://etherscan.io/tx/0x{txHash}'
-      : 'https://ropsten.etherscan.io/tx/0x{txHash}',
+      ? 'https://scan.hecochain.com/tx/0x{txHash}'
+      : 'https://scan-testnet.hecochain.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
       ? '0x250e76987d838a75310c34bf422ea9f1AC4Cc906'
       : '0xD8aE73e06552E270340b63A8bcAbf9277a1aac99',
@@ -121,11 +125,11 @@ export const UNKNOWN_ICON = require('@/assets/svg/eth.svg'); // TODO
 
 export const TOKEN_BASIC_ICONS = [
   {
-    symbol: 'USDT',
-    icon: require('@/assets/svg/usdt.svg'),
+    symbol: 'ETH',
+    icon: require('@/assets/svg/eth-token.svg'),
   },
   {
-    symbol: 'ETH',
-    icon: require('@/assets/svg/eth.svg'),
+    symbol: 'NEO',
+    icon: require('@/assets/svg/neo-token.svg'),
   },
 ];

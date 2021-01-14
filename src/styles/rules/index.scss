@@ -1,5 +1,4 @@
 @import './element-ui.scss'; // import before custom css
-@import './fonts.scss';
 @import './animations.scss';
 @import './transitions.scss';
 
@@ -12,12 +11,12 @@ html {
   --background-color-base: #091225;
   --background-color-base-inverse: #ffffff;
 
-  --background-image: linear-gradient(147deg, #151d37 0%, #3a5b73 100%);
+  --background-image: linear-gradient(327deg, #{rgba(#3ec7eb, 0.5)} 0, #{rgba(#3ec7eb, 0)} 100%);
 }
 
 body {
   background: var(--background-color-base);
   color: var(--color-text-primary);
-  font-family: 'Poppins', 'Avenlr', 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
-    Arial, sans-serif;
+  font-family: 'Avenir', 'PingFang SC', 'Helvetica Neue', Helvetica, 'Hiragino Sans GB', Arial,
+    sans-serif;
 }

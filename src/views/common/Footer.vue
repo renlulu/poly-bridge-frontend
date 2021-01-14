@@ -1,3 +1,41 @@
 <template>
-  <div></div>
+  <div class="footer">
+    <div class="copyright">
+      © 2021 Polynetwork. All rights reserved. Privacy policy
+    </div>
+    <CButton class="change-lang">
+      <span>English</span>
+      <img src="@/assets/svg/switch.svg" />
+    </CButton>
+  </div>
 </template>
+
+<script>
+export default {
+  name: 'Footer',
+};
+</script>
+
+<style lang="scss" scoped>
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  @include child-margin-h(30px);
+}
+
+.copyright {
+  opacity: 0.4;
+  font-size: 14px;
+}
+
+.change-lang {
+  height: 30px;
+  padding: 0 15px;
+  border-radius: 15px;
+  background: rgba(#ffffff, 0.2);
+  font-size: 12px;
+  @include child-margin-h(5px);
+}
+</style>

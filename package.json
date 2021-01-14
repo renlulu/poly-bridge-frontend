@@ -25,7 +25,6 @@
     "neo-dapi": "^2.0.4",
     "normalize.css": "^8.0.1",
     "number-to-bn": "^1.7.0",
-    "ontology-ts-sdk": "^1.1.16",
     "promise-deferred": "^2.0.3",
     "query-string": "^6.13.1",
     "string-template": "^1.0.0",

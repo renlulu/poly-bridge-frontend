@@ -4,8 +4,20 @@
       <img class="brand-logo" src="@/assets/svg/logo.svg" />
       <span class="brand-name">PolyBridge</span>
     </CLink>
+    <Wallets />
   </div>
 </template>
+
+<script>
+import Wallets from './Wallets';
+
+export default {
+  name: 'Header',
+  components: {
+    Wallets,
+  },
+};
+</script>
 
 <style lang="scss" scoped>
 .header {

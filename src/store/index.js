@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import chains from './chains';
 import wallets from './wallets';
 import tokenBasics from './tokenBasics';
-import tokenBasicIcons from './tokenBasicIcons';
 import tokens from './tokens';
 import transactions from './transactions';
 
@@ -14,7 +13,6 @@ export default new Vuex.Store({
     chains,
     wallets,
     tokenBasics,
-    tokenBasicIcons,
     tokens,
     transactions,
   },

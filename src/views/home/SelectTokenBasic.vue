@@ -1,0 +1,165 @@
+<template>
+  <CDrawer v-bind="$attrs" v-on="$listeners">
+    <div class="content">
+      <div class="header">
+        <div class="title">Select Asset</div>
+        <div class="input">
+          <CInput class="input-inner" placeholder="Search name or paste address" />
+        </div>
+        <div class="popular-token-basics">
+          <CButton
+            v-for="(tokenBasic, index) in popularTokenBasics"
+            :key="index"
+            class="popular-token-basic"
+            @click="select(tokenBasic)"
+          >
+            <img class="popular-token-basic-icon" :src="tokenBasic.icon" />
+            <span>{{ tokenBasic.symbol }}</span>
+          </CButton>
+        </div>
+      </div>
+
+      <div class="hint">Token Name</div>
+      <CDivider />
+      <div class="scroll">
+        <div
+          v-for="(tokenBasic, index) in filteredTokenBasics"
+          :key="index"
+          class="token-basic"
+          @click="select(tokenBasic)"
+        >
+          <span class="token-basic-left">
+            <img :src="tokenBasic.icon" />
+            <span>{{ tokenBasic.symbol }}</span>
+          </span>
+          <img
+            v-if="selectedTokenBasicSymobol === tokenBasic.symbol"
+            src="@/assets/svg/check.svg"
+          />
+        </div>
+      </div>
+    </div>
+  </CDrawer>
+</template>
+
+<script>
+export default {
+  name: 'SelectTokenBasic',
+  inheritAttrs: false,
+  data() {
+    return {
+      keyword: '',
+      selectedTokenBasicSymobol: 'ETH',
+      popularTokenBasics: [
+        { symbol: 'NEO', icon: require('@/assets/svg/neo-token.svg') },
+        { symbol: 'ETH', icon: require('@/assets/svg/eth-token.svg') },
+      ],
+      tokenBasics: [
+        { symbol: 'NEO', icon: require('@/assets/svg/neo-token.svg') },
+        { symbol: 'ETH', icon: require('@/assets/svg/eth-token.svg') },
+        { symbol: 'NEO', icon: require('@/assets/svg/neo-token.svg') },
+        { symbol: 'NEO', icon: require('@/assets/svg/neo-token.svg') },
+        { symbol: 'ETH', icon: require('@/assets/svg/eth-token.svg') },
+        { symbol: 'ETH', icon: require('@/assets/svg/eth-token.svg') },
+      ],
+    };
+  },
+  computed: {
+    filteredTokenBasics() {
+      return this.tokenBasics.filter(tokenBasic => {
+        return tokenBasic.symbol.toLowerCase().includes(this.keyword.toLowerCase());
+      });
+    },
+  },
+  methods: {
+    select(tokenBasic) {
+      this.$emit('update:visible', false);
+      this.$emit('select', tokenBasic);
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: 100vh;
+  background: #171f31;
+  box-shadow: 0px 2px 18px 7px rgba(#000000, 0.1);
+}
+
+.header {
+  padding: 80px 50px 40px;
+  @include child-margin-v(20px);
+}
+
+.title {
+  font-weight: 500;
+}
+
+.input {
+  padding: 16px 20px;
+  background: rgba(#000000, 0.26);
+  border-radius: 4px;
+}
+
+.popular-token-basics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.popular-token-basic {
+  height: 30px;
+  padding: 0 16px;
+  border-radius: 15px;
+  background: rgba(#000000, 0.3);
+  border: 1px solid rgba(#000000, 0.3);
+  @include child-margin-h(4px);
+
+  &:hover {
+    border: 1px solid #2fd8ca;
+  }
+}
+
+.popular-token-basic-icon {
+  width: 20px;
+}
+
+.hint {
+  padding: 0 50px;
+  opacity: 0.8;
+  font-size: 12px;
+  @include next-margin-v(20px);
+}
+
+.scroll {
+  flex: 1;
+  padding: 16px 10px;
+  overflow-y: auto;
+  @include scroll-bar(rgba(#fff, 0.2), transparent);
+}
+
+.token-basic {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 32px;
+  transition: all 0.3s;
+  @include child-margin-h(16px);
+
+  &:hover {
+    background: rgba(#000000, 0.3);
+    opacity: 0.8;
+  }
+}
+
+.token-basic-left {
+  display: flex;
+  align-items: center;
+  @include child-margin-h(8px);
+}
+</style>

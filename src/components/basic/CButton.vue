@@ -24,7 +24,7 @@ export default {
   outline: none;
   background: transparent;
   color: inherit;
-  transition: filter 0.3s;
+  transition: all 0.3s;
   cursor: pointer;
 
   > * {

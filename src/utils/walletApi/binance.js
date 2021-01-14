@@ -1,12 +1,12 @@
 import Web3 from 'web3';
 import store from '@/store';
 import { WalletError } from '@/utils/errors';
-import { TARGET_MAINNET, WALLET_SYMBOL_BINANCE, CHAIN_ID_BINANCE } from '@/utils/values';
+import { TARGET_MAINNET, WALLET_SYMBOL_BINANCE, CHAIN_ID_BSC } from '@/utils/values';
 
 const BINANCE_CONNECTED_KEY = 'BINANCE_CONNECTED';
 
 const NETWORK_CHAIN_ID_MAPS = {
-  [TARGET_MAINNET ? 56 : 97]: CHAIN_ID_BINANCE,
+  [TARGET_MAINNET ? 56 : 97]: CHAIN_ID_BSC,
 };
 
 let web3;

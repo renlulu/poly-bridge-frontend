@@ -32,7 +32,7 @@ export default {
 @include block(c-link) {
   color: inherit;
   text-decoration: none;
-  transition: filter 0.3s;
+  transition: all 0.3s;
   cursor: pointer;
 
   &:hover {

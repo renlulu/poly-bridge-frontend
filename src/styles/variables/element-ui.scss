@@ -1,10 +1,10 @@
 // set variables before import element-ui variables
 $--color-primary: #f936b4;
 
-$--border-color-base: #2a2a2a;
-$--border-color-light: rgba($--border-color-base, 0.8);
-$--border-color-lighter: rgba($--border-color-base, 0.6);
-$--border-color-extra-light: rgba($--border-color-base, 0.4);
+$--border-color-base: rgba(#ffffff, 0.05);
+$--border-color-light: rgba(#ffffff, 0.04);
+$--border-color-lighter: rgba(#ffffff, 0.03);
+$--border-color-extra-light: rgba(#ffffff, 0.02);
 
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
