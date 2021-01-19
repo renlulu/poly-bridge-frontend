@@ -29,7 +29,7 @@
             <ElTableColumn label="Asset" prop="tokenBasicName" />
             <ElTableColumn label="Time" prop="updateTime" />
             <ElTableColumn #default="{row}" label="Status" align="right">
-              <CButton class="view-details">
+              <CButton class="view-details" @click="transactionDetailsVisible = true">
                 {{ row.status }}
               </CButton>
             </ElTableColumn>
@@ -47,19 +47,23 @@
         </div>
       </div>
     </div>
+    <TransactionDetails :visible.sync="transactionDetailsVisible" />
   </Page>
 </template>
 
 <script>
 import Page from '@/views/common/Page';
+import TransactionDetails from '@/views/home/TransactionDetails';
 
 export default {
   name: 'Transactions',
   components: {
     Page,
+    TransactionDetails,
   },
   data() {
     return {
+      transactionDetailsVisible: false,
       transactions: {
         items: [
           { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
