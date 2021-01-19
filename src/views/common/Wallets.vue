@@ -8,12 +8,12 @@
     </CPopover>
 
     <template v-else>
-      <CPopover v-for="(wallet, index) in connectedWallets" :key="index" trigger="hover">
+      <CPopover v-for="wallet in connectedWallets" :key="wallet.name" trigger="hover">
         <CButton>
           <img class="wallet-icon" :src="wallet.icon" />
         </CButton>
         <template #content>
-          <Wallet />
+          <Wallet :wallet="wallet" />
         </template>
       </CPopover>
 
@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import { getWalletApi } from '@/utils/walletApi';
 import Wallet from './Wallet';
 import ConnectWallet from './ConnectWallet';
 
@@ -42,19 +44,21 @@ export default {
   data() {
     return {
       connectWalletVisible: false,
-      connectedWallets: [
-        {
-          symbol: 'Neoline',
-          name: 'Neoline',
-          icon: require('@/assets/svg/neoline.svg'),
-        },
-        {
-          symbol: 'Metamask',
-          name: 'NeMetamaskoline',
-          icon: require('@/assets/svg/metamask.svg'),
-        },
-      ],
     };
+  },
+  computed: {
+    wallets() {
+      return this.$store.getters.wallets;
+    },
+    connectedWallets() {
+      return this.wallets.filter(wallet => wallet.connected);
+    },
+  },
+  created() {
+    this.wallets.forEach(async wallet => {
+      Vue.use(await getWalletApi(wallet.name));
+    });
+    this.$store.dispatch('loadChainSelectedWallets');
   },
 };
 </script>

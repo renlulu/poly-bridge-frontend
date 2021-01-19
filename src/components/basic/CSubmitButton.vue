@@ -29,10 +29,10 @@ export default {
   font-weight: 500;
   font-size: 14px;
   text-transform: uppercase;
-  @include child-margin-h(16px);
+  @include child-margin-h(8px);
 
   @include element(loading-icon) {
-    width: 20px;
+    width: 16px;
     animation: rotation 2s infinite linear;
   }
 }

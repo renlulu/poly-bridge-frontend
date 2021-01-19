@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { CHAINS } from '@/utils/values';
-import { toStandardHex, serialize, deserialize } from '@/utils/convertors';
+import { toStandardHex, objectToBase64, base64ToObject } from '@/utils/convertors';
+import { WalletError } from '@/utils/errors';
 
 const CHAIN_SELECTED_WALLETS_KEY = 'CHAIN_SELECTED_WALLETS';
 
@@ -8,44 +9,64 @@ export default {
   state: {
     chainMap: CHAINS.reduce((pre, cur) => {
       const lockContractHash = cur.lockContractHash && toStandardHex(cur.lockContractHash);
-      const unlockContractHash = cur.unlockContractHash && toStandardHex(cur.unlockContractHash);
-      return { ...pre, [cur.id]: { ...cur, lockContractHash, unlockContractHash } };
+      return { ...pre, [cur.id]: { ...cur, lockContractHash } };
     }, {}),
     chainSelectedWalletMap: {},
   },
   getters: {
-    chains: state => Object.values(state.chainMap),
-    getChain: state => id => state.chainMap[id],
-    getChainSelectedWallet: (state, getters) => id => {
-      const wallet = getters.getWallet(state.chainSelectedWalletMap[id]);
-      return wallet && wallet.supportedChainIds.includes(id) ? wallet : null;
+    chains: (state, getters) => {
+      return Object.keys(state.chainMap).map(key => getters.getChain(key));
     },
-    getChainConnnectedWallet: (state, getters) => id => {
-      const wallet = getters.getChainSelectedWallet(id);
+    getChain: state => id => {
+      const chain = state.chainMap[id];
+      if (!chain) {
+        return null;
+      }
+      return { ...chain, selectedWalletName: state.chainSelectedWalletMap[id] };
+    },
+    getChainConnectedWallet: (state, getters) => id => {
+      const wallet = getters.getWallet(state.chainSelectedWalletMap[id]);
       return wallet && wallet.connected ? wallet : null;
+    },
+    getChainWalletReady: (state, getters) => id => {
+      const wallet = getters.getChainConnectedWallet(id);
+      return wallet && wallet.chainId === id;
     },
   },
   mutations: {
-    setChainSelectedWallet(state, { chainId, walletSymbol }) {
-      Vue.set(state.chainSelectedWalletMap, chainId, walletSymbol);
+    setChainSelectedWallet(state, { chainId, walletName }) {
+      Vue.set(state.chainSelectedWalletMap, chainId, walletName);
     },
     setChainSelectedWalletMap(state, map) {
-      this.chainSelectedWalletMap = map;
+      state.chainSelectedWalletMap = map;
     },
   },
   actions: {
     loadChainSelectedWallets({ commit }) {
-      const data = deserialize(sessionStorage.getItem(CHAIN_SELECTED_WALLETS_KEY), null);
+      const data = base64ToObject(sessionStorage.getItem(CHAIN_SELECTED_WALLETS_KEY), null);
       if (data) {
         commit('setChainSelectedWalletMap', data);
       }
     },
-    saveChainSelectedWallets({ commit, getters }) {
-      const data = serialize(getters.chainSelectedWalletMap);
+    saveChainSelectedWallets({ state }) {
+      const data = objectToBase64(state.chainSelectedWalletMap);
       sessionStorage.setItem(CHAIN_SELECTED_WALLETS_KEY, data);
     },
-    setChainSelectedWallets({ commit }, { chainId, walletSymbol }) {
-      commit('setChainSelectedWallet', { chainId, walletSymbol });
+    setChainSelectedWallet({ commit, dispatch }, { chainId, walletName }) {
+      commit('setChainSelectedWallet', { chainId, walletName });
+      dispatch('saveChainSelectedWallets');
+    },
+    async ensureChainWalletReady({ getters }, chainId) {
+      if (!getters.getChainConnectedWallet(chainId)) {
+        throw new WalletError('Wallet is not connected.', {
+          code: WalletError.CODES.NOT_CONNECTED,
+        });
+      }
+      if (!getters.getChainWalletReady(chainId)) {
+        throw new WalletError('Wallet is not in correct network.', {
+          code: WalletError.CODES.INCORRECT_NETWORK,
+        });
+      }
     },
   },
 };

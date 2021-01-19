@@ -6,65 +6,77 @@
     <div class="content">
       <div class="chains">
         <CButton
-          v-for="(chain, index) in chains"
-          :key="index"
+          v-for="chain in chains"
+          :key="chain.id"
           class="chain"
-          :class="{ selected: selectedChainId === chain.id }"
+          :class="{ selected: chainIdWithDefault === chain.id }"
+          @click="chainId = chain.id"
         >
           <img class="chain-icon" :src="chain.icon" />
         </CButton>
       </div>
+
       <CDivider direction="vertical" />
-      <div class="wallets">
-        <div class="wallet-chain">Ethereum Wallet</div>
-        <CButton v-for="(wallet, index) in wallets" :key="index" class="wallet">
-          <span class="wallet-name">Connect {{ wallet.name }}</span>
-          <img :src="wallet.icon" />
-        </CButton>
-      </div>
+
+      <transition name="fade" mode="out-in">
+        <div class="wallets" :key="chain.id">
+          <div class="wallet-chain">{{ $formatEnum(chain.id, { type: 'chainName' }) }} Wallet</div>
+          <div v-for="wallet in chainWallets" :key="wallet.name">
+            <div v-if="wallet.connected && wallet.name === chain.selectedWalletName" class="wallet">
+              <img :src="wallet.icon" />
+              <span class="wallet-name">{{ wallet.name }} Connected</span>
+            </div>
+            <CButton v-else class="connect" @click="connect(chain, wallet)">
+              <span class="wallet-name">Connect {{ wallet.name }}</span>
+              <img :src="wallet.icon" />
+            </CButton>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
+import { ChainId } from '@/utils/enums';
+import { getWalletApi } from '@/utils/walletApi';
+
 export default {
   name: 'ConnectWallet',
   data() {
     return {
-      selectedChainId: 1,
-      chains: [
-        { id: 1, name: 'Ethereum', icon: require('@/assets/svg/eth.svg') },
-        {
-          id: 2,
-          name: 'Binance Smart Chain',
-          icon: require('@/assets/svg/bsc.svg'),
-        },
-        { id: 3, name: 'Huobi ECO Chain', icon: require('@/assets/svg/heco.svg') },
-        { id: 4, name: 'Neo', icon: require('@/assets/svg/neo.svg') },
-      ],
-      wallets: [
-        {
-          symbol: 'Neoline',
-          name: 'Neoline',
-          icon: require('@/assets/svg/neoline.svg'),
-        },
-        {
-          symbol: 'O3',
-          name: 'O3',
-          icon: require('@/assets/svg/o3.svg'),
-        },
-        {
-          symbol: 'Metamask',
-          name: 'Metamask',
-          icon: require('@/assets/svg/metamask.svg'),
-        },
-        {
-          symbol: 'Binance',
-          name: 'Binance',
-          icon: require('@/assets/svg/binance.svg'),
-        },
-      ],
+      chainId: 0,
     };
+  },
+  computed: {
+    chains() {
+      return this.$store.getters.chains.filter(chain => chain.id !== ChainId.Poly);
+    },
+    chainIdWithDefault() {
+      return this.chainId ? this.chainId : this.chains[0].id;
+    },
+    chain() {
+      return this.$store.getters.getChain(this.chainIdWithDefault);
+    },
+    chainWallets() {
+      return this.$store.getters.getWalletsByChainId(this.chainIdWithDefault);
+    },
+  },
+  methods: {
+    async connect(chain, wallet) {
+      if (wallet.installed) {
+        if (!wallet.connected) {
+          const walletApi = await getWalletApi(wallet.name);
+          await walletApi.connect();
+        }
+        this.$store.dispatch('setChainSelectedWallet', {
+          chainId: chain.id,
+          walletName: wallet.name,
+        });
+      } else {
+        window.open(wallet.downloadUrl);
+      }
+    },
   },
 };
 </script>
@@ -123,6 +135,21 @@ export default {
 .wallet {
   display: flex;
   align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 167px;
+  height: 34px;
+  padding: 0px 16px;
+  @include child-margin-h(8px);
+}
+
+.wallet-name {
+  font-size: 12px;
+}
+
+.connect {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   min-width: 167px;
@@ -131,9 +158,5 @@ export default {
   border-radius: 4px;
   border: 1px solid #ffffff;
   @include child-margin-h(8px);
-}
-
-.wallet-name {
-  font-size: 12px;
 }
 </style>

@@ -1,13 +1,15 @@
 <template>
-  <div class="form">
+  <ValidationObserver ref="validation" tag="div" v-slot="{ invalid }" class="form">
     <div class="card">
       <div class="title">Bridge</div>
       <div class="fields">
         <div class="field">
           <div class="label">Asset</div>
           <CButton class="select-token-basic" @click="selectTokenBasicVisible = true">
-            <img class="select-token-basic-icon" src="@/assets/svg/eth-token.svg" />
-            <span class="select-token-basic-text">ETH</span>
+            <template v-if="tokenBasic">
+              <img class="select-token-basic-icon" :src="tokenBasic.icon" />
+              <span class="select-token-basic-name">{{ tokenBasicName }}</span>
+            </template>
             <CFlexSpan />
             <img src="@/assets/svg/chevron-right.svg" />
           </CButton>
@@ -16,61 +18,117 @@
         <div class="fields-row">
           <div class="field">
             <div class="label">From</div>
-            <CButton class="select-chain" @click="selectFromChainVisible = true">
-              <img class="select-chain-icon" src="@/assets/svg/eth.svg" />
-              <span class="select-chain-name">Ethereum</span>
+            <CButton
+              class="select-chain"
+              :disabled="!tokenBasic"
+              @click="selectFromChainVisible = true"
+            >
+              <template v-if="fromChain">
+                <img class="select-chain-icon" :src="fromChain.icon" />
+                <span class="select-chain-name">
+                  {{ $formatEnum(fromChainId, { type: 'chainName' }) }}
+                </span>
+              </template>
+              <template v-else>
+                <img class="select-chain-icon" src="@/assets/svg/from.svg" />
+                <span class="select-chain-name">From</span>
+              </template>
               <span class="select-chain-name">Network</span>
               <img class="chevron-down" src="@/assets/svg/chevron-down.svg" />
             </CButton>
-            <div class="address">
-              <span class="address-value">0xc12E…79F192</span>
-              <CButton>
+            <div v-if="fromWallet" class="address">
+              <span class="address-value">
+                {{ $formatLongText(fromWallet.address, { headTailLength: 6 }) }}
+              </span>
+              <CButton @click="copy(fromWallet.address)">
                 <img src="@/assets/svg/copy.svg" />
               </CButton>
             </div>
           </div>
-          <CButton class="exchange">
+
+          <!-- TODO -->
+          <CButton :disabled="!toChainId" @click="exchangeFromTo">
             <img src="@/assets/svg/exchange.svg" />
           </CButton>
+
           <div class="field">
             <div class="label">To</div>
-            <CButton class="select-chain" @click="selectToChainVisible = true">
-              <img class="select-chain-icon" src="@/assets/svg/neo.svg" />
-              <span class="select-chain-name">Neo</span>
+            <CButton
+              class="select-chain"
+              :disabled="!toChains"
+              @click="selectToChainVisible = true"
+            >
+              <template v-if="toChain">
+                <img class="select-chain-icon" :src="toChain.icon" />
+                <span class="select-chain-name">
+                  {{ $formatEnum(toChainId, { type: 'chainName' }) }}
+                </span>
+              </template>
+              <template v-else>
+                <img class="select-chain-icon" src="@/assets/svg/to.svg" />
+                <span class="select-chain-name">To</span>
+              </template>
               <span class="select-chain-name">Network</span>
               <img class="chevron-down" src="@/assets/svg/chevron-down.svg" />
             </CButton>
-            <div class="address">
-              <span class="address-value">0xc12E…79F192</span>
-              <CButton>
+            <div v-if="toWallet" class="address">
+              <span class="address-value">
+                {{ $formatLongText(toWallet.address, { headTailLength: 6 }) }}
+              </span>
+              <CButton @click="copy(toWallet.address)">
                 <img src="@/assets/svg/copy.svg" />
               </CButton>
             </div>
           </div>
         </div>
 
-        <div class="field">
+        <ValidationProvider
+          ref="amountValidation"
+          tag="div"
+          class="field"
+          :rules="{
+            required: true,
+            number: true,
+            positive: true,
+            maxDecimal: tokenBasic && tokenBasic.precision,
+            maxValue: balance,
+            minValue: { min: fee, excluded: true },
+          }"
+          v-slot="{ errors }"
+        >
           <div class="label">Amount</div>
           <div class="input">
-            <CInput class="input-inner" />
-            <CButton class="use-max">MAX</CButton>
+            <CInput class="input-inner" v-model="amount" />
+            <CButton v-if="balance" class="use-max" @click="transferAll">MAX</CButton>
           </div>
-          <div class="balance">
+          <div class="input-error">{{ errors[0] }}</div>
+          <div v-if="balance" class="balance">
             <span class="label">Balance</span>
             <CFlexSpan />
-            <span class="value">70,00235 ETH</span>
+            <span class="value">{{ balance }} {{ tokenBasicName }}</span>
           </div>
-          <div class="fee">
+          <div v-if="fee" class="fee">
             <span class="label">Fee</span>
             <CFlexSpan />
-            <span class="fee-value">0.25567</span>
+            <span class="fee-value">{{ fee }}</span>
             <img class="fee-icon" src="@/assets/svg/eth-token.svg" />
-            <span class="fee-token">ETH</span>
+            <span class="fee-token">{{ tokenBasicName }}</span>
           </div>
-        </div>
+        </ValidationProvider>
       </div>
 
-      <CSubmitButton @click="connectWalletVisible = true">Connect Wallet</CSubmitButton>
+      <CSubmitButton
+        v-if="fromChain && toChain && !(fromWallet && toWallet)"
+        @click="connectWalletVisible = true"
+      >
+        Connect Wallet
+      </CSubmitButton>
+      <CSubmitButton v-else-if="needApproval" :loading="approving" @click="approve">
+        Approve
+      </CSubmitButton>
+      <CSubmitButton v-else :disabled="invalid || !(fromToken && toToken)" @click="submit">
+        {{ $t('buttons.next') }}
+      </CSubmitButton>
     </div>
 
     <div class="history">
@@ -78,16 +136,44 @@
       <CLink class="link" :to="{ name: 'transactions' }">history</CLink>
     </div>
 
-    <SelectTokenBasic :visible.sync="selectTokenBasicVisible" />
-    <SelectChain :visible.sync="selectFromChainVisible" />
-    <SelectChain :visible.sync="selectToChainVisible" />
-    <ConnectWallet :visible.sync="connectWalletVisible" />
-    <ConfirmSwap :visible.sync="confirmSwapVisible" />
+    <SelectTokenBasic
+      :visible.sync="selectTokenBasicVisible"
+      :tokenBasicName="tokenBasicName"
+      @update:tokenBasicName="changeTokenBasicName"
+      :tokenBasics="tokenBasics"
+      :popularTokenBasics="tokenBasics"
+    />
+    <SelectChain
+      :visible.sync="selectFromChainVisible"
+      :chainId="fromChainId"
+      @update:chainId="changeFromChainId"
+      :chains="fromChains || []"
+    />
+    <SelectChain
+      :visible.sync="selectToChainVisible"
+      :chainId="toChainId"
+      @update:chainId="changeToChainId"
+      :chains="toChains || []"
+    />
+    <ConnectWallet
+      :visible.sync="connectWalletVisible"
+      :fromChainId="fromChainId"
+      :toChainId="toChainId"
+    />
+    <ConfirmSwap
+      :visible.sync="confirmSwapVisible"
+      :confirmingData="confirmingData"
+      @succeed="clearForm"
+    />
     <TransactionDetails :visible.sync="transactionDetailsVisible" />
-  </div>
+  </ValidationObserver>
 </template>
 
 <script>
+import BigNumber from 'bignumber.js';
+import copy from 'clipboard-copy';
+import { ChainId } from '@/utils/enums';
+import { getWalletApi } from '@/utils/walletApi';
 import SelectTokenBasic from './SelectTokenBasic';
 import SelectChain from './SelectChain';
 import ConnectWallet from './ConnectWallet';
@@ -111,7 +197,239 @@ export default {
       connectWalletVisible: false,
       confirmSwapVisible: false,
       transactionDetailsVisible: false,
+      tokenBasicName: 'USDT',
+      fromChainId: null,
+      toChainId: null,
+      amount: '',
+      confirmingData: null,
+      approving: false,
     };
+  },
+  computed: {
+    tokenBasics() {
+      return this.$store.getters.tokenBasics;
+    },
+    tokenBasic() {
+      return this.$store.getters.getTokenBasic(this.tokenBasicName);
+    },
+    chains() {
+      return this.$store.getters.chains.filter(chain => chain.id !== ChainId.Poly);
+    },
+    fromChains() {
+      return (
+        this.tokenBasic &&
+        this.$store.getters
+          .getTokensByTokenBasicName(this.tokenBasic.name)
+          .map(token => this.$store.getters.getChain(token.chainId))
+      );
+    },
+    fromChain() {
+      return this.$store.getters.getChain(this.fromChainId);
+    },
+    fromToken() {
+      return (
+        this.tokenBasic &&
+        this.$store.getters.getTokenByTokenBasicNameAndChainId({
+          tokenBasicName: this.tokenBasicName,
+          chainId: this.fromChainId,
+        })
+      );
+    },
+    fromWallet() {
+      return this.$store.getters.getChainConnectedWallet(this.fromChainId);
+    },
+    getTokenMapsParams() {
+      if (this.fromToken) {
+        return {
+          fromChainId: this.fromChainId,
+          fromTokenHash: this.fromToken.hash,
+        };
+      }
+      return null;
+    },
+    tokenMaps() {
+      return this.getTokenMapsParams && this.$store.getters.getTokenMaps(this.getTokenMapsParams);
+    },
+    toChains() {
+      return (
+        this.tokenMaps &&
+        this.tokenMaps.map(tokenMap => this.$store.getters.getChain(tokenMap.toToken.chainId))
+      );
+    },
+    toChain() {
+      return this.$store.getters.getChain(this.toChainId);
+    },
+    toToken() {
+      return (
+        this.tokenBasic &&
+        this.$store.getters.getTokenByTokenBasicNameAndChainId({
+          tokenBasicName: this.tokenBasicName,
+          chainId: this.toChainId,
+        })
+      );
+    },
+    toWallet() {
+      return this.$store.getters.getChainConnectedWallet(this.toChainId);
+    },
+    getBalanceParams() {
+      if (this.fromWallet && this.fromToken) {
+        return {
+          chainId: this.fromChainId,
+          address: this.fromWallet.address,
+          tokenHash: this.fromToken.hash,
+          walletReady: this.walletReady,
+        };
+      }
+      return null;
+    },
+    balance() {
+      return this.getBalanceParams && this.$store.getters.getBalance(this.getBalanceParams);
+    },
+    getAllowanceParams() {
+      if (this.fromWallet && this.fromChain && this.fromToken) {
+        return {
+          chainId: this.fromChainId,
+          address: this.fromWallet.address,
+          tokenHash: this.fromToken.hash,
+          spender: this.fromChain.lockContractHash,
+        };
+      }
+      return null;
+    },
+    allowance() {
+      return this.getAllowanceParams && this.$store.getters.getAllowance(this.getAllowanceParams);
+    },
+    needApproval() {
+      return this.amount && this.allowance && new BigNumber(this.amount).gt(this.allowance);
+    },
+    getFeeParams() {
+      if (this.fromToken && this.toChainId) {
+        return {
+          fromChainId: this.fromChainId,
+          fromTokenHash: this.fromToken.hash,
+          toChainId: this.toChainId,
+        };
+      }
+      return null;
+    },
+    fee() {
+      return this.getFeeParams && this.$store.getters.getFee(this.getFeeParams);
+    },
+  },
+  watch: {
+    async getBalanceParams(value) {
+      if (value) {
+        await this.$store.dispatch('ensureChainWalletReady', value.chainId);
+        this.$store.dispatch('getBalance', value);
+      }
+    },
+    getFeeParams(value) {
+      if (value) {
+        this.$store.dispatch('getFee', value);
+      }
+    },
+    getTokenMapsParams(value) {
+      if (value) {
+        this.$store.dispatch('getTokenMaps', value);
+      }
+    },
+    getAllowanceParams(value) {
+      if (value) {
+        this.$store.dispatch('getAllowance', value);
+      }
+    },
+  },
+  created() {
+    this.$store.dispatch('getTokenBasics');
+    this.interval = setInterval(() => {
+      if (this.getBalanceParams) {
+        this.$store.dispatch('getBalance', this.getBalanceParams);
+      }
+    }, 5000);
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
+  },
+  methods: {
+    changeTokenBasicName(tokenBasicName) {
+      this.tokenBasicName = tokenBasicName;
+      this.fromChainId = null;
+      this.toChainId = null;
+    },
+    changeFromChainId(chainId) {
+      this.fromChainId = chainId;
+      this.toChainId = null;
+    },
+    changeToChainId(chainId) {
+      this.toChainId = chainId;
+    },
+    async exchangeFromTo() {
+      await this.$store.dispatch('getTokenMaps', {
+        fromChainId: this.toChainId,
+        fromTokenHash: this.toToken.hash,
+      });
+      const { fromChainId } = this;
+      this.fromChainId = this.toChainId;
+      if (this.toChains && this.toChains.find(chain => chain.id === fromChainId)) {
+        this.toChainId = fromChainId;
+      } else {
+        this.toChainId = null;
+      }
+    },
+    copy(text) {
+      copy(text);
+      this.$message.success(this.$t('messages.copied', { text }));
+    },
+    transferAll() {
+      this.amount = this.balance;
+      this.$nextTick(() => this.$refs.amountValidation.validate());
+    },
+    async approve() {
+      await this.$store.dispatch('ensureChainWalletReady', this.fromChainId);
+      try {
+        this.approving = true;
+        const walletApi = await getWalletApi(this.fromWallet.name);
+
+        if (!new BigNumber(this.allowance).isZero()) {
+          await walletApi.approve({
+            chainId: this.fromChainId,
+            address: this.fromWallet.address,
+            tokenHash: this.fromToken.hash,
+            spender: this.fromChain.lockContractHash,
+            amount: 0,
+          });
+        }
+
+        await walletApi.approve({
+          chainId: this.fromChainId,
+          address: this.fromWallet.address,
+          tokenHash: this.fromToken.hash,
+          spender: this.fromChain.lockContractHash,
+          amount: this.amount,
+        });
+
+        await this.$store.dispatch('getAllowance', this.getAllowanceParams);
+      } finally {
+        this.approving = false;
+      }
+    },
+    submit() {
+      this.confirmingData = {
+        fromAddress: this.fromWallet.address,
+        toAddress: this.toWallet.address,
+        fromChainId: this.fromChainId,
+        toChainId: this.toChainId,
+        fromTokenHash: this.fromToken.hash,
+        toTokenHash: this.toToken.hash,
+        amount: this.amount,
+        fee: this.fee,
+      };
+      this.confirmSwapVisible = true;
+    },
+    clearForm() {
+      this.amount = '';
+      this.$refs.validation.reset();
+    },
   },
 };
 </script>
@@ -169,7 +487,8 @@ export default {
   display: flex;
   align-items: center;
   width: stretch;
-  padding: 10px 14px;
+  height: 40px;
+  padding: 0 14px;
   background: rgba(#000000, 0.26);
   border-radius: 4px;
   @include child-margin-h(8px);
@@ -179,7 +498,7 @@ export default {
   width: 20px;
 }
 
-.select-token-basic-text {
+.select-token-basic-name {
   font-size: 14px;
 }
 
@@ -216,16 +535,16 @@ export default {
   align-self: flex-end;
 }
 
-.exchange {
-  position: relative;
-  top: 10px;
-}
-
 .input {
   display: flex;
   padding: 18px 14px;
   background: rgba(#000000, 0.26);
   border-radius: 4px;
+}
+
+.input-error {
+  color: $--color-danger;
+  font-size: 12px;
 }
 
 .use-max {

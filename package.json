@@ -27,6 +27,7 @@
     "number-to-bn": "^1.7.0",
     "promise-deferred": "^2.0.3",
     "query-string": "^6.13.1",
+    "serializr": "^1.5.3",
     "string-template": "^1.0.0",
     "uuid": "^8.3.0",
     "vee-validate": "^3.3.11",

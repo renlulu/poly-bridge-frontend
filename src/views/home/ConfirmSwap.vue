@@ -4,12 +4,12 @@
       <div class="title">Confirm Swap</div>
       <CDivider />
       <div class="scroll">
-        <div class="fields">
+        <div class="fields" v-if="confirmingData">
           <div class="field">
             <div class="label">Amount</div>
             <div class="amount">
-              <span class="amount-value">1000.0</span>
-              <span class="token-basic-name">ETH</span>
+              <span class="amount-value">{{ confirmingData.amount }}</span>
+              <span class="token-basic-name">{{ tokenBasic.name }}</span>
             </div>
           </div>
 
@@ -17,10 +17,12 @@
             <div class="label">From</div>
             <div class="chain">
               <img class="chain-icon" src="@/assets/svg/eth.svg" />
-              <span class="chain-name">Ethereum Network</span>
+              <span class="chain-name">
+                {{ $formatEnum(confirmingData.fromChainId, { type: 'chainName' }) }} Network
+              </span>
             </div>
             <div class="address">
-              0xc1pmwndcnki09nk21nk18lnkk112e79F192
+              {{ confirmingData.fromAddress }}
             </div>
           </div>
 
@@ -28,43 +30,97 @@
             <div class="label">To</div>
             <div class="chain">
               <img class="chain-icon" src="@/assets/svg/neo.svg" />
-              <span class="chain-name">Neo Network</span>
+              <span class="chain-name">
+                {{ $formatEnum(confirmingData.toChainId, { type: 'chainName' }) }} Network
+              </span>
             </div>
             <div class="address">
-              0xc1pmwndcnki09nk21nk18lnkk112e79F192
+              {{ confirmingData.toAddress }}
             </div>
           </div>
 
           <div class="field">
             <div class="label">Fee</div>
             <div class="fee">
-              <span class="fee-value">0.0132000000</span>
-              <span class="token-basic-name">ETH</span>
+              <span class="fee-value">{{ confirmingData.fee }}</span>
+              <span class="token-basic-name">{{ tokenBasic.name }}</span>
             </div>
           </div>
 
           <div class="field">
             <div class="label">You will receive</div>
             <div class="fee">
-              <span class="fee-value">999.08741</span>
-              <span class="token-basic-name">ETH</span>
+              <span class="fee-value">{{ receivingAmount }}</span>
+              <span class="token-basic-name">{{ tokenBasic.name }}</span>
             </div>
           </div>
         </div>
 
-        <CSubmitButton @click="confirm">Confirm</CSubmitButton>
+        <CSubmitButton :loading="submitting" @click="confirm">Confirm</CSubmitButton>
       </div>
     </div>
   </CDrawer>
 </template>
 
 <script>
+import BigNumber from 'bignumber.js';
+import { getWalletApi } from '@/utils/walletApi';
+
 export default {
   name: 'ConfirmSwap',
   inheritAttrs: false,
+  props: {
+    confirmingData: Object,
+  },
+  data() {
+    return {
+      submitting: false,
+    };
+  },
+  computed: {
+    tokenBasic() {
+      return (
+        this.confirmingData &&
+        this.$store.getters.getTokenBasicByChainIdAndTokenHash({
+          chainId: this.confirmingData.fromChainId,
+          tokenHash: this.confirmingData.fromTokenHash,
+        })
+      );
+    },
+    receivingAmount() {
+      return (
+        this.confirmingData &&
+        new BigNumber(this.confirmingData.amount).minus(this.confirmingData.fee).toString()
+      );
+    },
+    fromWallet() {
+      return (
+        this.confirmingData &&
+        this.$store.getters.getChainConnectedWallet(this.confirmingData.fromChainId)
+      );
+    },
+  },
   methods: {
-    confirm() {
-      this.$emit('update:visible', false);
+    async confirm() {
+      await this.$store.dispatch('ensureChainWalletReady', this.confirmingData.fromChainId);
+      try {
+        this.submitting = true;
+        const walletApi = await getWalletApi(this.fromWallet.name);
+        const transactionHash = await walletApi.lock({
+          fromChainId: this.confirmingData.fromChainId,
+          fromAddress: this.confirmingData.fromAddress,
+          fromTokenHash: this.confirmingData.fromTokenHash,
+          toChainId: this.confirmingData.toChainId,
+          toAddress: this.confirmingData.toAddress,
+          amount: this.confirmingData.amount,
+          fee: this.confirmingData.fee,
+        });
+        this.$message.success(`Success. Transaction hash: ${transactionHash}`);
+        this.$emit('update:visible', false);
+        this.$emit('succeed');
+      } finally {
+        this.submitting = false;
+      }
     },
   },
 };

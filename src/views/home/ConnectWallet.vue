@@ -4,18 +4,23 @@
       <div class="title">Connect Wallet</div>
       <CDivider />
       <div class="scroll">
-        <div class="from">
+        <div v-if="fromChain" class="from">
           <div class="chain">
-            <img class="chain-icon" src="@/assets/svg/eth.svg" />
-            <span class="chain-name">Ethereum Network</span>
+            <img class="chain-icon" :src="fromChain.icon" />
+            <span class="chain-name">
+              {{ $formatEnum(fromChainId, { type: 'chainName' }) }} Network
+            </span>
           </div>
           <div class="wallets">
-            <div v-for="(wallet, index) in fromChainWallets" :key="index">
-              <div v-if="wallet.connected" class="wallet">
+            <div v-for="wallet in fromChainWallets" :key="wallet.name">
+              <div
+                v-if="wallet.connected && wallet.name === fromChain.selectedWalletName"
+                class="wallet"
+              >
                 <img :src="wallet.icon" />
                 <span class="wallet-name">{{ wallet.name }} Connected</span>
               </div>
-              <CButton v-else class="connect" :disabled="wallet.disabled" @click="connect(wallet)">
+              <CButton v-else class="connect" @click="connect(fromChain, wallet)">
                 <span class="wallet-name">Connect {{ wallet.name }}</span>
                 <img :src="wallet.icon" />
               </CButton>
@@ -23,18 +28,23 @@
           </div>
         </div>
 
-        <div class="to">
+        <div v-if="toChain" class="to">
           <div class="chain">
-            <img class="chain-icon" src="@/assets/svg/eth.svg" />
-            <span class="chain-name">Ethereum Network</span>
+            <img class="chain-icon" :src="toChain.icon" />
+            <span class="chain-name">
+              {{ $formatEnum(toChainId, { type: 'chainName' }) }} Network
+            </span>
           </div>
           <div class="wallets">
-            <div v-for="(wallet, index) in toChainWallets" :key="index">
-              <div v-if="wallet.connected" class="wallet">
+            <div v-for="wallet in toChainWallets" :key="wallet.name">
+              <div
+                v-if="wallet.connected && wallet.name === toChain.selectedWalletName"
+                class="wallet"
+              >
                 <img :src="wallet.icon" />
                 <span class="wallet-name">{{ wallet.name }} Connected</span>
               </div>
-              <CButton v-else class="connect" :disabled="wallet.disabled" @click="connect(wallet)">
+              <CButton v-else class="connect" @click="connect(toChain, wallet)">
                 <span class="wallet-name">Connect {{ wallet.name }}</span>
                 <img :src="wallet.icon" />
               </CButton>
@@ -47,26 +57,52 @@
 </template>
 
 <script>
+import { getWalletApi } from '@/utils/walletApi';
+
 export default {
   name: 'ConnectWallet',
+  props: {
+    fromChainId: Number,
+    toChainId: Number,
+  },
   inheritAttrs: false,
-  data() {
-    return {
-      fromChainWallets: [
-        { symbol: 'Metamask', name: 'Metamask', icon: require('@/assets/svg/metamask.svg') },
-        { symbol: 'NeoLine', name: 'NeoLine', icon: require('@/assets/svg/neoline.svg') },
-        { symbol: 'O3', name: 'O3', icon: require('@/assets/svg/o3.svg'), connected: true },
-      ],
-      toChainWallets: [
-        { symbol: 'Metamask', name: 'Metamask', icon: require('@/assets/svg/metamask.svg') },
-        { symbol: 'NeoLine', name: 'NeoLine', icon: require('@/assets/svg/neoline.svg') },
-        { symbol: 'O3', name: 'O3', icon: require('@/assets/svg/o3.svg'), disabled: true },
-      ],
-    };
+  computed: {
+    fromChain() {
+      return this.$store.getters.getChain(this.fromChainId);
+    },
+    fromChainWallets() {
+      return this.$store.getters.getWalletsByChainId(this.fromChainId);
+    },
+    fromWallet() {
+      return this.$store.getters.getChainConnectedWallet(this.fromChainId);
+    },
+    toChain() {
+      return this.$store.getters.getChain(this.toChainId);
+    },
+    toChainWallets() {
+      return this.$store.getters.getWalletsByChainId(this.toChainId);
+    },
+    toWallet() {
+      return this.$store.getters.getChainConnectedWallet(this.toChainId);
+    },
   },
   methods: {
-    connect(wallet) {
-      this.$emit('update:visible', false);
+    async connect(chain, wallet) {
+      if (wallet.installed) {
+        if (!wallet.connected) {
+          const walletApi = await getWalletApi(wallet.name);
+          await walletApi.connect();
+        }
+        this.$store.dispatch('setChainSelectedWallet', {
+          chainId: chain.id,
+          walletName: wallet.name,
+        });
+        if (this.fromWallet && this.toWallet) {
+          this.$emit('update:visible', false);
+        }
+      } else {
+        window.open(wallet.downloadUrl);
+      }
     },
   },
 };

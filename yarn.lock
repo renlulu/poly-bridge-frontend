@@ -10482,6 +10482,11 @@ serialize-javascript@^4.0.0:
   dependencies:
     randombytes "^2.1.0"
 
+serializr@^1.5.3:
+  version "1.5.4"
+  resolved "https://registry.npm.taobao.org/serializr/download/serializr-1.5.4.tgz#3ddf1cb7b4465c9c3f72bab0cbc41e09dbe50c33"
+  integrity sha1-Pd8ct7RGXJw/crqwy8QeCdvlDDM=
+
 serve-index@^1.9.1:
   version "1.9.1"
   resolved "https://registry.npm.taobao.org/serve-index/download/serve-index-1.9.1.tgz#d3768d69b1e7d82e5ce050fff5b453bea12a9239"

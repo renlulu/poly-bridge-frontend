@@ -3,8 +3,9 @@
     <div class="copyright">
       © 2021 Polynetwork. All rights reserved. Privacy policy
     </div>
-    <CButton class="change-lang">
-      <span>English</span>
+    <CButton class="change-lang" @click="changeLocale">
+      <span v-if="$i18n.locale === 'en'">English</span>
+      <span v-if="$i18n.locale === 'zh-cn'">中文</span>
       <img src="@/assets/svg/switch.svg" />
     </CButton>
   </div>
@@ -13,6 +14,11 @@
 <script>
 export default {
   name: 'Footer',
+  methods: {
+    changeLocale() {
+      this.$i18n.locale = this.$i18n.locale === 'en' ? 'zh-cn' : 'en';
+    },
+  },
 };
 </script>
 

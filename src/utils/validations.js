@@ -50,6 +50,19 @@ extend('maxValue', {
   message: () => i18n.t('validations.maxValue'),
 });
 
+extend('minValue', {
+  validate(value, { min, excluded }) {
+    if (min == null) {
+      return true;
+    }
+    if (excluded && new BigNumber(value).gt(min)) return true;
+    if (!excluded && new BigNumber(value).gte(min)) return true;
+    return false;
+  },
+  params: ['min', 'excluded'],
+  message: () => i18n.t('validations.minValue'),
+});
+
 export default {
   install(Vue) {
     Vue.component('ValidationObserver', ValidationObserver);

@@ -4,12 +4,12 @@
       <div class="title">Select Network</div>
       <CDivider />
       <div class="scroll">
-        <div v-for="(chain, index) in chains" :key="index" class="chain" @click="select(chain)">
+        <div v-for="chain in chains" :key="chain.id" class="chain" @click="select(chain)">
           <span class="chain-left">
             <img :src="chain.icon" />
-            <span>{{ chain.name }}</span>
+            <span>{{ $formatEnum(chain.id, { type: 'chainName' }) }}</span>
           </span>
-          <img v-if="selectedChainId === chain.id" src="@/assets/svg/check.svg" />
+          <img v-if="chainId === chain.id" src="@/assets/svg/check.svg" />
         </div>
       </div>
     </div>
@@ -20,20 +20,14 @@
 export default {
   name: 'SelectChain',
   inheritAttrs: false,
-  data() {
-    return {
-      selectedChainId: 1,
-      chains: [
-        { id: 1, name: 'Ethereum', icon: require('@/assets/svg/eth.svg') },
-        { id: 2, name: 'Binance Smart Chain', icon: require('@/assets/svg/eth.svg') },
-        { id: 3, name: 'Huobi ECO Chain', icon: require('@/assets/svg/eth.svg') },
-      ],
-    };
+  props: {
+    chainId: Number,
+    chains: Array,
   },
   methods: {
     select(chain) {
       this.$emit('update:visible', false);
-      this.$emit('select', chain);
+      this.$emit('update:chainId', chain.id);
     },
   },
 };

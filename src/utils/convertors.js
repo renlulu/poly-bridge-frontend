@@ -73,11 +73,11 @@ export function decimalToInteger(decimal, unit) {
   return numberToBN(new BigNumber(decimal).shiftedBy(unit).dp(0)).toString();
 }
 
-export function serialize(data) {
-  return Base64.encodeURI(JSON.stringify(data));
+export function objectToBase64(object) {
+  return Base64.encodeURI(JSON.stringify(object));
 }
 
-export function deserialize(base64, defaultValue) {
+export function base64ToObject(base64, defaultValue) {
   try {
     return JSON.parse(Base64.decode(base64));
   } catch (error) {

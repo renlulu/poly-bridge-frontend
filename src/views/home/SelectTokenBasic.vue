@@ -4,17 +4,22 @@
       <div class="header">
         <div class="title">Select Asset</div>
         <div class="input">
-          <CInput class="input-inner" placeholder="Search name or paste address" />
+          <CInput
+            v-model="keyword"
+            class="input-inner"
+            placeholder="Search name or paste address"
+          />
         </div>
         <div class="popular-token-basics">
           <CButton
-            v-for="(tokenBasic, index) in popularTokenBasics"
-            :key="index"
+            v-for="tokenBasic in popularTokenBasics"
+            :key="tokenBasic.name"
             class="popular-token-basic"
+            :class="{ selected: tokenBasicName === tokenBasic.name }"
             @click="select(tokenBasic)"
           >
             <img class="popular-token-basic-icon" :src="tokenBasic.icon" />
-            <span>{{ tokenBasic.symbol }}</span>
+            <span>{{ tokenBasic.name }}</span>
           </CButton>
         </div>
       </div>
@@ -23,19 +28,16 @@
       <CDivider />
       <div class="scroll">
         <div
-          v-for="(tokenBasic, index) in filteredTokenBasics"
-          :key="index"
+          v-for="tokenBasic in filteredTokenBasics"
+          :key="tokenBasic.name"
           class="token-basic"
           @click="select(tokenBasic)"
         >
           <span class="token-basic-left">
             <img :src="tokenBasic.icon" />
-            <span>{{ tokenBasic.symbol }}</span>
+            <span>{{ tokenBasic.name }}</span>
           </span>
-          <img
-            v-if="selectedTokenBasicSymobol === tokenBasic.symbol"
-            src="@/assets/svg/check.svg"
-          />
+          <img v-if="tokenBasicName === tokenBasic.name" src="@/assets/svg/check.svg" />
         </div>
       </div>
     </div>
@@ -46,35 +48,27 @@
 export default {
   name: 'SelectTokenBasic',
   inheritAttrs: false,
+  props: {
+    tokenBasicName: String,
+    tokenBasics: Array,
+    popularTokenBasics: Array,
+  },
   data() {
     return {
       keyword: '',
-      selectedTokenBasicSymobol: 'ETH',
-      popularTokenBasics: [
-        { symbol: 'NEO', icon: require('@/assets/svg/neo-token.svg') },
-        { symbol: 'ETH', icon: require('@/assets/svg/eth-token.svg') },
-      ],
-      tokenBasics: [
-        { symbol: 'NEO', icon: require('@/assets/svg/neo-token.svg') },
-        { symbol: 'ETH', icon: require('@/assets/svg/eth-token.svg') },
-        { symbol: 'NEO', icon: require('@/assets/svg/neo-token.svg') },
-        { symbol: 'NEO', icon: require('@/assets/svg/neo-token.svg') },
-        { symbol: 'ETH', icon: require('@/assets/svg/eth-token.svg') },
-        { symbol: 'ETH', icon: require('@/assets/svg/eth-token.svg') },
-      ],
     };
   },
   computed: {
     filteredTokenBasics() {
       return this.tokenBasics.filter(tokenBasic => {
-        return tokenBasic.symbol.toLowerCase().includes(this.keyword.toLowerCase());
+        return tokenBasic.name.toLowerCase().includes(this.keyword.toLowerCase());
       });
     },
   },
   methods: {
     select(tokenBasic) {
       this.$emit('update:visible', false);
-      this.$emit('select', tokenBasic);
+      this.$emit('update:tokenBasicName', tokenBasic.name);
     },
   },
 };
@@ -116,10 +110,10 @@ export default {
   padding: 0 16px;
   border-radius: 15px;
   background: rgba(#000000, 0.3);
-  border: 1px solid rgba(#000000, 0.3);
+  border: 1px solid transparent;
   @include child-margin-h(4px);
 
-  &:hover {
+  &.selected {
     border: 1px solid #2fd8ca;
   }
 }

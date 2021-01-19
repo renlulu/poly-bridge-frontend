@@ -1,12 +1,15 @@
 import delay from 'delay';
 import store from '@/store';
+import { getChainApi } from '@/utils/chainApi';
+import { decimalToInteger, toStandardHex } from '@/utils/convertors';
+import { WalletName, ChainId } from '@/utils/enums';
 import { WalletError } from '@/utils/errors';
-import { TARGET_MAINNET, WALLET_SYMBOL_NEOLINE, CHAIN_ID_NEO } from '@/utils/values';
+import { TARGET_MAINNET } from '@/utils/env';
 
 const NEOLINE_CONNECTED_KEY = 'NEOLINE_CONNECTED';
 
 const NETWORK_CHAIN_ID_MAPS = {
-  [TARGET_MAINNET ? 'MainNet' : 'TestNet']: CHAIN_ID_NEO,
+  [TARGET_MAINNET ? 'MainNet' : 'TestNet']: ChainId.Neo,
 };
 
 let neoDapi;
@@ -48,7 +51,7 @@ async function queryState() {
   const address = (await neoDapi.getAccount()).address || null;
   const network = (await neoDapi.getNetworks()).defaultNetwork;
   store.dispatch('updateWallet', {
-    symbol: WALLET_SYMBOL_NEOLINE,
+    name: WalletName.NeoLine,
     address,
     connected: !!address,
     chainId: NETWORK_CHAIN_ID_MAPS[network],
@@ -60,7 +63,7 @@ async function init() {
     try {
       window.removeEventListener('NEOLine.NEO.EVENT.READY', init);
 
-      store.dispatch('updateWallet', { symbol: WALLET_SYMBOL_NEOLINE, installed: true });
+      store.dispatch('updateWallet', { name: WalletName.NeoLine, installed: true });
       neoDapi = new window.NEOLine.Init();
 
       if (sessionStorage.getItem(NEOLINE_CONNECTED_KEY) === 'true') {
@@ -70,7 +73,7 @@ async function init() {
       neoDapi.addEventListener(neoDapi.EVENT.ACCOUNT_CHANGED, data => {
         const address = data.address || null;
         store.dispatch('updateWallet', {
-          symbol: WALLET_SYMBOL_NEOLINE,
+          name: WalletName.NeoLine,
           address,
           connected: !!address,
         });
@@ -78,12 +81,12 @@ async function init() {
 
       neoDapi.addEventListener(neoDapi.EVENT.NETWORK_CHANGED, ({ defaultNetwork: network }) => {
         store.dispatch('updateWallet', {
-          symbol: WALLET_SYMBOL_NEOLINE,
+          name: WalletName.NeoLine,
           chainId: NETWORK_CHAIN_ID_MAPS[network],
         });
       });
     } finally {
-      store.getters.getWallet(WALLET_SYMBOL_NEOLINE).deferred.resolve();
+      store.getters.getWallet(WalletName.NeoLine).deferred.resolve();
     }
   }
 
@@ -92,7 +95,7 @@ async function init() {
   } else {
     window.addEventListener('NEOLine.NEO.EVENT.READY', onReady);
     await delay(2000);
-    store.getters.getWallet(WALLET_SYMBOL_NEOLINE).deferred.resolve();
+    store.getters.getWallet(WalletName.NeoLine).deferred.resolve();
   }
 }
 
@@ -105,7 +108,81 @@ async function connect() {
   }
 }
 
+async function getBalance({ chainId, address, tokenHash }) {
+  try {
+    const token = store.getters.getToken({ chainId, hash: tokenHash });
+
+    const result = await neoDapi.getBalance({
+      params: [
+        {
+          address,
+          assets: ['NEO', 'GAS', token.hash],
+        },
+      ],
+    });
+    const balance = (
+      (result[address] || []).find(item => toStandardHex(item.assetID) === token.hash) || {}
+    ).amount;
+    return balance == null ? '0' : balance;
+  } catch (error) {
+    throw convertWalletError(error);
+  }
+}
+
+async function getAllowance() {
+  return null;
+}
+
+async function approve() {
+  throw new Error('Method not implemented');
+}
+
+async function lock({
+  fromChainId,
+  fromAddress,
+  fromTokenHash,
+  toChainId,
+  toAddress,
+  amount,
+  fee,
+}) {
+  try {
+    const chain = store.getters.getChain(fromChainId);
+    const tokenBasic = store.getters.getTokenBasicByChainIdAndTokenHash({
+      chainId: fromChainId,
+      tokenHash: fromTokenHash,
+    });
+
+    const toChainApi = await getChainApi(toChainId);
+    const toAddressHex = toChainApi.addressToHex(toAddress);
+    const amountInt = decimalToInteger(amount, tokenBasic.precision);
+    const feeInt = decimalToInteger(fee, tokenBasic.precision);
+
+    const params = {
+      scriptHash: chain.lockContractHash,
+      operation: 'lock',
+      args: [
+        { type: 'Hash160', value: fromTokenHash },
+        { type: 'Address', value: fromAddress },
+        { type: 'Integer', value: toChainId },
+        { type: 'ByteArray', value: toAddressHex },
+        { type: 'Integer', value: amountInt },
+        { type: 'Integer', value: feeInt },
+        { type: 'Integer', value: 0 },
+      ],
+    };
+    const result = await neoDapi.invoke(params);
+    return result.txid;
+  } catch (error) {
+    throw convertWalletError(error);
+  }
+}
+
 export default {
   install: init,
   connect,
+  getBalance,
+  getAllowance,
+  approve,
+  lock,
 };
