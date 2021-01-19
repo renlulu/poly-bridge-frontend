@@ -94,7 +94,7 @@ export const CHAINS = [
 ];
 
 export const TOKEN_BASIC_ICONS = {
-  Neo: require('@/assets/svg/neo-token.svg'),
+  NEO: require('@/assets/svg/neo-token.svg'),
   Ethereum: require('@/assets/svg/eth-token.svg'),
 };
 

@@ -1,6 +1,6 @@
-# flamingo-web-app
+# poly-bridge-frontend
 
-Flamingo web application based on Vue
+Poly Bridge web application based on Vue
 
 ## Project setup
 
