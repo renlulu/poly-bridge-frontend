@@ -123,7 +123,11 @@
       >
         Connect Wallet
       </CSubmitButton>
-      <CSubmitButton v-else-if="needApproval" :loading="approving" @click="approve">
+      <CSubmitButton
+        v-else-if="!invalid && fromToken && toToken && needApproval"
+        :loading="approving"
+        @click="approve"
+      >
         Approve
       </CSubmitButton>
       <CSubmitButton v-else :disabled="invalid || !(fromToken && toToken)" @click="submit">
