@@ -5,6 +5,7 @@ export class BaseError extends Error {
     super(message);
     this.cause = options.cause;
     this.expose = options.expose != null ? options.expose : true;
+    this.detail = options.detail;
   }
 
   getLocalMessage() {
@@ -46,9 +47,9 @@ export class WalletError extends BaseError {
   }
 
   getLocalMessage() {
-    const { code } = this;
+    const { code, detail } = this;
     if (i18n.te(`errors.wallet.${code}`)) {
-      return i18n.t(`errors.wallet.${code}`);
+      return i18n.t(`errors.wallet.${code}`, detail);
     }
     return this.message;
   }
@@ -67,9 +68,9 @@ export class ChainError extends BaseError {
   }
 
   getLocalMessage() {
-    const { code } = this;
+    const { code, detail } = this;
     if (i18n.te(`errors.chain.${code}`)) {
-      return i18n.t(`errors.chain.${code}`);
+      return i18n.t(`errors.chain.${code}`, detail);
     }
     return this.message;
   }
@@ -90,9 +91,9 @@ export class HttpError extends BaseError {
   }
 
   getLocalMessage() {
-    const { code } = this;
+    const { code, detail } = this;
     if (i18n.te(`errors.http.${code}`)) {
-      return i18n.t(`errors.http.${code}`);
+      return i18n.t(`errors.http.${code}`, detail);
     }
     return this.message;
   }

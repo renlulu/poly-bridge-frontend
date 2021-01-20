@@ -41,8 +41,6 @@ export const CHAINS = [
   {
     id: ChainId.Poly,
     icon: require('@/assets/svg/poly.svg'),
-    url: 'https://poly.network',
-    explorerName: 'Transaction Browser',
     explorerUrl: TARGET_MAINNET
       ? 'http://explorer.poly.network/tx/{txHash}'
       : 'http://explorer.poly.network/testnet/tx/{txHash}',
@@ -50,7 +48,6 @@ export const CHAINS = [
   {
     id: ChainId.Eth,
     icon: require('@/assets/svg/eth.svg'),
-    explorerName: 'Etherscan',
     explorerUrl: TARGET_MAINNET
       ? 'https://etherscan.io/tx/0x{txHash}'
       : 'https://ropsten.etherscan.io/tx/0x{txHash}',
@@ -61,7 +58,6 @@ export const CHAINS = [
   {
     id: ChainId.Neo, // TODO
     icon: require('@/assets/svg/neo.svg'),
-    explorerName: 'NeoTube',
     explorerUrl: TARGET_MAINNET
       ? 'https://neotube.io/transaction/0x{txHash}'
       : 'https://testnet.neotube.io/transaction/0x{txHash}',
@@ -72,7 +68,6 @@ export const CHAINS = [
   {
     id: ChainId.Bsc, // TODO
     icon: require('@/assets/svg/bsc.svg'),
-    explorerName: 'BscScan',
     explorerUrl: TARGET_MAINNET
       ? 'https://bscscan.com/tx/0x{txHash}'
       : 'https://testnet.bscscan.com/tx/0x{txHash}',
@@ -83,7 +78,6 @@ export const CHAINS = [
   {
     id: ChainId.Heco, // TODO
     icon: require('@/assets/svg/heco.svg'),
-    explorerName: 'HecoScan',
     explorerUrl: TARGET_MAINNET
       ? 'https://scan.hecochain.com/tx/0x{txHash}'
       : 'https://scan-testnet.hecochain.com/tx/0x{txHash}',

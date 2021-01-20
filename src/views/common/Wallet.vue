@@ -2,7 +2,9 @@
   <div class="wallet">
     <div class="top">
       <img :src="wallet.icon" />
-      <span class="wallet-name">{{ wallet.name }}</span>
+      <span class="wallet-name">
+        {{ $formatEnum(wallet.name, { type: 'walletName' }) }}
+      </span>
     </div>
     <div class="address">
       <span class="address-value">{{ $formatLongText(wallet.address) }}</span>

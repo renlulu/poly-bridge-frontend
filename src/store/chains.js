@@ -1,7 +1,8 @@
 import Vue from 'vue';
-import { CHAINS } from '@/utils/values';
 import { toStandardHex, objectToBase64, base64ToObject } from '@/utils/convertors';
 import { WalletError } from '@/utils/errors';
+import { formatEnum } from '@/utils/formatters';
+import { CHAINS } from '@/utils/values';
 
 const CHAIN_SELECTED_WALLETS_KEY = 'CHAIN_SELECTED_WALLETS';
 
@@ -28,10 +29,6 @@ export default {
       const wallet = getters.getWallet(state.chainSelectedWalletMap[id]);
       return wallet && wallet.connected ? wallet : null;
     },
-    getChainWalletReady: (state, getters) => id => {
-      const wallet = getters.getChainConnectedWallet(id);
-      return wallet && wallet.chainId === id;
-    },
   },
   mutations: {
     setChainSelectedWallet(state, { chainId, walletName }) {
@@ -57,14 +54,22 @@ export default {
       dispatch('saveChainSelectedWallets');
     },
     async ensureChainWalletReady({ getters }, chainId) {
-      if (!getters.getChainConnectedWallet(chainId)) {
+      const wallet = getters.getChainConnectedWallet(chainId);
+      if (!wallet) {
         throw new WalletError('Wallet is not connected.', {
           code: WalletError.CODES.NOT_CONNECTED,
+          detail: {
+            chainName: formatEnum(chainId, { type: 'chainName' }),
+          },
         });
       }
-      if (!getters.getChainWalletReady(chainId)) {
+      if (wallet.chainId !== chainId) {
         throw new WalletError('Wallet is not in correct network.', {
           code: WalletError.CODES.INCORRECT_NETWORK,
+          detail: {
+            walletName: formatEnum(wallet.name, { type: 'walletName' }),
+            chainNetworkName: formatEnum(chainId, { type: 'chainNetworkName' }),
+          },
         });
       }
     },

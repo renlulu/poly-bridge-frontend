@@ -1,4 +1,5 @@
-import { ChainId } from '@/utils/enums';
+import { TARGET_MAINNET } from '@/utils/env';
+import { WalletName, ChainId } from '@/utils/enums';
 
 export default {
   buttons: {
@@ -16,7 +17,12 @@ export default {
     copied: '"{text}" 已复制到剪切板.',
   },
   enums: {
-    walletName: {},
+    walletName: {
+      [WalletName.Metamask]: 'Metamask',
+      [WalletName.NeoLine]: 'NeoLine',
+      [WalletName.O3]: 'O3',
+      [WalletName.Binance]: 'Binance',
+    },
     chainName: {
       [ChainId.Poly]: 'PolyNetwork',
       [ChainId.Eth]: 'Ethereum',
@@ -24,15 +30,21 @@ export default {
       [ChainId.Bsc]: 'BSC',
       [ChainId.Heco]: 'Heco',
     },
-    tokenBasicName: {},
+    chainNetworkName: {
+      [ChainId.Poly]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
+      [ChainId.Eth]: TARGET_MAINNET ? 'MainNet' : 'Ropsten TestNet',
+      [ChainId.Neo]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
+      [ChainId.Bsc]: TARGET_MAINNET ? 'BSC MainNet' : 'BSC TestNet',
+      [ChainId.Heco]: TARGET_MAINNET ? 'Heco MainNet' : 'Heco TestNet',
+    },
   },
   errors: {
     wallet: {
       UNKNOWN_ERROR: '未知钱包错误.',
       NOT_SUPPORTED: '钱包尚未支持.',
       NOT_INSTALLED: '钱包尚未安装.',
-      NOT_CONNECTED: '钱包尚未连接.',
-      INCORRECT_NETWORK: '钱包所连接网络不正确.',
+      NOT_CONNECTED: '{chainName} Wallet is not connected.',
+      INCORRECT_NETWORK: 'Please switch network to {chainNetworkName} on {walletName} Wallet.',
       USER_REJECTED: '请求已被用户拒绝.',
       MALFORMED_INPUT: '输入错误.',
       INSUFFICIENT_FUNDS: '余额不足.',

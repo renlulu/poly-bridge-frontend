@@ -1,4 +1,5 @@
-import { ChainId } from '@/utils/enums';
+import { TARGET_MAINNET } from '@/utils/env';
+import { WalletName, ChainId } from '@/utils/enums';
 
 export default {
   buttons: {
@@ -16,7 +17,12 @@ export default {
     copied: '"{text}" has been copied to clipboard.',
   },
   enums: {
-    walletName: {},
+    walletName: {
+      [WalletName.Metamask]: 'Metamask',
+      [WalletName.NeoLine]: 'NeoLine',
+      [WalletName.O3]: 'O3',
+      [WalletName.Binance]: 'Binance',
+    },
     chainName: {
       [ChainId.Poly]: 'PolyNetwork',
       [ChainId.Eth]: 'Ethereum',
@@ -24,15 +30,21 @@ export default {
       [ChainId.Bsc]: 'BSC',
       [ChainId.Heco]: 'Heco',
     },
-    tokenBasicName: {},
+    chainNetworkName: {
+      [ChainId.Poly]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
+      [ChainId.Eth]: TARGET_MAINNET ? 'MainNet' : 'Ropsten TestNet',
+      [ChainId.Neo]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
+      [ChainId.Bsc]: TARGET_MAINNET ? 'BSC MainNet' : 'BSC TestNet',
+      [ChainId.Heco]: TARGET_MAINNET ? 'Heco MainNet' : 'Heco TestNet',
+    },
   },
   errors: {
     wallet: {
       UNKNOWN_ERROR: 'Unknown wallet error.',
       NOT_SUPPORTED: 'Wallet is not supported.',
       NOT_INSTALLED: 'Wallet is not installed.',
-      NOT_CONNECTED: 'Wallet is not connected.',
-      INCORRECT_NETWORK: 'Wallet is not in correct network.',
+      NOT_CONNECTED: '{chainName} Wallet is not connected.',
+      INCORRECT_NETWORK: 'Please switch network to {chainNetworkName} on {walletName} Wallet.',
       USER_REJECTED: 'Request is rejected by user.',
       MALFORMED_INPUT: 'Malformed input.',
       INSUFFICIENT_FUNDS: 'Insufficient funds.',

@@ -24,10 +24,14 @@
           <div v-for="wallet in chainWallets" :key="wallet.name">
             <div v-if="wallet.connected && wallet.name === chain.selectedWalletName" class="wallet">
               <img :src="wallet.icon" />
-              <span class="wallet-name">{{ wallet.name }} Connected</span>
+              <span class="wallet-name">
+                {{ $formatEnum(wallet.name, { type: 'walletName' }) }} Connected
+              </span>
             </div>
             <CButton v-else class="connect" @click="connect(chain, wallet)">
-              <span class="wallet-name">Connect {{ wallet.name }}</span>
+              <span class="wallet-name">
+                Connect {{ $formatEnum(wallet.name, { type: 'walletName' }) }}
+              </span>
               <img :src="wallet.icon" />
             </CButton>
           </div>
