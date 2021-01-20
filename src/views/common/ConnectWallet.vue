@@ -1,8 +1,5 @@
 <template>
   <div class="connect-wallet">
-    <CButton class="close" @click="$emit('close')">
-      <img class="close-icon" src="@/assets/svg/close.svg" />
-    </CButton>
     <div class="content">
       <div class="chains">
         <CButton
@@ -92,15 +89,6 @@ export default {
   background: #182233;
   box-shadow: 0px 2px 10px 7px rgba(0, 0, 0, 0.16);
   overflow: hidden;
-}
-
-.close {
-  position: absolute;
-  transform: translateX(calc(-100% - 10px));
-}
-
-.close-icon {
-  width: 20px;
 }
 
 .content {
