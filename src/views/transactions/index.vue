@@ -86,7 +86,6 @@ export default {
 <style lang="scss" scoped>
 .transactions {
   min-width: 1440px;
-  overflow: hidden;
 }
 
 .top-decoration {
@@ -116,7 +115,7 @@ export default {
 
 .content-inner {
   width: 1090px;
-  margin: 20px auto;
+  margin: 40px auto 20px;
   @include child-margin-v(24px);
 }
 

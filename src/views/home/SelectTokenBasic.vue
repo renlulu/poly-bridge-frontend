@@ -96,12 +96,22 @@ export default {
 .input {
   padding: 16px 20px;
   background: rgba(#000000, 0.26);
+  border: 1px solid transparent;
   border-radius: 4px;
+  transition: all 0.3s;
+
+  &:hover {
+    border: 1px solid #2fd8ca;
+  }
+
+  input:focus::placeholder {
+    color: transparent;
+  }
 }
 
 .popular-token-basics {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
 
@@ -111,6 +121,10 @@ export default {
   border-radius: 15px;
   background: rgba(#000000, 0.3);
   border: 1px solid transparent;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
   @include child-margin-h(4px);
 
   &.selected {
@@ -141,7 +155,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   height: 56px;
-  padding: 0 32px;
+  padding: 0 40px;
   transition: all 0.3s;
   @include child-margin-h(16px);
 

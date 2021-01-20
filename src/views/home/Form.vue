@@ -23,18 +23,20 @@
               :disabled="!tokenBasic"
               @click="selectFromChainVisible = true"
             >
-              <template v-if="fromChain">
-                <img class="select-chain-icon" :src="fromChain.icon" />
-                <span class="select-chain-name">
-                  {{ $formatEnum(fromChainId, { type: 'chainName' }) }}
-                </span>
-              </template>
-              <template v-else>
-                <img class="select-chain-icon" src="@/assets/svg/from.svg" />
-                <span class="select-chain-name">From</span>
-              </template>
-              <span class="select-chain-name">Network</span>
-              <img class="chevron-down" src="@/assets/svg/chevron-down.svg" />
+              <div class="select-chain-content">
+                <template v-if="fromChain">
+                  <img class="select-chain-icon" :src="fromChain.icon" />
+                  <span class="select-chain-name">
+                    {{ $formatEnum(fromChainId, { type: 'chainName' }) }}
+                  </span>
+                </template>
+                <template v-else>
+                  <img class="select-chain-icon" src="@/assets/svg/from.svg" />
+                  <span class="select-chain-name">From</span>
+                </template>
+                <span class="select-chain-name">Network</span>
+                <img class="chevron-down" src="@/assets/svg/chevron-right.svg" />
+              </div>
             </CButton>
             <div v-if="fromWallet" class="address">
               <span class="address-value">
@@ -58,18 +60,20 @@
               :disabled="!toChains"
               @click="selectToChainVisible = true"
             >
-              <template v-if="toChain">
-                <img class="select-chain-icon" :src="toChain.icon" />
-                <span class="select-chain-name">
-                  {{ $formatEnum(toChainId, { type: 'chainName' }) }}
-                </span>
-              </template>
-              <template v-else>
-                <img class="select-chain-icon" src="@/assets/svg/to.svg" />
-                <span class="select-chain-name">To</span>
-              </template>
-              <span class="select-chain-name">Network</span>
-              <img class="chevron-down" src="@/assets/svg/chevron-down.svg" />
+              <div class="select-chain-content">
+                <template v-if="toChain">
+                  <img class="select-chain-icon" :src="toChain.icon" />
+                  <span class="select-chain-name">
+                    {{ $formatEnum(toChainId, { type: 'chainName' }) }}
+                  </span>
+                </template>
+                <template v-else>
+                  <img class="select-chain-icon" src="@/assets/svg/to.svg" />
+                  <span class="select-chain-name">To</span>
+                </template>
+                <span class="select-chain-name">Network</span>
+                <img class="chevron-down" src="@/assets/svg/chevron-right.svg" />
+              </div>
             </CButton>
             <div v-if="toWallet" class="address">
               <span class="address-value">
@@ -507,8 +511,13 @@ export default {
 }
 
 .select-chain {
+  width: 100%;
+}
+
+.select-chain-content {
   display: flex;
   flex-direction: column;
+  align-items: start;
   width: stretch;
   padding: 15px;
   border: 1px solid rgba(#ffffff, 0.1);

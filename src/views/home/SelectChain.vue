@@ -60,7 +60,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   height: 56px;
-  padding: 0 32px;
+  padding: 0 40px;
   transition: all 0.3s;
   @include child-margin-h(16px);
 

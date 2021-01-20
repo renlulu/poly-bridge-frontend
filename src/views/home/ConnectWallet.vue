@@ -153,9 +153,9 @@ export default {
 
 .scroll {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex: 1;
-  padding: 16px 0;
+  padding: 16px 50px;
   overflow-y: auto;
   @include scroll-bar(rgba(#fff, 0.2), transparent);
 }

@@ -1,6 +1,9 @@
 <template>
   <Page class="home">
-    <img class="decoration" src="@/assets/svg/poly-bg.svg" />
+    <img class="top-decoration" src="@/assets/svg/poly-bg.svg" />
+    <div class="bottom-decoration-wrapper">
+      <img class="bottom-decoration" src="@/assets/svg/poly-bg.svg" />
+    </div>
     <div class="content">
       <div class="slogan" v-html="slogon" />
       <Form />
@@ -31,6 +34,24 @@ export default {
 .home {
   min-width: 1440px;
   background-image: var(--background-image);
+}
+
+.top-decoration {
+  position: absolute;
+  top: 0;
+  z-index: -1;
+}
+
+.bottom-decoration-wrapper {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.bottom-decoration {
+  transform: translate3d(60px, 60px, 0) scale(1.2);
 }
 
 .decoration {

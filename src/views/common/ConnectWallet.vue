@@ -11,6 +11,7 @@
           class="chain"
           :class="{ selected: chainIdWithDefault === chain.id }"
           @click="chainId = chain.id"
+          @mouseover="chainId = chain.id"
         >
           <img class="chain-icon" :src="chain.icon" />
         </CButton>

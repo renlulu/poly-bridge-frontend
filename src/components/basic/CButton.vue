@@ -33,12 +33,12 @@ export default {
 
   @include modifier(fade) {
     &:hover {
-      filter: brightness(0.8);
+      filter: brightness(0.6);
     }
   }
 
   &:disabled {
-    filter: brightness(0.6);
+    filter: brightness(0.3);
     cursor: not-allowed;
   }
 }
