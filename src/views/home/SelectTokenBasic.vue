@@ -19,7 +19,7 @@
             @click="select(tokenBasic)"
           >
             <img class="popular-token-basic-icon" :src="tokenBasic.icon" />
-            <span>{{ tokenBasic.name }}</span>
+            <span class="popular-token-basic-name">{{ tokenBasic.name }}</span>
           </CButton>
         </div>
       </div>
@@ -133,19 +133,23 @@ export default {
 }
 
 .popular-token-basic-icon {
-  width: 20px;
+  width: 16px;
+}
+
+.popular-token-basic-name {
+  font-size: 14px;
 }
 
 .hint {
   padding: 0 50px;
   opacity: 0.8;
   font-size: 12px;
-  @include next-margin-v(20px);
+  @include next-margin-v(17px);
 }
 
 .scroll {
   flex: 1;
-  padding: 16px 10px;
+  padding: 8px 10px;
   overflow-y: auto;
   @include scroll-bar(rgba(#fff, 0.2), transparent);
 }
