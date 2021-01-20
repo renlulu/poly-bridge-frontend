@@ -477,7 +477,7 @@ export default {
 }
 
 .field {
-  width: stretch;
+  flex: 1;
   @include child-margin-v(10px);
 }
 
