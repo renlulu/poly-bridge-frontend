@@ -1,10 +1,11 @@
 import Web3 from 'web3';
 import store from '@/store';
 import { getChainApi } from '@/utils/chainApi';
-import { integerToDecimal, decimalToInteger, toStandardHex } from '@/utils/convertors';
+import { integerToDecimal, decimalToInteger, isValidHex, toStandardHex } from '@/utils/convertors';
 import { WalletName, ChainId } from '@/utils/enums';
 import { WalletError } from '@/utils/errors';
 import { TARGET_MAINNET } from '@/utils/env';
+import { formatEnum } from '@/utils/formatters';
 
 const BINANCE_CONNECTED_KEY = 'BINANCE_CONNECTED';
 
@@ -40,6 +41,15 @@ function convertWalletError(error) {
 async function queryState() {
   const accounts = await window.BinanceChain.request({ method: 'eth_accounts' });
   const address = accounts[0] || null;
+  if (address && !isValidHex(address)) {
+    throw new WalletError('Wallet is not in correct network.', {
+      code: WalletError.CODES.INCORRECT_NETWORK,
+      detail: {
+        walletName: formatEnum(WalletName.Binance, { type: 'walletName' }),
+        chainNetworkName: formatEnum(ChainId.Bsc, { type: 'chainNetworkName' }),
+      },
+    });
+  }
   const checksumAddress = address && web3.utils.toChecksumAddress(address);
   const network = await window.BinanceChain.request({ method: 'eth_chainId' });
   store.dispatch('updateWallet', {
