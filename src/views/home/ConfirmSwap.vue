@@ -43,7 +43,7 @@
             <div class="label">Fee</div>
             <div class="fee">
               <span class="fee-value">{{ confirmingData.fee }}</span>
-              <span class="token-basic-name">{{ tokenBasic.name }}</span>
+              <span class="token-basic-name">{{ fromToken.name }}</span>
             </div>
           </div>
 
@@ -51,7 +51,7 @@
             <div class="label">You will receive</div>
             <div class="fee">
               <span class="fee-value">{{ receivingAmount }}</span>
-              <span class="token-basic-name">{{ tokenBasic.name }}</span>
+              <span class="token-basic-name">{{ toToken.name }}</span>
             </div>
           </div>
         </div>
@@ -84,6 +84,24 @@ export default {
         this.$store.getters.getTokenBasicByChainIdAndTokenHash({
           chainId: this.confirmingData.fromChainId,
           tokenHash: this.confirmingData.fromTokenHash,
+        })
+      );
+    },
+    fromToken() {
+      return (
+        this.tokenBasic &&
+        this.$store.getters.getTokenByTokenBasicNameAndChainId({
+          tokenBasicName: this.tokenBasic.name,
+          chainId: this.confirmingData.fromChainId,
+        })
+      );
+    },
+    toToken() {
+      return (
+        this.tokenBasic &&
+        this.$store.getters.getTokenByTokenBasicNameAndChainId({
+          tokenBasicName: this.tokenBasic.name,
+          chainId: this.confirmingData.toChainId,
         })
       );
     },

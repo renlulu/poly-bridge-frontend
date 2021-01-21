@@ -109,14 +109,14 @@
           <div v-if="balance" class="balance">
             <span class="label">Balance</span>
             <CFlexSpan />
-            <span class="value">{{ balance }} {{ tokenBasicName }}</span>
+            <span class="value">{{ balance }} {{ fromToken.name }}</span>
           </div>
           <div v-if="fee" class="fee">
             <span class="label">Fee</span>
             <CFlexSpan />
             <span class="fee-value">{{ fee }}</span>
             <img class="fee-icon" src="@/assets/svg/eth-token.svg" />
-            <span class="fee-token">{{ tokenBasicName }}</span>
+            <span class="fee-token">{{ fromToken.name }}</span>
           </div>
         </ValidationProvider>
       </div>
