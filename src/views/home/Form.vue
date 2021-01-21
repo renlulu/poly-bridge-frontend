@@ -440,7 +440,8 @@ export default {
     },
     clearForm() {
       this.amount = '';
-      this.$refs.validation.reset();
+      this.confirmingData = null;
+      this.$nextTick(() => this.$refs.validation.reset());
     },
   },
 };
