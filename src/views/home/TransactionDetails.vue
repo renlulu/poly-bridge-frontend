@@ -2,46 +2,40 @@
   <CDrawer v-bind="$attrs" v-on="$listeners">
     <div class="content">
       <div class="title">Transaction Details</div>
-      <div class="scroll">
-        <div class="step">
-          <div class="step-dot" :class="{ active: true }" />
-          <div class="step-line" />
-          <div class="step-title">ETH</div>
+      <div v-if="transaction" class="scroll">
+        <div v-for="(step, index) in transaction.steps" :key="step.chainId" class="step">
+          <div class="step-dot" :class="{ active: step.hash }" />
+          <div v-if="index !== transaction.steps.length - 1" class="step-line" />
+          <div class="step-title">{{ $formatEnum(step.chainId, { type: 'chainName' }) }}</div>
           <div class="description">
-            The transaction is proceeding on the ETH. Please be patient…
+            <template v-if="!step.hash">
+              The transaction has not been proceeded on the
+              {{ $formatEnum(step.chainId, { type: 'chainName' }) }}. Please be patient…
+            </template>
+            <template v-else-if="step.blocks < step.needBlocks">
+              The transaction is proceeding on the
+              {{ $formatEnum(step.chainId, { type: 'chainName' }) }}. Please be patient…
+            </template>
+            <template v-else>
+              The transaction has been proceeded on the
+              {{ $formatEnum(step.chainId, { type: 'chainName' }) }}.
+            </template>
           </div>
           <div class="progress">
-            <ElProgress class="progress-bar" :percentage="100" :showText="false" />
-            <span class="progress-text">1/2 Confirm</span>
+            <ElProgress
+              class="progress-bar"
+              :percentage="(step.blocks / step.needBlocks) * 100"
+              :showText="false"
+            />
+            <span class="progress-text">{{ step.blocks }}/{{ step.needBlocks }} Confirm</span>
           </div>
-          <CLink class="hash">hash 709dd2a9a0054f02cf102ed81e0b…</CLink>
-        </div>
-
-        <div class="step">
-          <div class="step-dot" :class="{ active: true }" />
-          <div class="step-line" />
-          <div class="step-title">NEO（1/2 Confirm）</div>
-          <div class="description">
-            The transaction is proceeding on the ETH. Please be patient…
-          </div>
-          <div class="progress">
-            <ElProgress class="progress-bar" :percentage="50" :showText="false" />
-            <span class="progress-text">1/2 Confirm</span>
-          </div>
-          <CLink class="hash">hash 709dd2a9a0054f02cf102ed81e0b…</CLink>
-        </div>
-
-        <div class="step">
-          <div class="step-dot" :class="{ active: false }" />
-          <div class="step-title">PolyNetwork（1/2 Confirm）</div>
-          <div class="description">
-            The transaction is proceeding on the ETH. Please be patient…
-          </div>
-          <div class="progress">
-            <ElProgress class="progress-bar" :percentage="0" :showText="false" />
-            <span class="progress-text">1/2 Confirm</span>
-          </div>
-          <CLink class="hash">hash 709dd2a9a0054f02cf102ed81e0b…</CLink>
+          <CLink
+            class="hash"
+            :href="$format(getChain(step.chainId).explorerUrl, { txHash: step.hash })"
+            :disabled="!step.hash"
+          >
+            Hash: {{ $formatLongText(step.hash || 'N/A', { headTailLength: 16 }) }}
+          </CLink>
         </div>
       </div>
     </div>
@@ -52,6 +46,26 @@
 export default {
   name: 'TransactionDetails',
   inheritAttrs: false,
+  props: {
+    hash: String,
+  },
+  computed: {
+    transaction() {
+      return this.$store.getters.getTransaction(this.hash);
+    },
+  },
+  watch: {
+    hash(value) {
+      if (value) {
+        this.$store.dispatch('getTransaction', value);
+      }
+    },
+  },
+  methods: {
+    getChain(chainId) {
+      return this.$store.getters.getChain(chainId);
+    },
+  },
 };
 </script>
 

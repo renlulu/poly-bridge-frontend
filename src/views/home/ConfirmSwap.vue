@@ -3,8 +3,8 @@
     <div class="content">
       <div class="title">Confirm Swap</div>
       <CDivider />
-      <div class="scroll">
-        <div class="fields" v-if="confirmingData">
+      <div v-if="confirmingData" class="scroll">
+        <div class="fields">
           <div class="field">
             <div class="label">Amount</div>
             <div class="amount">

@@ -1,7 +1,9 @@
+import element from 'element-ui/lib/locale/lang/zh-CN';
 import { TARGET_MAINNET } from '@/utils/env';
-import { WalletName, ChainId } from '@/utils/enums';
+import { WalletName, ChainId, TransactionStatus } from '@/utils/enums';
 
 export default {
+  ...element,
   buttons: {
     cancel: '取消',
     confirm: '确认',
@@ -36,6 +38,13 @@ export default {
       [ChainId.Neo]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
       [ChainId.Bsc]: TARGET_MAINNET ? 'BSC MainNet' : 'BSC TestNet',
       [ChainId.Heco]: TARGET_MAINNET ? 'Heco MainNet' : 'Heco TestNet',
+    },
+    transactionStatus: {
+      [TransactionStatus.Finished]: 'Finished',
+      [TransactionStatus.Pending]: 'Pending',
+      [TransactionStatus.SourceDone]: 'Pending',
+      [TransactionStatus.SourceConfirmed]: 'Pending',
+      [TransactionStatus.PolyConfirmed]: 'Pending',
     },
   },
   errors: {

@@ -9,7 +9,7 @@ dayjs.extend(advancedFormat);
 dayjs.extend(utc);
 
 export function formatEnum(value, { type, ingoreMissing = false } = {}) {
-  if (!value) {
+  if (!value && value !== 0) {
     return '';
   }
   if (i18n.te(`enums.${type}.${value}`)) {

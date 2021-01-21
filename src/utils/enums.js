@@ -14,3 +14,11 @@ export const ChainId = {
   Bsc: 79, // TODO
   Heco: 7, // TODO
 };
+
+export const TransactionStatus = {
+  Finished: 0,
+  Pending: 1,
+  SourceDone: 2,
+  SourceConfirmed: 3,
+  PolyConfirmed: 4,
+};

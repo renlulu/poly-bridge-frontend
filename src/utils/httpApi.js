@@ -1,6 +1,8 @@
 import axios from 'axios';
 import _ from 'lodash';
+import { getChainApi } from '@/utils/chainApi';
 import { HttpError } from './errors';
+import { mapTransactionToDo } from './mappers';
 import { HTTP_BASE_URL } from './values';
 import * as schemas from './schemas';
 import { deserialize, list } from './serializr';
@@ -38,8 +40,8 @@ request.interceptors.response.use(
 export default {
   async getTokenBasics() {
     const result = await request({ method: 'post', url: '/tokenbasics', data: {} });
-    const tokenBasics = deserialize(list(schemas.tokenBasic), result.TokenBasics);
-    const tokens = _.flatMap(tokenBasics, tokenBasic => tokenBasic.tokens);
+    const tokenBasics = deserialize(list(schemas.tokenBasic), result.TokenBasics || []);
+    const tokens = _.flatMap(tokenBasics, tokenBasic => tokenBasic.tokens || []);
     return { tokenBasics, tokens };
   },
   async getTokenMaps({ fromChainId, fromTokenHash }) {
@@ -66,10 +68,38 @@ export default {
     });
     return result.TokenAmount;
   },
-  async getTransactions({ addresses }) {
-    return 0;
+  async getTransactions({ addressAndChainIds, page, pageSize }) {
+    const addressHexs = await Promise.all(
+      addressAndChainIds.map(async addressAndChainId => {
+        const chainApi = await getChainApi(addressAndChainId.chainId);
+        return chainApi.addressToHex(addressAndChainId.address);
+      }),
+    );
+
+    const result = await request({
+      method: 'post',
+      url: 'transactionsofaddress',
+      data: {
+        Addresses: addressHexs,
+        PageNo: page - 1,
+        PageSize: pageSize,
+      },
+    });
+    const transactions = deserialize(list(schemas.transaction), result.Transactions || []);
+    return {
+      items: transactions.map(mapTransactionToDo),
+      pageCount: result.TotalPage,
+    };
   },
   async getTransaction({ hash }) {
-    return 0;
+    const result = await request({
+      method: 'post',
+      url: 'transactionofhash',
+      data: {
+        Hash: hash,
+      },
+    });
+    const transaction = deserialize(schemas.transaction, result);
+    return mapTransactionToDo(transaction);
   },
 };

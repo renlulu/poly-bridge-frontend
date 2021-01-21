@@ -350,7 +350,11 @@ export default {
   created() {
     this.$store.dispatch('getTokenBasics');
     this.interval = setInterval(() => {
-      if (this.getBalanceParams) {
+      if (
+        this.getBalanceParams &&
+        this.fromWallet &&
+        this.fromWallet.chainId === this.fromChainId
+      ) {
         this.$store.dispatch('getBalance', this.getBalanceParams);
       }
     }, 5000);

@@ -11,47 +11,68 @@
         <div class="table-wrapper">
           <ElTable :data="transactions.items">
             <ElTableColumn width="20" />
-            <ElTableColumn #default="{}" label="Source Chain" min-width="150">
+            <ElTableColumn #default="{row}" label="Source Chain" min-width="150">
               <div class="chain">
-                <img src="@/assets/svg/eth.svg" />
-                <span>Ethereum</span>
+                <img :src="getChain(row.fromChainId).icon" />
+                <span>{{ $formatEnum(row.fromChainId, { type: 'chainName' }) }}</span>
               </div>
-              <CLink class="hash">hash:0xc12E…79F192</CLink>
+              <CLink
+                class="hash"
+                :href="
+                  $format(getChain(row.fromChainId).explorerUrl, {
+                    txHash: row.fromTransactionHash,
+                  })
+                "
+                :disabled="!row.fromTransactionHash"
+              >
+                Hash: {{ $formatLongText(row.fromTransactionHash || 'N/A') }}
+              </CLink>
             </ElTableColumn>
-            <ElTableColumn #default="{}" label="Destination Chain" min-width="150">
+            <ElTableColumn #default="{row}" label="Destination Chain" min-width="150">
               <div class="chain">
-                <img src="@/assets/svg/neo.svg" />
-                <span>Neo</span>
+                <img :src="getChain(row.toChainId).icon" />
+                <span>{{ $formatEnum(row.toChainId, { type: 'chainName' }) }}</span>
               </div>
-              <CLink class="hash">hash:0xc12E…79F192</CLink>
+              <CLink
+                class="hash"
+                :href="
+                  $format(getChain(row.toChainId).explorerUrl, { txHash: row.toTransactionHash })
+                "
+                :disabled="!row.toTransactionHash"
+              >
+                Hash: {{ $formatLongText(row.toTransactionHash || 'N/A') }}
+              </CLink>
             </ElTableColumn>
             <ElTableColumn label="Amount" prop="amount" />
             <ElTableColumn label="Asset" prop="tokenBasicName" />
-            <ElTableColumn label="Time" prop="updateTime" />
+            <ElTableColumn #default="{row}" label="Time" prop="time" min-width="120">
+              {{ $formatTime(row.time) }}
+            </ElTableColumn>
             <ElTableColumn #default="{row}" label="Status" align="right">
-              <CButton class="view-details" @click="transactionDetailsVisible = true">
-                {{ row.status }}
+              <CButton class="view-details" @click="viewDetails(row)">
+                {{ $formatEnum(row.status, { type: 'transactionStatus' }) }}
               </CButton>
             </ElTableColumn>
             <ElTableColumn width="20" />
           </ElTable>
           <div class="pagination">
-            <CButton>
+            <CButton @click="page--" :disabled="page <= 1 || transactions.pageCount == null">
               <img src="@/assets/svg/arrow-left.svg" />
             </CButton>
-            <span>Page 1 of 10</span>
-            <CButton>
+            <span>Page {{ page }} of {{ transactions.pageCount || 1 }}</span>
+            <CButton @click="page++" :disabled="!(page < transactions.pageCount)">
               <img src="@/assets/svg/arrow-right.svg" />
             </CButton>
           </div>
         </div>
       </div>
     </div>
-    <TransactionDetails :visible.sync="transactionDetailsVisible" />
+    <TransactionDetails :visible.sync="transactionDetailsVisible" :hash="transactionHash" />
   </Page>
 </template>
 
 <script>
+import _ from 'lodash';
 import Page from '@/views/common/Page';
 import TransactionDetails from '@/views/home/TransactionDetails';
 
@@ -64,21 +85,47 @@ export default {
   data() {
     return {
       transactionDetailsVisible: false,
-      transactions: {
-        items: [
-          { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
-          { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
-          { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
-          { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
-          { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
-          { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
-          { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
-          { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
-          { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
-          { amount: 1000, tokenBasicName: 'pNeo', updateTime: '2020.04.12', status: 'Completed' },
-        ],
-      },
+      transactionHash: null,
+      page: 1,
+      pageSize: 10,
     };
+  },
+  computed: {
+    addressAndChainIds() {
+      return this.$store.getters.wallets
+        .filter(wallet => wallet.address && wallet.chainId)
+        .map(wallet => ({ address: wallet.address, chainId: wallet.chainId }));
+    },
+    getTransactionsParams() {
+      return {
+        addressAndChainIds: this.addressAndChainIds,
+        page: this.page,
+        pageSize: this.pageSize,
+        vary: ['pageSize'],
+      };
+    },
+    transactions() {
+      return this.$store.getters.getTransactions(this.getTransactionsParams) || {};
+    },
+  },
+  watch: {
+    getTransactionsParams: {
+      handler(value, oldValue) {
+        if (!_.isEqual(value, oldValue)) {
+          this.$store.dispatch('getTransactions', value);
+        }
+      },
+      immediate: true,
+    },
+  },
+  methods: {
+    getChain(chainId) {
+      return this.$store.getters.getChain(chainId);
+    },
+    viewDetails(transaction) {
+      this.transactionHash = transaction.hash;
+      this.transactionDetailsVisible = true;
+    },
   },
 };
 </script>
