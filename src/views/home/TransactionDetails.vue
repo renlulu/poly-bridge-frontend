@@ -61,6 +61,16 @@ export default {
       }
     },
   },
+  created() {
+    this.interval = setInterval(() => {
+      if (this.hash && this.$attrs.visible) {
+        this.$store.dispatch('getTransaction', this.hash);
+      }
+    }, 5000);
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
+  },
   methods: {
     getChain(chainId) {
       return this.$store.getters.getChain(chainId);
