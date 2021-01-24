@@ -1,10 +1,10 @@
 <template>
   <ValidationObserver ref="validation" tag="div" v-slot="{ invalid }" class="form">
     <div class="card">
-      <div class="title">Bridge</div>
+      <div class="title">{{ $t('home.form.title') }}</div>
       <div class="fields">
         <div class="field">
-          <div class="label">Asset</div>
+          <div class="label">{{ $t('home.form.asset') }}</div>
           <CButton class="select-token-basic" @click="selectTokenBasicVisible = true">
             <template v-if="tokenBasic">
               <img class="select-token-basic-icon" :src="tokenBasic.icon" />
@@ -17,7 +17,7 @@
 
         <div class="fields-row">
           <div class="field">
-            <div class="label">From</div>
+            <div class="label">{{ $t('home.form.from') }}</div>
             <CButton
               class="select-chain"
               :disabled="!tokenBasic"
@@ -27,14 +27,19 @@
                 <template v-if="fromChain">
                   <img class="select-chain-icon" :src="fromChain.icon" />
                   <span class="select-chain-name">
-                    {{ $formatEnum(fromChainId, { type: 'chainName' }) }}
+                    {{
+                      $t('home.form.chainName', {
+                        chainName: $formatEnum(fromChainId, { type: 'chainName' }),
+                      })
+                    }}
                   </span>
                 </template>
                 <template v-else>
                   <img class="select-chain-icon" src="@/assets/svg/from.svg" />
-                  <span class="select-chain-name">From</span>
+                  <span class="select-chain-name">
+                    {{ $t('home.form.chainName', { chainName: $t('home.form.from') }) }}
+                  </span>
                 </template>
-                <span class="select-chain-name">Network</span>
                 <img class="chevron-down" src="@/assets/svg/chevron-right.svg" />
               </div>
             </CButton>
@@ -54,7 +59,7 @@
           </CButton>
 
           <div class="field">
-            <div class="label">To</div>
+            <div class="label">{{ $t('home.form.to') }}</div>
             <CButton
               class="select-chain"
               :disabled="!toChains"
@@ -64,14 +69,19 @@
                 <template v-if="toChain">
                   <img class="select-chain-icon" :src="toChain.icon" />
                   <span class="select-chain-name">
-                    {{ $formatEnum(toChainId, { type: 'chainName' }) }}
+                    {{
+                      $t('home.form.chainName', {
+                        chainName: $formatEnum(toChainId, { type: 'chainName' }),
+                      })
+                    }}
                   </span>
                 </template>
                 <template v-else>
                   <img class="select-chain-icon" src="@/assets/svg/to.svg" />
-                  <span class="select-chain-name">To</span>
+                  <span class="select-chain-name">
+                    {{ $t('home.form.chainName', { chainName: $t('home.form.to') }) }}
+                  </span>
                 </template>
-                <span class="select-chain-name">Network</span>
                 <img class="chevron-down" src="@/assets/svg/chevron-right.svg" />
               </div>
             </CButton>
@@ -100,19 +110,21 @@
           }"
           v-slot="{ errors }"
         >
-          <div class="label">Amount</div>
+          <div class="label">{{ $t('home.form.amount') }}</div>
           <div class="input">
             <CInput class="input-inner" v-model="amount" />
-            <CButton v-if="balance" class="use-max" @click="transferAll">MAX</CButton>
+            <CButton v-if="balance" class="use-max" @click="transferAll">
+              {{ $t('home.form.max') }}
+            </CButton>
           </div>
           <div class="input-error">{{ errors[0] }}</div>
           <div v-if="balance" class="balance">
-            <span class="label">Balance</span>
+            <span class="label">{{ $t('home.form.balance') }}</span>
             <CFlexSpan />
             <span class="value">{{ balance }} {{ fromToken.name }}</span>
           </div>
           <div v-if="fee" class="fee">
-            <span class="label">Fee</span>
+            <span class="label">{{ $t('home.form.fee') }}</span>
             <CFlexSpan />
             <span class="fee-value">{{ fee }}</span>
             <img class="fee-icon" src="@/assets/svg/eth-token.svg" />
@@ -125,14 +137,14 @@
         v-if="fromChain && toChain && !(fromWallet && toWallet)"
         @click="connectWalletVisible = true"
       >
-        Connect Wallet
+        {{ $t('home.form.connectWallet') }}
       </CSubmitButton>
       <CSubmitButton
         v-else-if="!invalid && fromToken && toToken && needApproval"
         :loading="approving"
         @click="approve"
       >
-        Approve
+        {{ $t('home.form.approve') }}
       </CSubmitButton>
       <CSubmitButton v-else :disabled="invalid || !(fromToken && toToken)" @click="submit">
         {{ $t('buttons.next') }}
@@ -140,8 +152,8 @@
     </div>
 
     <div class="history">
-      You can view your
-      <CLink class="link" :to="{ name: 'transactions' }">history</CLink>
+      {{ $t('home.form.historyPrefix') }}
+      <CLink class="link" :to="{ name: 'transactions' }">{{ $t('home.form.historyLink') }}</CLink>
     </div>
 
     <SelectTokenBasic
@@ -181,12 +193,12 @@
 import BigNumber from 'bignumber.js';
 import copy from 'clipboard-copy';
 import { ChainId } from '@/utils/enums';
+import TransactionDetails from '@/views/transactions/Details';
 import { getWalletApi } from '@/utils/walletApi';
 import SelectTokenBasic from './SelectTokenBasic';
 import SelectChain from './SelectChain';
 import ConnectWallet from './ConnectWallet';
 import ConfirmSwap from './ConfirmSwap';
-import TransactionDetails from './TransactionDetails';
 
 export default {
   name: 'Form',
@@ -522,7 +534,7 @@ export default {
 .select-chain-content {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   width: stretch;
   padding: 15px;
   border: 1px solid rgba(#ffffff, 0.1);
@@ -537,6 +549,8 @@ export default {
 
 .select-chain-name {
   font-size: 14px;
+  white-space: pre-line;
+  text-align: left;
 }
 
 .address {

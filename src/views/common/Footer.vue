@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <div class="copyright">
-      © 2021 Polynetwork. All rights reserved. Privacy policy
+      {{ $t('common.footer.copyright') }}
     </div>
     <CButton class="change-lang" @click="changeLocale">
       <span v-if="$i18n.locale === 'en'">English</span>

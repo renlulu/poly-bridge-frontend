@@ -2,12 +2,12 @@
   <CDrawer v-bind="$attrs" v-on="$listeners">
     <div class="content">
       <div class="header">
-        <div class="title">Select Asset</div>
+        <div class="title">{{ $t('home.selectTokenBasic.title') }}</div>
         <div class="input">
           <CInput
             v-model="keyword"
             class="input-inner"
-            placeholder="Search name or paste address"
+            :placeholder="$t('home.selectTokenBasic.inputPlaceholder')"
           />
         </div>
         <div class="popular-token-basics">
@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <div class="hint">Token Name</div>
+      <div class="hint">{{ $t('home.selectTokenBasic.hint') }}</div>
       <CDivider />
       <div class="scroll">
         <div

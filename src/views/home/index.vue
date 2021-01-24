@@ -5,7 +5,7 @@
       <img class="bottom-decoration" src="@/assets/svg/poly-bg.svg" />
     </div>
     <div class="content">
-      <div class="slogan" v-html="slogon" />
+      <div class="slogan" v-html="$t('home.index.slogon')" />
       <Form />
     </div>
   </Page>
@@ -20,12 +20,6 @@ export default {
   components: {
     Page,
     Form,
-  },
-  data() {
-    return {
-      slogon:
-        'In order to\nbuild the next generation\nInternet infrastructure,\nrealize interoperability\nbetween\nmultiple <em>chains</em>',
-    };
   },
 };
 </script>

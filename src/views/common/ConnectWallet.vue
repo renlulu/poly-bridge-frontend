@@ -18,17 +18,31 @@
 
       <transition name="fade" mode="out-in">
         <div class="wallets" :key="chain.id">
-          <div class="wallet-chain">{{ $formatEnum(chain.id, { type: 'chainName' }) }} Wallet</div>
+          <div class="chain-name">
+            {{
+              $t('common.connectWallet.chainName', {
+                chainName: $formatEnum(chain.id, { type: 'chainName' }),
+              })
+            }}
+          </div>
           <div v-for="wallet in chainWallets" :key="wallet.name">
             <div v-if="wallet.connected && wallet.name === chain.selectedWalletName" class="wallet">
               <img :src="wallet.icon" />
               <span class="wallet-name">
-                {{ $formatEnum(wallet.name, { type: 'walletName' }) }} Connected
+                {{
+                  $t('common.connectWallet.walletConnected', {
+                    walletName: $formatEnum(wallet.name, { type: 'walletName' }),
+                  })
+                }}
               </span>
             </div>
             <CButton v-else class="connect" @click="connect(chain, wallet)">
               <span class="wallet-name">
-                Connect {{ $formatEnum(wallet.name, { type: 'walletName' }) }}
+                {{
+                  $t('common.connectWallet.connectWallet', {
+                    walletName: $formatEnum(wallet.name, { type: 'walletName' }),
+                  })
+                }}
               </span>
               <img :src="wallet.icon" />
             </CButton>
@@ -119,7 +133,7 @@ export default {
   @include child-margin-v(16px);
 }
 
-.wallet-chain {
+.chain-name {
   font-weight: 500;
   font-size: 12px;
   @include next-margin-v(8px);

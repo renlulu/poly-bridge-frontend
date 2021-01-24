@@ -1,7 +1,7 @@
 <template>
   <CDrawer v-bind="$attrs" v-on="$listeners">
     <div class="content">
-      <div class="title">Transaction Details</div>
+      <div class="title">{{ $t('transactions.details.title') }}</div>
       <div v-if="transaction" class="scroll">
         <div v-for="(step, index) in transaction.steps" :key="step.chainId" class="step">
           <div class="step-dot" :class="{ active: step.hash }" />
@@ -9,16 +9,25 @@
           <div class="step-title">{{ $formatEnum(step.chainId, { type: 'chainName' }) }}</div>
           <div class="description">
             <template v-if="!step.hash">
-              The transaction has not been proceeded on the
-              {{ $formatEnum(step.chainId, { type: 'chainName' }) }}. Please be patient…
+              {{
+                $t('transactions.details.waiting', {
+                  chainName: $formatEnum(step.chainId, { type: 'chainName' }),
+                })
+              }}
             </template>
             <template v-else-if="step.blocks < step.needBlocks">
-              The transaction is proceeding on the
-              {{ $formatEnum(step.chainId, { type: 'chainName' }) }}. Please be patient…
+              {{
+                $t('transactions.details.proceeding', {
+                  chainName: $formatEnum(step.chainId, { type: 'chainName' }),
+                })
+              }}
             </template>
             <template v-else>
-              The transaction has been proceeded on the
-              {{ $formatEnum(step.chainId, { type: 'chainName' }) }}.
+              {{
+                $t('transactions.details.proceeded', {
+                  chainName: $formatEnum(step.chainId, { type: 'chainName' }),
+                })
+              }}
             </template>
           </div>
           <div class="progress">
@@ -34,7 +43,11 @@
             :href="$format(getChain(step.chainId).explorerUrl, { txHash: step.hash })"
             :disabled="!step.hash"
           >
-            Hash: {{ $formatLongText(step.hash || 'N/A', { headTailLength: 16 }) }}
+            {{
+              $t('transactions.details.hash', {
+                hash: $formatLongText(step.hash || 'N/A', { headTailLength: 16 }),
+              })
+            }}
           </CLink>
         </div>
       </div>
@@ -44,7 +57,7 @@
 
 <script>
 export default {
-  name: 'TransactionDetails',
+  name: 'Details',
   inheritAttrs: false,
   props: {
     hash: String,

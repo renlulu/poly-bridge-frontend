@@ -1,7 +1,7 @@
 <template>
   <div class="wallets">
     <CPopover v-if="!connectedWallets.length" v-model="connectWalletVisible">
-      <CButton class="connect-wallet-button">Connect Wallet</CButton>
+      <CButton class="connect-wallet-button">{{ $t('common.wallets.connectWallet') }}</CButton>
       <template #content>
         <ConnectWallet @close="connectWalletVisible = false" />
       </template>

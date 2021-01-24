@@ -1,7 +1,7 @@
 <template>
   <CDrawer v-bind="$attrs" v-on="$listeners">
     <div class="content">
-      <div class="title">Select Network</div>
+      <div class="title">{{ $t('home.selectChain.title') }}</div>
       <CDivider />
       <div class="scroll">
         <div v-for="chain in chains" :key="chain.id" class="chain" @click="select(chain)">

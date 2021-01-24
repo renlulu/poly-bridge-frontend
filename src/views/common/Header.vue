@@ -2,7 +2,7 @@
   <div class="header">
     <CLink class="brand" :to="{ name: 'home' }">
       <img class="brand-logo" src="@/assets/svg/logo.svg" />
-      <span class="brand-name">PolyBridge</span>
+      <span class="brand-name">{{ $t('common.header.brandName') }}</span>
     </CLink>
     <Wallets />
   </div>

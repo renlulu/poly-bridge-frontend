@@ -16,6 +16,7 @@ export const ChainId = {
 };
 
 export const TransactionStatus = {
+  Failed: -1,
   Finished: 0,
   Pending: 1,
   SourceDone: 2,

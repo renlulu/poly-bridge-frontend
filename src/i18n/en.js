@@ -4,16 +4,92 @@ import { WalletName, ChainId, TransactionStatus } from '@/utils/enums';
 
 export default {
   ...element,
+  common: {
+    header: {
+      brandName: 'PolyBridge',
+    },
+    wallets: {
+      connectWallet: 'Connect Wallet',
+    },
+    connectWallet: {
+      chainName: '{chainName} Wallet',
+      walletConnected: '{walletName} Connected',
+      connectWallet: 'Connect {walletName}',
+    },
+    footer: {
+      copyright: '© 2021 Polynetwork. All rights reserved. Privacy policy',
+    },
+  },
+  home: {
+    index: {
+      slogon:
+        'In order to\nbuild the next generation\nInternet infrastructure,\nrealize interoperability\nbetween\nmultiple <em>chains</em>',
+    },
+    form: {
+      title: 'Bridge',
+      asset: 'Asset',
+      from: 'From',
+      to: 'To',
+      chainName: '{chainName}\nNetwork',
+      amount: 'Amount',
+      max: 'MAX',
+      balance: 'Balance',
+      fee: 'Fee',
+      connectWallet: 'Connect Wallet',
+      approve: 'Approve',
+      historyPrefix: 'You can view your',
+      historyLink: 'history',
+    },
+    selectTokenBasic: {
+      title: 'Select Asset',
+      inputPlaceholder: 'Search name',
+      hint: 'Token Name',
+    },
+    selectChain: {
+      title: 'Select Network',
+    },
+    connectWallet: {
+      title: 'Connect Wallet',
+      chainName: '{chainName} Network',
+      walletConnected: '{walletName} Connected',
+      connectWallet: 'Connect {walletName}',
+    },
+    confirmSwap: {
+      title: 'Confirm Swap',
+      amount: 'Amount',
+      from: 'From',
+      to: 'To',
+      fee: 'Fee',
+      chainName: '{chainName} Network',
+      receiving: 'You will receive',
+      succeed: 'Success. Transaction hash: {transactionHash}',
+    },
+  },
+  transactions: {
+    index: {
+      title: 'The historical records',
+      fromChain: 'Source Chain',
+      toChain: 'Destination Chain',
+      hash: 'Hash: {hash}',
+      amount: 'Amount',
+      asset: 'Asset',
+      time: 'Time',
+      status: 'Status',
+      pagination: 'Page {page} of {pageCount}',
+    },
+    details: {
+      title: 'Transaction Details',
+      waiting: 'The transaction is waiting to be proceeding on the {chainName}. Please be patient…',
+      proceeding: 'The transaction is proceeding on the {chainName}. Please be patient…',
+      proceeded: 'The transaction has been proceeded on the {chainName}.',
+      confirmation: '{blocks}/{needBlocks} Confirm',
+      hash: 'Hash: {hash}',
+    },
+  },
   buttons: {
-    cancel: 'Cancel',
+    next: 'Next',
     confirm: 'Confirm',
     confirming: 'Confirming...',
-    next: 'Next',
-    submit: 'Submit',
-    submitting: 'Submitting...',
-    close: 'Close',
-    complete: 'Complete',
-    retry: 'Retry',
   },
   messages: {
     copied: '"{text}" has been copied to clipboard.',
@@ -40,6 +116,7 @@ export default {
       [ChainId.Heco]: TARGET_MAINNET ? 'Heco MainNet' : 'Heco TestNet',
     },
     transactionStatus: {
+      [TransactionStatus.Failed]: 'Failed',
       [TransactionStatus.Finished]: 'Finished',
       [TransactionStatus.Pending]: 'Pending',
       [TransactionStatus.SourceDone]: 'Pending',

@@ -1,12 +1,12 @@
 <template>
   <CDrawer v-bind="$attrs" v-on="$listeners">
     <div class="content">
-      <div class="title">Confirm Swap</div>
+      <div class="title">{{ $t('home.confirmSwap.title') }}</div>
       <CDivider />
       <div v-if="confirmingData" class="scroll">
         <div class="fields">
           <div class="field">
-            <div class="label">Amount</div>
+            <div class="label">{{ $t('home.confirmSwap.amount') }}</div>
             <div class="amount">
               <span class="amount-value">{{ confirmingData.amount }}</span>
               <span class="token-basic-name">{{ tokenBasic.name }}</span>
@@ -14,11 +14,15 @@
           </div>
 
           <div class="field">
-            <div class="label">From</div>
+            <div class="label">{{ $t('home.confirmSwap.from') }}</div>
             <div class="chain">
               <img class="chain-icon" src="@/assets/svg/eth.svg" />
               <span class="chain-name">
-                {{ $formatEnum(confirmingData.fromChainId, { type: 'chainName' }) }} Network
+                {{
+                  $t('home.confirmSwap.chainName', {
+                    chainName: $formatEnum(confirmingData.fromChainId, { type: 'chainName' }),
+                  })
+                }}
               </span>
             </div>
             <div class="address">
@@ -27,11 +31,15 @@
           </div>
 
           <div class="field">
-            <div class="label">To</div>
+            <div class="label">{{ $t('home.confirmSwap.to') }}</div>
             <div class="chain">
               <img class="chain-icon" src="@/assets/svg/neo.svg" />
               <span class="chain-name">
-                {{ $formatEnum(confirmingData.toChainId, { type: 'chainName' }) }} Network
+                {{
+                  $t('home.confirmSwap.chainName', {
+                    chainName: $formatEnum(confirmingData.toChainId, { type: 'chainName' }),
+                  })
+                }}
               </span>
             </div>
             <div class="address">
@@ -40,7 +48,7 @@
           </div>
 
           <div class="field">
-            <div class="label">Fee</div>
+            <div class="label">{{ $t('home.confirmSwap.fee') }}</div>
             <div class="fee">
               <span class="fee-value">{{ confirmingData.fee }}</span>
               <span class="token-basic-name">{{ fromToken.name }}</span>
@@ -48,7 +56,7 @@
           </div>
 
           <div class="field">
-            <div class="label">You will receive</div>
+            <div class="label">{{ $t('home.confirmSwap.receiving') }}</div>
             <div class="fee">
               <span class="fee-value">{{ receivingAmount }}</span>
               <span class="token-basic-name">{{ toToken.name }}</span>
@@ -56,7 +64,9 @@
           </div>
         </div>
 
-        <CSubmitButton :loading="submitting" @click="confirm">Confirm</CSubmitButton>
+        <CSubmitButton :loading="submitting" @click="confirm">
+          {{ submitting ? $t('buttons.confirming') : $t('buttons.confirm') }}
+        </CSubmitButton>
       </div>
     </div>
   </CDrawer>
@@ -133,7 +143,7 @@ export default {
           amount: this.confirmingData.amount,
           fee: this.confirmingData.fee,
         });
-        this.$message.success(`Success. Transaction hash: ${transactionHash}`);
+        this.$message.success(this.$t('home.confirmSwap.succeed', { transactionHash }));
         this.$emit('update:visible', false);
         this.$emit('succeed');
       } finally {

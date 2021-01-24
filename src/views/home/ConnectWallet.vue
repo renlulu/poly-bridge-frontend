@@ -1,14 +1,18 @@
 <template>
   <CDrawer v-bind="$attrs" v-on="$listeners">
     <div class="content">
-      <div class="title">Connect Wallet</div>
+      <div class="title">{{ $t('home.connectWallet.title') }}</div>
       <CDivider />
       <div class="scroll">
         <div v-if="fromChain" class="from">
           <div class="chain">
             <img class="chain-icon" :src="fromChain.icon" />
             <span class="chain-name">
-              {{ $formatEnum(fromChainId, { type: 'chainName' }) }} Network
+              {{
+                $t('home.connectWallet.chainName', {
+                  chainName: $formatEnum(fromChainId, { type: 'chainName' }),
+                })
+              }}
             </span>
           </div>
           <div class="wallets">
@@ -19,12 +23,20 @@
               >
                 <img :src="wallet.icon" />
                 <span class="wallet-name">
-                  {{ $formatEnum(wallet.name, { type: 'walletName' }) }} Connected
+                  {{
+                    $t('home.connectWallet.walletConnected', {
+                      walletName: $formatEnum(wallet.name, { type: 'walletName' }),
+                    })
+                  }}
                 </span>
               </div>
               <CButton v-else class="connect" @click="connect(fromChain, wallet)">
                 <span class="wallet-name">
-                  Connect {{ $formatEnum(wallet.name, { type: 'walletName' }) }}
+                  {{
+                    $t('home.connectWallet.connectWallet', {
+                      walletName: $formatEnum(wallet.name, { type: 'walletName' }),
+                    })
+                  }}
                 </span>
                 <img :src="wallet.icon" />
               </CButton>
@@ -36,7 +48,11 @@
           <div class="chain">
             <img class="chain-icon" :src="toChain.icon" />
             <span class="chain-name">
-              {{ $formatEnum(toChainId, { type: 'chainName' }) }} Network
+              {{
+                $t('home.connectWallet.chainName', {
+                  chainName: $formatEnum(toChainId, { type: 'chainName' }),
+                })
+              }}
             </span>
           </div>
           <div class="wallets">
@@ -47,12 +63,20 @@
               >
                 <img :src="wallet.icon" />
                 <span class="wallet-name">
-                  {{ $formatEnum(wallet.name, { type: 'walletName' }) }} Connected
+                  {{
+                    $t('home.connectWallet.walletConnected', {
+                      walletName: $formatEnum(wallet.name, { type: 'walletName' }),
+                    })
+                  }}
                 </span>
               </div>
               <CButton v-else class="connect" @click="connect(toChain, wallet)">
                 <span class="wallet-name">
-                  Connect {{ $formatEnum(wallet.name, { type: 'walletName' }) }}
+                  {{
+                    $t('home.connectWallet.connectWallet', {
+                      walletName: $formatEnum(wallet.name, { type: 'walletName' }),
+                    })
+                  }}
                 </span>
                 <img :src="wallet.icon" />
               </CButton>

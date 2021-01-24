@@ -6,12 +6,16 @@
     </div>
     <div class="content">
       <div class="content-inner">
-        <div class="title">The historical records</div>
+        <div class="title">{{ $t('transactions.index.title') }}</div>
 
         <div class="table-wrapper">
           <ElTable :data="transactions.items">
             <ElTableColumn width="20" />
-            <ElTableColumn #default="{row}" label="Source Chain" min-width="150">
+            <ElTableColumn
+              #default="{row}"
+              :label="$t('transactions.index.fromChain')"
+              min-width="150"
+            >
               <div class="chain">
                 <img :src="getChain(row.fromChainId).icon" />
                 <span>{{ $formatEnum(row.fromChainId, { type: 'chainName' }) }}</span>
@@ -25,10 +29,18 @@
                 "
                 :disabled="!row.fromTransactionHash"
               >
-                Hash: {{ $formatLongText(row.fromTransactionHash || 'N/A') }}
+                {{
+                  $t('transactions.index.hash', {
+                    hash: $formatLongText(row.fromTransactionHash || 'N/A'),
+                  })
+                }}
               </CLink>
             </ElTableColumn>
-            <ElTableColumn #default="{row}" label="Destination Chain" min-width="150">
+            <ElTableColumn
+              #default="{row}"
+              :label="$t('transactions.index.toChain')"
+              min-width="150"
+            >
               <div class="chain">
                 <img :src="getChain(row.toChainId).icon" />
                 <span>{{ $formatEnum(row.toChainId, { type: 'chainName' }) }}</span>
@@ -40,15 +52,24 @@
                 "
                 :disabled="!row.toTransactionHash"
               >
-                Hash: {{ $formatLongText(row.toTransactionHash || 'N/A') }}
+                {{
+                  $t('transactions.index.hash', {
+                    hash: $formatLongText(row.toTransactionHash || 'N/A'),
+                  })
+                }}
               </CLink>
             </ElTableColumn>
-            <ElTableColumn label="Amount" prop="amount" />
-            <ElTableColumn label="Asset" prop="tokenBasicName" />
-            <ElTableColumn #default="{row}" label="Time" prop="time" min-width="120">
+            <ElTableColumn :label="$t('transactions.index.amount')" prop="amount" />
+            <ElTableColumn :label="$t('transactions.index.asset')" prop="tokenBasicName" />
+            <ElTableColumn
+              #default="{row}"
+              :label="$t('transactions.index.time')"
+              prop="time"
+              min-width="120"
+            >
               {{ $formatTime(row.time) }}
             </ElTableColumn>
-            <ElTableColumn #default="{row}" label="Status" align="right">
+            <ElTableColumn #default="{row}" :label="$t('transactions.index.status')" align="right">
               <CButton class="view-details" @click="viewDetails(row)">
                 {{ $formatEnum(row.status, { type: 'transactionStatus' }) }}
               </CButton>
@@ -59,7 +80,12 @@
             <CButton @click="page--" :disabled="page <= 1 || transactions.pageCount == null">
               <img src="@/assets/svg/arrow-left.svg" />
             </CButton>
-            <span>Page {{ page }} of {{ transactions.pageCount || 1 }}</span>
+            <span>{{
+              $t('transactions.index.pagination', {
+                page: page,
+                pageCount: transactions.pageCount || 1,
+              })
+            }}</span>
             <CButton @click="page++" :disabled="!(page < transactions.pageCount)">
               <img src="@/assets/svg/arrow-right.svg" />
             </CButton>
@@ -74,7 +100,7 @@
 <script>
 import _ from 'lodash';
 import Page from '@/views/common/Page';
-import TransactionDetails from '@/views/home/TransactionDetails';
+import TransactionDetails from './Details';
 
 export default {
   name: 'Transactions',
