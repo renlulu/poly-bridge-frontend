@@ -2,10 +2,10 @@
   <CDrawer v-bind="$attrs" v-on="$listeners">
     <div class="content">
       <div class="title">{{ $t('transactions.details.title') }}</div>
-      <div v-if="transaction" class="scroll">
-        <div v-for="(step, index) in transaction.steps" :key="step.chainId" class="step">
+      <div v-if="mergedTransaction" class="scroll">
+        <div v-for="(step, index) in mergedTransaction.steps" :key="step.chainId" class="step">
           <div class="step-dot" :class="{ active: step.hash }" />
-          <div v-if="index !== transaction.steps.length - 1" class="step-line" />
+          <div v-if="index !== mergedTransaction.steps.length - 1" class="step-line" />
           <div class="step-title">{{ $formatEnum(step.chainId, { type: 'chainName' }) }}</div>
           <div class="description">
             <template v-if="!step.hash">
@@ -15,7 +15,7 @@
                 })
               }}
             </template>
-            <template v-else-if="step.blocks < step.needBlocks">
+            <template v-else-if="!(step.blocks >= step.needBlocks)">
               {{
                 $t('transactions.details.proceeding', {
                   chainName: $formatEnum(step.chainId, { type: 'chainName' }),
@@ -36,7 +36,14 @@
               :percentage="(step.blocks / step.needBlocks) * 100"
               :showText="false"
             />
-            <span class="progress-text">{{ step.blocks }}/{{ step.needBlocks }} Confirm</span>
+            <span class="progress-text">
+              {{
+                $t('transactions.details.confirmation', {
+                  blocks: step.blocks || '-',
+                  needBlocks: step.needBlocks || '-',
+                })
+              }}
+            </span>
           </div>
           <CLink
             class="hash"
@@ -56,19 +63,44 @@
 </template>
 
 <script>
+import { ChainId } from '@/utils/enums';
+
 export default {
   name: 'Details',
   inheritAttrs: false,
   props: {
     hash: String,
+    confirmingData: Object,
   },
   computed: {
+    mergedHash() {
+      return this.hash || (this.confirmingData && this.confirmingData.transactionHash);
+    },
     transaction() {
-      return this.$store.getters.getTransaction(this.hash);
+      return this.$store.getters.getTransaction(this.mergedHash);
+    },
+    mergedTransaction() {
+      return (
+        this.transaction ||
+        (this.confirmingData && {
+          steps: [
+            {
+              hash: this.confirmingData.transactionHash,
+              chainId: this.confirmingData.fromChainId,
+            },
+            {
+              chainId: ChainId.Poly,
+            },
+            {
+              chainId: this.confirmingData.toChainId,
+            },
+          ],
+        })
+      );
     },
   },
   watch: {
-    hash(value) {
+    mergedHash(value) {
       if (value) {
         this.$store.dispatch('getTransaction', value);
       }
@@ -76,8 +108,8 @@ export default {
   },
   created() {
     this.interval = setInterval(() => {
-      if (this.hash && this.$attrs.visible) {
-        this.$store.dispatch('getTransaction', this.hash);
+      if (this.mergedHash && this.$attrs.visible) {
+        this.$store.dispatch('getTransaction', this.mergedHash);
       }
     }, 5000);
   },

@@ -40,7 +40,6 @@ export const transactionStep = model({
   chainId: alias('ChainId'),
   blocks: alias('Blocks'),
   needBlocks: alias('NeedBlocks'),
-  time: alias('Time'),
 });
 
 export const transaction = model({

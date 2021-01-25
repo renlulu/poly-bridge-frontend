@@ -182,10 +182,15 @@
     />
     <ConfirmSwap
       :visible.sync="confirmSwapVisible"
-      :confirmingData="confirmingData"
+      :confirmingData.sync="confirmingData"
       @succeed="clearForm"
     />
-    <TransactionDetails :visible.sync="transactionDetailsVisible" />
+    <TransactionDetails
+      :visible.sync="transactionDetailsVisible"
+      :confirmingData.sync="confirmingData"
+      :closeOnClickModal="false"
+      :closeOnPressEscape="false"
+    />
   </ValidationObserver>
 </template>
 
@@ -297,7 +302,6 @@ export default {
           chainId: this.fromChainId,
           address: this.fromWallet.address,
           tokenHash: this.fromToken.hash,
-          walletReady: this.walletReady,
         };
       }
       return null;
@@ -451,8 +455,8 @@ export default {
       this.confirmSwapVisible = true;
     },
     clearForm() {
+      this.transactionDetailsVisible = true;
       this.amount = '';
-      this.confirmingData = null;
       this.$nextTick(() => this.$refs.validation.reset());
     },
   },

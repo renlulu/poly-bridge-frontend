@@ -62,7 +62,6 @@ export default {
       fee: 'Fee',
       chainName: '{chainName} Network',
       receiving: 'You will receive',
-      succeed: 'Success. Transaction hash: {transactionHash}',
     },
   },
   transactions: {

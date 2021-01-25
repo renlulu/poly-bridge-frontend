@@ -75,6 +75,7 @@
 <script>
 import BigNumber from 'bignumber.js';
 import { getWalletApi } from '@/utils/walletApi';
+import { TransactionStatus } from '@/utils/enums';
 
 export default {
   name: 'ConfirmSwap',
@@ -143,8 +144,12 @@ export default {
           amount: this.confirmingData.amount,
           fee: this.confirmingData.fee,
         });
-        this.$message.success(this.$t('home.confirmSwap.succeed', { transactionHash }));
         this.$emit('update:visible', false);
+        this.$emit('update:confirmingData', {
+          ...this.confirmingData,
+          transactionHash,
+          transactionStatus: TransactionStatus.Pending,
+        });
         this.$emit('succeed');
       } finally {
         this.submitting = false;
