@@ -20,12 +20,8 @@ export default {
       const wallet = getters.getChainConnectedWallet(chainId);
       let allowance = null;
       if (wallet) {
-        try {
-          const walletApi = await getWalletApi(wallet.name);
-          allowance = await walletApi.getAllowance({ chainId, address, tokenHash, spender });
-        } catch {
-          // ignore error
-        }
+        const walletApi = await getWalletApi(wallet.name);
+        allowance = await walletApi.getAllowance({ chainId, address, tokenHash, spender });
       }
       const oldValue = getters.getAllowance({ chainId, address, tokenHash, spender });
       if (oldValue !== allowance) {

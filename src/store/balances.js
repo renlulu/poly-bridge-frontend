@@ -20,12 +20,8 @@ export default {
       const wallet = getters.getChainConnectedWallet(chainId);
       let balance = null;
       if (wallet) {
-        try {
-          const walletApi = await getWalletApi(wallet.name);
-          balance = await walletApi.getBalance({ chainId, address, tokenHash });
-        } catch {
-          // ignore error
-        }
+        const walletApi = await getWalletApi(wallet.name);
+        balance = await walletApi.getBalance({ chainId, address, tokenHash });
       }
       const oldValue = getters.getBalance({ chainId, address, tokenHash });
       if (oldValue !== balance) {

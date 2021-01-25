@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import store from '@/store';
 import { getChainApi } from '@/utils/chainApi';
 import { integerToDecimal, decimalToInteger, isValidHex, toStandardHex } from '@/utils/convertors';
-import { WalletName, ChainId } from '@/utils/enums';
+import { WalletName, ChainId, SingleTransactionStatus } from '@/utils/enums';
 import { WalletError } from '@/utils/errors';
 import { TARGET_MAINNET } from '@/utils/env';
 import { formatEnum } from '@/utils/formatters';
@@ -133,6 +133,20 @@ async function getAllowance({ chainId, address, tokenHash, spender }) {
   }
 }
 
+async function getTransactionStatus({ transactionHash }) {
+  try {
+    const transactionReceipt = await web3.eth.getTransactionReceipt(`0x${transactionHash}`);
+    if (transactionReceipt) {
+      return transactionReceipt.status
+        ? SingleTransactionStatus.Done
+        : SingleTransactionStatus.Failed;
+    }
+    return SingleTransactionStatus.Pending;
+  } catch (error) {
+    throw convertWalletError(error);
+  }
+}
+
 async function approve({ chainId, address, tokenHash, spender, amount }) {
   try {
     const tokenBasic = store.getters.getTokenBasicByChainIdAndTokenHash({ chainId, tokenHash });
@@ -191,6 +205,7 @@ export default {
   connect,
   getBalance,
   getAllowance,
+  getTransactionStatus,
   approve,
   lock,
 };

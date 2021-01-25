@@ -12,12 +12,21 @@ export function dispatchGlobalError(error) {
   }
 }
 
+const SAME_MESSAGE_INTERVAL = 1000;
+
+let lastLocalMessage = null;
+let lastTime = 0;
+
 function handleGlobalError(error) {
   if (error instanceof BaseError) {
     if (error.expose) {
       const localMessage = error.getLocalMessage();
       if (localMessage) {
-        Message({ message: localMessage, type: 'error' });
+        if (localMessage !== lastLocalMessage || Date.now() - lastTime > SAME_MESSAGE_INTERVAL) {
+          Message({ message: localMessage, type: 'error' });
+          lastLocalMessage = localMessage;
+          lastTime = Date.now();
+        }
       }
       error.printTraceStack();
     }

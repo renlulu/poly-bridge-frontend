@@ -1,6 +1,6 @@
 <template>
   <CDrawer v-bind="$attrs" v-on="$listeners">
-    <div class="content">
+    <div v-if="!failed" class="content">
       <div class="title">{{ $t('transactions.details.title') }}</div>
       <div v-if="mergedTransaction" class="scroll">
         <div v-for="(step, index) in mergedTransaction.steps" :key="step.chainId" class="step">
@@ -33,14 +33,14 @@
           <div class="progress">
             <ElProgress
               class="progress-bar"
-              :percentage="(step.blocks / step.needBlocks) * 100"
+              :percentage="(step.blocks / step.needBlocks || 0) * 100"
               :showText="false"
             />
             <span class="progress-text">
               {{
                 $t('transactions.details.confirmation', {
-                  blocks: step.blocks || '-',
-                  needBlocks: step.needBlocks || '-',
+                  blocks: step.blocks != null ? step.blocks : '-',
+                  needBlocks: step.needBlocks != null ? step.needBlocks : '-',
                 })
               }}
             </span>
@@ -59,11 +59,39 @@
         </div>
       </div>
     </div>
+    <div v-else class="content">
+      <div class="failed-title">{{ $t('transactions.details.failedTitle') }}</div>
+      <CDivider />
+      <div class="failed-body">
+        <img class="failed-icon" src="@/assets/svg/failed.svg" />
+        <span class="failed-text">{{ $t('transactions.details.failedMessage') }}</span>
+        <CLink
+          v-if="confirmingData"
+          class="hash"
+          :href="
+            $format(getChain(confirmingData.fromChainId).explorerUrl, {
+              txHash: confirmingData.transactionHash,
+            })
+          "
+          :disabled="!confirmingData.transactionHash"
+        >
+          {{
+            $t('transactions.details.hash', {
+              hash: $formatLongText(confirmingData.transactionHash || 'N/A', {
+                headTailLength: 10,
+              }),
+            })
+          }}
+        </CLink>
+      </div>
+    </div>
   </CDrawer>
 </template>
 
 <script>
-import { ChainId } from '@/utils/enums';
+import { ChainId, SingleTransactionStatus } from '@/utils/enums';
+import { HttpError } from '@/utils/errors';
+import { getWalletApi } from '@/utils/walletApi';
 
 export default {
   name: 'Details',
@@ -98,19 +126,27 @@ export default {
         })
       );
     },
+    fromWallet() {
+      return (
+        this.confirmingData &&
+        this.$store.getters.getChainConnectedWallet(this.confirmingData.fromChainId)
+      );
+    },
+    failed() {
+      return (
+        this.confirmingData &&
+        this.confirmingData.transactionStatus === SingleTransactionStatus.Failed
+      );
+    },
   },
   watch: {
-    mergedHash(value) {
-      if (value) {
-        this.$store.dispatch('getTransaction', value);
-      }
+    mergedHash() {
+      this.updateTransaction();
     },
   },
   created() {
     this.interval = setInterval(() => {
-      if (this.mergedHash && this.$attrs.visible) {
-        this.$store.dispatch('getTransaction', this.mergedHash);
-      }
+      this.updateTransaction();
     }, 5000);
   },
   beforeDestroy() {
@@ -119,6 +155,37 @@ export default {
   methods: {
     getChain(chainId) {
       return this.$store.getters.getChain(chainId);
+    },
+    async updateTransaction() {
+      if (this.mergedHash && this.$attrs.visible) {
+        if (
+          this.confirmingData &&
+          this.confirmingData.transactionStatus === SingleTransactionStatus.Pending
+        ) {
+          if (this.fromWallet) {
+            const walletApi = await getWalletApi(this.fromWallet.name);
+            const transactionStatus = await walletApi.getTransactionStatus({
+              transactionHash: this.mergedHash,
+            });
+            if (transactionStatus !== this.confirmingData.transactionStatus) {
+              this.$emit('update:confirmingData', {
+                ...this.confirmingData,
+                transactionStatus,
+              });
+            }
+          }
+        }
+        try {
+          await this.$store.dispatch('getTransaction', this.mergedHash);
+        } catch (error) {
+          if (error instanceof HttpError) {
+            if (error.code === HttpError.CODES.BAD_REQUEST) {
+              return;
+            }
+          }
+          throw error;
+        }
+      }
     },
   },
 };
@@ -216,5 +283,24 @@ export default {
   color: #3ec7eb;
   font-size: 14px;
   text-decoration: underline;
+}
+
+.failed-title {
+  padding: 80px 50px 20px;
+  font-weight: 500;
+}
+
+.failed-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  @include child-margin-v(20px);
+}
+
+.failed-text {
+  font-weight: 500;
+  @include last-margin-v(40px);
 }
 </style>

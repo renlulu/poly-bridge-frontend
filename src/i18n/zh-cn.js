@@ -83,6 +83,8 @@ export default {
       proceeded: 'The transaction has been proceeded on the {chainName}.',
       confirmation: '{blocks}/{needBlocks} Confirm',
       hash: 'Hash: {hash}',
+      failedTitle: 'Error',
+      failedMessage: 'Transaction Failed',
     },
   },
   buttons: {
@@ -115,7 +117,6 @@ export default {
       [ChainId.Heco]: TARGET_MAINNET ? 'Heco MainNet' : 'Heco TestNet',
     },
     transactionStatus: {
-      [TransactionStatus.Failed]: 'Failed',
       [TransactionStatus.Finished]: 'Finished',
       [TransactionStatus.Pending]: 'Pending',
       [TransactionStatus.SourceDone]: 'Pending',

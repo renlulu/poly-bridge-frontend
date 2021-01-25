@@ -15,6 +15,13 @@ export const ChainId = {
   Heco: 7, // TODO
 };
 
+export const SingleTransactionStatus = {
+  Failed: -1,
+  Finished: 0,
+  Pending: 1,
+  Done: 2,
+};
+
 export const TransactionStatus = {
   Failed: -1,
   Finished: 0,

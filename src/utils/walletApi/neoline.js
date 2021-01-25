@@ -1,8 +1,9 @@
 import delay from 'delay';
+import _ from 'lodash';
 import store from '@/store';
 import { getChainApi } from '@/utils/chainApi';
 import { decimalToInteger, toStandardHex } from '@/utils/convertors';
-import { WalletName, ChainId } from '@/utils/enums';
+import { WalletName, ChainId, SingleTransactionStatus } from '@/utils/enums';
 import { WalletError } from '@/utils/errors';
 import { TARGET_MAINNET } from '@/utils/env';
 
@@ -133,6 +134,36 @@ async function getAllowance() {
   return null;
 }
 
+async function getTransactionStatus({ transactionHash }) {
+  try {
+    let applicationLog = null;
+    try {
+      applicationLog = await neoDapi.getApplicationLog({ txid: transactionHash });
+      // fix network error
+      if (!applicationLog) {
+        throw new WalletError('Communicate failed with wallet.', {
+          code: WalletError.CODES.COMMUNICATE_FAILED,
+        });
+      }
+    } catch (error) {
+      // ignore rpc error
+      if (error.type !== 'RPC_ERROR') {
+        throw error;
+      }
+    }
+    if (applicationLog) {
+      const vmstate = _.get(applicationLog, 'executions[0].vmstate');
+      const result = _.get(applicationLog, 'executions[0].stack[0].value');
+      return vmstate === 'HALT' && result === '1'
+        ? SingleTransactionStatus.Done
+        : SingleTransactionStatus.Failed;
+    }
+    return SingleTransactionStatus.Pending;
+  } catch (error) {
+    throw convertWalletError(error);
+  }
+}
+
 async function approve() {
   throw new Error('Method not implemented');
 }
@@ -183,6 +214,7 @@ export default {
   connect,
   getBalance,
   getAllowance,
+  getTransactionStatus,
   approve,
   lock,
 };

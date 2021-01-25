@@ -357,8 +357,9 @@ export default {
         this.$store.dispatch('getTokenMaps', value);
       }
     },
-    getAllowanceParams(value) {
+    async getAllowanceParams(value) {
       if (value) {
+        await this.$store.dispatch('ensureChainWalletReady', value.chainId);
         this.$store.dispatch('getAllowance', value);
       }
     },
