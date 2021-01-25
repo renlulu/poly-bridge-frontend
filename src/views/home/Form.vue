@@ -183,7 +183,7 @@
     <ConfirmSwap
       :visible.sync="confirmSwapVisible"
       :confirmingData.sync="confirmingData"
-      @succeed="clearForm"
+      @succeed="handleSucceed"
     />
     <TransactionDetails
       :visible.sync="transactionDetailsVisible"
@@ -384,13 +384,16 @@ export default {
       this.tokenBasicName = tokenBasicName;
       this.fromChainId = null;
       this.toChainId = null;
+      this.clearAmount();
     },
     changeFromChainId(chainId) {
       this.fromChainId = chainId;
       this.toChainId = null;
+      this.clearAmount();
     },
     changeToChainId(chainId) {
       this.toChainId = chainId;
+      this.clearAmount();
     },
     async exchangeFromTo() {
       await this.$store.dispatch('getTokenMaps', {
@@ -404,6 +407,7 @@ export default {
       } else {
         this.toChainId = null;
       }
+      this.clearAmount();
     },
     copy(text) {
       copy(text);
@@ -455,10 +459,12 @@ export default {
       };
       this.confirmSwapVisible = true;
     },
-    clearForm() {
+    handleSucceed() {
       this.transactionDetailsVisible = true;
+    },
+    clearAmount() {
       this.amount = '';
-      this.$nextTick(() => this.$refs.validation.reset());
+      this.$nextTick(() => this.$refs.amountValidation.reset());
     },
   },
 };
