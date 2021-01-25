@@ -1,90 +1,92 @@
 <template>
   <CDrawer v-bind="$attrs" v-on="$listeners">
-    <div v-if="!failed" class="content">
-      <div class="title">{{ $t('transactions.details.title') }}</div>
-      <div v-if="mergedTransaction" class="scroll">
-        <div v-for="(step, index) in mergedTransaction.steps" :key="step.chainId" class="step">
-          <div class="step-dot" :class="{ active: step.hash }" />
-          <div v-if="index !== mergedTransaction.steps.length - 1" class="step-line" />
-          <div class="step-title">{{ $formatEnum(step.chainId, { type: 'chainName' }) }}</div>
-          <div class="description">
-            <template v-if="!step.hash">
+    <transition name="fade" mode="out-in">
+      <div v-if="!failed" class="content">
+        <div class="title">{{ $t('transactions.details.title') }}</div>
+        <div v-if="mergedTransaction" class="scroll">
+          <div v-for="(step, index) in mergedTransaction.steps" :key="step.chainId" class="step">
+            <div class="step-dot" :class="{ active: step.hash }" />
+            <div v-if="index !== mergedTransaction.steps.length - 1" class="step-line" />
+            <div class="step-title">{{ $formatEnum(step.chainId, { type: 'chainName' }) }}</div>
+            <div class="description">
+              <template v-if="!step.hash">
+                {{
+                  $t('transactions.details.waiting', {
+                    chainName: $formatEnum(step.chainId, { type: 'chainName' }),
+                  })
+                }}
+              </template>
+              <template v-else-if="!(step.blocks >= step.needBlocks)">
+                {{
+                  $t('transactions.details.proceeding', {
+                    chainName: $formatEnum(step.chainId, { type: 'chainName' }),
+                  })
+                }}
+              </template>
+              <template v-else>
+                {{
+                  $t('transactions.details.proceeded', {
+                    chainName: $formatEnum(step.chainId, { type: 'chainName' }),
+                  })
+                }}
+              </template>
+            </div>
+            <div class="progress">
+              <ElProgress
+                class="progress-bar"
+                :percentage="(step.blocks / step.needBlocks || 0) * 100"
+                :showText="false"
+              />
+              <span class="progress-text">
+                {{
+                  $t('transactions.details.confirmation', {
+                    blocks: step.blocks != null ? step.blocks : '-',
+                    needBlocks: step.needBlocks != null ? step.needBlocks : '-',
+                  })
+                }}
+              </span>
+            </div>
+            <CLink
+              class="hash"
+              :href="$format(getChain(step.chainId).explorerUrl, { txHash: step.hash })"
+              :disabled="!step.hash"
+            >
               {{
-                $t('transactions.details.waiting', {
-                  chainName: $formatEnum(step.chainId, { type: 'chainName' }),
+                $t('transactions.details.hash', {
+                  hash: $formatLongText(step.hash || 'N/A', { headTailLength: 16 }),
                 })
               }}
-            </template>
-            <template v-else-if="!(step.blocks >= step.needBlocks)">
-              {{
-                $t('transactions.details.proceeding', {
-                  chainName: $formatEnum(step.chainId, { type: 'chainName' }),
-                })
-              }}
-            </template>
-            <template v-else>
-              {{
-                $t('transactions.details.proceeded', {
-                  chainName: $formatEnum(step.chainId, { type: 'chainName' }),
-                })
-              }}
-            </template>
+            </CLink>
           </div>
-          <div class="progress">
-            <ElProgress
-              class="progress-bar"
-              :percentage="(step.blocks / step.needBlocks || 0) * 100"
-              :showText="false"
-            />
-            <span class="progress-text">
-              {{
-                $t('transactions.details.confirmation', {
-                  blocks: step.blocks != null ? step.blocks : '-',
-                  needBlocks: step.needBlocks != null ? step.needBlocks : '-',
-                })
-              }}
-            </span>
-          </div>
+        </div>
+      </div>
+      <div v-else class="content">
+        <div class="failed-title">{{ $t('transactions.details.failedTitle') }}</div>
+        <CDivider />
+        <div class="failed-body">
+          <img class="failed-icon" src="@/assets/svg/failed.svg" />
+          <span class="failed-text">{{ $t('transactions.details.failedMessage') }}</span>
           <CLink
+            v-if="confirmingData"
             class="hash"
-            :href="$format(getChain(step.chainId).explorerUrl, { txHash: step.hash })"
-            :disabled="!step.hash"
+            :href="
+              $format(getChain(confirmingData.fromChainId).explorerUrl, {
+                txHash: confirmingData.transactionHash,
+              })
+            "
+            :disabled="!confirmingData.transactionHash"
           >
             {{
               $t('transactions.details.hash', {
-                hash: $formatLongText(step.hash || 'N/A', { headTailLength: 16 }),
+                hash: $formatLongText(confirmingData.transactionHash || 'N/A', {
+                  headTailLength: 10,
+                }),
               })
             }}
           </CLink>
         </div>
       </div>
-    </div>
-    <div v-else class="content">
-      <div class="failed-title">{{ $t('transactions.details.failedTitle') }}</div>
-      <CDivider />
-      <div class="failed-body">
-        <img class="failed-icon" src="@/assets/svg/failed.svg" />
-        <span class="failed-text">{{ $t('transactions.details.failedMessage') }}</span>
-        <CLink
-          v-if="confirmingData"
-          class="hash"
-          :href="
-            $format(getChain(confirmingData.fromChainId).explorerUrl, {
-              txHash: confirmingData.transactionHash,
-            })
-          "
-          :disabled="!confirmingData.transactionHash"
-        >
-          {{
-            $t('transactions.details.hash', {
-              hash: $formatLongText(confirmingData.transactionHash || 'N/A', {
-                headTailLength: 10,
-              }),
-            })
-          }}
-        </CLink>
-      </div>
-    </div>
+    </transition>
   </CDrawer>
 </template>
 
