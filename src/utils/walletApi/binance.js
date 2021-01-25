@@ -32,8 +32,10 @@ function convertWalletError(error) {
     return error;
   }
   let code = WalletError.CODES.UNKNOWN_ERROR;
-  if (error.code === 4001) {
+  if (error.message.includes('Rejected by user')) {
     code = WalletError.CODES.USER_REJECTED;
+  } else if (error.message.includes('insufficient funds')) {
+    code = WalletError.CODES.INSUFFICIENT_FUNDS;
   }
   return new WalletError(error.message, { code, cause: error });
 }
