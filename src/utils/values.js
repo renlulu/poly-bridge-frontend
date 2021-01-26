@@ -63,7 +63,7 @@ export const CHAINS = [
       : 'https://testnet.neotube.io/transaction/0x{txHash}',
     lockContractHash: TARGET_MAINNET
       ? 'f263ca001a7fdeea43a45300c01bb99713809de7'
-      : '104057f879009326250ee1f5d60e2efd925024e6',
+      : 'cd074cd290acc3d73c030784101afbcf40fd86a1',
   },
   {
     id: ChainId.Bsc, // TODO
