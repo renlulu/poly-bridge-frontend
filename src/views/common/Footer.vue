@@ -3,11 +3,11 @@
     <div class="copyright">
       {{ $t('common.footer.copyright') }}
     </div>
-    <CButton class="change-lang" @click="changeLocale">
+    <!-- <CButton class="change-locale" @click="changeLocale">
       <span v-if="$i18n.locale === 'en'">English</span>
       <span v-if="$i18n.locale === 'zh-cn'">中文</span>
       <img src="@/assets/svg/switch.svg" />
-    </CButton>
+    </CButton> -->
   </div>
 </template>
 
@@ -36,7 +36,7 @@ export default {
   font-size: 14px;
 }
 
-.change-lang {
+.change-locale {
   height: 30px;
   padding: 0 15px;
   border-radius: 15px;
