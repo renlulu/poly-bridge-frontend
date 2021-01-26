@@ -183,14 +183,11 @@
     <ConfirmSwap
       :key="confirmSwapUuid"
       :visible.sync="confirmSwapVisible"
-      :confirmingData.sync="confirmingData"
+      :confirmingData="confirmingData"
       @closed="handleClosed"
-      @succeed="handleSucceed"
+      @confirmed="handleConfirmed"
     />
-    <TransactionDetails
-      :visible.sync="transactionDetailsVisible"
-      :confirmingData.sync="confirmingData"
-    />
+    <TransactionDetails :visible.sync="transactionDetailsVisible" :confirmedData="confirmedData" />
   </ValidationObserver>
 </template>
 
@@ -230,6 +227,7 @@ export default {
       approving: false,
       confirmingData: null,
       confirmSwapUuid: uuidv4(),
+      confirmedData: null,
     };
   },
   computed: {
@@ -473,8 +471,10 @@ export default {
         this.confirmSwapUuid = uuidv4();
       });
     },
-    handleSucceed() {
+    handleConfirmed(confirmedData) {
+      this.confirmedData = confirmedData;
       this.transactionDetailsVisible = true;
+      this.confirmingData = null;
       this.clearAmount();
     },
     clearAmount() {

@@ -172,12 +172,11 @@ export default {
           }
         }
         this.$emit('update:visible', false);
-        this.$emit('update:confirmingData', {
+        this.$emit('confirmed', {
           ...this.confirmingData,
           transactionHash,
           transactionStatus: status,
         });
-        this.$emit('succeed');
       } finally {
         this.confirming = false;
       }

@@ -1,8 +1,8 @@
 <template>
   <CDrawer
     v-bind="$attrs"
-    :closeOnClickModal="!confirmingData || failed || finished"
-    :closeOnPressEscape="!confirmingData || failed || finished"
+    :closeOnClickModal="!confirmedData || failed || finished"
+    :closeOnPressEscape="!confirmedData || failed || finished"
     v-on="$listeners"
   >
     <transition name="fade" mode="out-in">
@@ -72,18 +72,18 @@
           <img class="failed-icon" src="@/assets/svg/failed.svg" />
           <span class="failed-text">{{ $t('transactions.details.failedMessage') }}</span>
           <CLink
-            v-if="confirmingData"
+            v-if="confirmedData"
             class="hash"
             :href="
-              $format(getChain(confirmingData.fromChainId).explorerUrl, {
-                txHash: confirmingData.transactionHash,
+              $format(getChain(confirmedData.fromChainId).explorerUrl, {
+                txHash: confirmedData.transactionHash,
               })
             "
-            :disabled="!confirmingData.transactionHash"
+            :disabled="!confirmedData.transactionHash"
           >
             {{
               $t('transactions.details.hash', {
-                hash: $formatLongText(confirmingData.transactionHash || 'N/A', {
+                hash: $formatLongText(confirmedData.transactionHash || 'N/A', {
                   headTailLength: 10,
                 }),
               })
@@ -104,11 +104,11 @@ export default {
   inheritAttrs: false,
   props: {
     hash: String,
-    confirmingData: Object,
+    confirmedData: Object,
   },
   computed: {
     mergedHash() {
-      return this.hash || (this.confirmingData && this.confirmingData.transactionHash);
+      return this.hash || (this.confirmedData && this.confirmedData.transactionHash);
     },
     transaction() {
       return this.$store.getters.getTransaction(this.mergedHash);
@@ -116,17 +116,17 @@ export default {
     mergedTransaction() {
       return (
         this.transaction ||
-        (this.confirmingData && {
+        (this.confirmedData && {
           steps: [
             {
-              hash: this.confirmingData.transactionHash,
-              chainId: this.confirmingData.fromChainId,
+              hash: this.confirmedData.transactionHash,
+              chainId: this.confirmedData.fromChainId,
             },
             {
               chainId: ChainId.Poly,
             },
             {
-              chainId: this.confirmingData.toChainId,
+              chainId: this.confirmedData.toChainId,
             },
           ],
         })
@@ -134,8 +134,8 @@ export default {
     },
     failed() {
       return (
-        this.confirmingData &&
-        this.confirmingData.transactionStatus === SingleTransactionStatus.Failed
+        this.confirmedData &&
+        this.confirmedData.transactionStatus === SingleTransactionStatus.Failed
       );
     },
     finished() {
