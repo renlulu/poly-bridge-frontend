@@ -376,6 +376,13 @@ export default {
       ) {
         this.$store.dispatch('getBalance', this.getBalanceParams);
       }
+      if (
+        this.getAllowanceParams &&
+        this.fromWallet &&
+        this.fromWallet.chainId === this.fromChainId
+      ) {
+        this.$store.dispatch('getAllowance', this.getAllowanceParams);
+      }
     }, 5000);
   },
   beforeDestroy() {
@@ -468,6 +475,7 @@ export default {
     },
     handleSucceed() {
       this.transactionDetailsVisible = true;
+      this.clearAmount();
     },
     clearAmount() {
       this.amount = '';
