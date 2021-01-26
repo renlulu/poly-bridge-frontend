@@ -279,9 +279,8 @@ export default {
 .failed-body {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  flex: 1;
+  padding: 160px 0;
   @include child-margin-v(20px);
 }
 
