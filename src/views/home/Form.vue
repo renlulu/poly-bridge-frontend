@@ -144,7 +144,7 @@
         :loading="approving"
         @click="approve"
       >
-        {{ $t('home.form.approve') }}
+        {{ approving ? $t('buttons.approving') : $t('buttons.approve') }}
       </CSubmitButton>
       <CSubmitButton v-else :disabled="invalid || !(fromToken && toToken)" @click="submit">
         {{ $t('buttons.next') }}

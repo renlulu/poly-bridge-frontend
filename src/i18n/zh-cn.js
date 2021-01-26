@@ -36,7 +36,6 @@ export default {
       balance: 'Balance',
       fee: 'Fee',
       connectWallet: 'Connect Wallet',
-      approve: 'Approve',
       historyPrefix: 'You can view your',
       historyLink: 'history',
     },
@@ -91,6 +90,8 @@ export default {
     next: 'Next',
     confirm: 'Confirm',
     confirming: 'Confirming...',
+    approve: 'Approve',
+    approving: 'Approving...',
   },
   messages: {
     copied: '"{text}" has been copied to clipboard.',
