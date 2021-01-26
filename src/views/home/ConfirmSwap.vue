@@ -1,5 +1,10 @@
 <template>
-  <CDrawer v-bind="$attrs" v-on="$listeners">
+  <CDrawer
+    v-bind="$attrs"
+    :closeOnClickModal="!confirming"
+    :closeOnPressEscape="!confirming"
+    v-on="$listeners"
+  >
     <div class="content">
       <div class="title">{{ $t('home.confirmSwap.title') }}</div>
       <CDivider />
@@ -64,8 +69,8 @@
           </div>
         </div>
 
-        <CSubmitButton :loading="submitting" @click="confirm">
-          {{ submitting ? $t('buttons.confirming') : $t('buttons.confirm') }}
+        <CSubmitButton :loading="confirming" @click="confirm">
+          {{ confirming ? $t('buttons.confirming') : $t('buttons.confirm') }}
         </CSubmitButton>
       </div>
     </div>
@@ -74,6 +79,7 @@
 
 <script>
 import BigNumber from 'bignumber.js';
+import delay from 'delay';
 import { SingleTransactionStatus } from '@/utils/enums';
 import { getWalletApi } from '@/utils/walletApi';
 
@@ -85,7 +91,7 @@ export default {
   },
   data() {
     return {
-      submitting: false,
+      confirming: false,
     };
   },
   computed: {
@@ -139,7 +145,7 @@ export default {
     async confirm() {
       await this.$store.dispatch('ensureChainWalletReady', this.confirmingData.fromChainId);
       try {
-        this.submitting = true;
+        this.confirming = true;
         const walletApi = await getWalletApi(this.fromWallet.name);
         const transactionHash = await walletApi.lock({
           fromChainId: this.confirmingData.fromChainId,
@@ -150,15 +156,30 @@ export default {
           amount: this.confirmingData.amount,
           fee: this.confirmingData.fee,
         });
+        let status;
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            status = await walletApi.getTransactionStatus({ transactionHash });
+            if (status !== SingleTransactionStatus.Pending) {
+              break;
+            }
+            // eslint-disable-next-line no-await-in-loop
+            await delay(5000);
+          } catch (error) {
+            // ignore error
+          }
+        }
         this.$emit('update:visible', false);
         this.$emit('update:confirmingData', {
           ...this.confirmingData,
           transactionHash,
-          transactionStatus: SingleTransactionStatus.Pending,
+          transactionStatus: status,
         });
         this.$emit('succeed');
       } finally {
-        this.submitting = false;
+        this.confirming = false;
       }
     },
   },

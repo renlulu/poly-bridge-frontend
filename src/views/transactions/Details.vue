@@ -1,5 +1,10 @@
 <template>
-  <CDrawer v-bind="$attrs" v-on="$listeners">
+  <CDrawer
+    v-bind="$attrs"
+    :closeOnClickModal="!confirmingData || failed || finished"
+    :closeOnPressEscape="!confirmingData || failed || finished"
+    v-on="$listeners"
+  >
     <transition name="fade" mode="out-in">
       <div v-if="!failed" class="content">
         <div class="title">{{ $t('transactions.details.title') }}</div>
@@ -91,9 +96,8 @@
 </template>
 
 <script>
-import { ChainId, SingleTransactionStatus } from '@/utils/enums';
+import { ChainId, SingleTransactionStatus, TransactionStatus } from '@/utils/enums';
 import { HttpError } from '@/utils/errors';
-import { getWalletApi } from '@/utils/walletApi';
 
 export default {
   name: 'Details',
@@ -128,27 +132,24 @@ export default {
         })
       );
     },
-    fromWallet() {
-      return (
-        this.confirmingData &&
-        this.$store.getters.getChainConnectedWallet(this.confirmingData.fromChainId)
-      );
-    },
     failed() {
       return (
         this.confirmingData &&
         this.confirmingData.transactionStatus === SingleTransactionStatus.Failed
       );
     },
+    finished() {
+      return this.transaction && this.transaction.status === TransactionStatus.Finished;
+    },
   },
   watch: {
     mergedHash() {
-      this.updateTransaction();
+      this.getTransaction();
     },
   },
   created() {
     this.interval = setInterval(() => {
-      this.updateTransaction();
+      this.getTransaction();
     }, 5000);
   },
   beforeDestroy() {
@@ -158,25 +159,8 @@ export default {
     getChain(chainId) {
       return this.$store.getters.getChain(chainId);
     },
-    async updateTransaction() {
+    async getTransaction() {
       if (this.mergedHash && this.$attrs.visible) {
-        if (
-          this.confirmingData &&
-          this.confirmingData.transactionStatus === SingleTransactionStatus.Pending
-        ) {
-          if (this.fromWallet) {
-            const walletApi = await getWalletApi(this.fromWallet.name);
-            const transactionStatus = await walletApi.getTransactionStatus({
-              transactionHash: this.mergedHash,
-            });
-            if (transactionStatus !== this.confirmingData.transactionStatus) {
-              this.$emit('update:confirmingData', {
-                ...this.confirmingData,
-                transactionStatus,
-              });
-            }
-          }
-        }
         try {
           await this.$store.dispatch('getTransaction', this.mergedHash);
         } catch (error) {

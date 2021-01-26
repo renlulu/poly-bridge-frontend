@@ -146,7 +146,7 @@
       >
         {{ approving ? $t('buttons.approving') : $t('buttons.approve') }}
       </CSubmitButton>
-      <CSubmitButton v-else :disabled="invalid || !(fromToken && toToken)" @click="submit">
+      <CSubmitButton v-else :disabled="invalid || !(fromToken && toToken)" @click="next">
         {{ $t('buttons.next') }}
       </CSubmitButton>
     </div>
@@ -181,15 +181,15 @@
       :toChainId="toChainId"
     />
     <ConfirmSwap
+      :key="confirmSwapUuid"
       :visible.sync="confirmSwapVisible"
       :confirmingData.sync="confirmingData"
+      @closed="handleClosed"
       @succeed="handleSucceed"
     />
     <TransactionDetails
       :visible.sync="transactionDetailsVisible"
       :confirmingData.sync="confirmingData"
-      :closeOnClickModal="false"
-      :closeOnPressEscape="false"
     />
   </ValidationObserver>
 </template>
@@ -197,6 +197,7 @@
 <script>
 import BigNumber from 'bignumber.js';
 import copy from 'clipboard-copy';
+import { v4 as uuidv4 } from 'uuid';
 import { ChainId } from '@/utils/enums';
 import TransactionDetails from '@/views/transactions/Details';
 import { getWalletApi } from '@/utils/walletApi';
@@ -226,8 +227,9 @@ export default {
       fromChainId: null,
       toChainId: null,
       amount: '',
-      confirmingData: null,
       approving: false,
+      confirmingData: null,
+      confirmSwapUuid: uuidv4(),
     };
   },
   computed: {
@@ -446,7 +448,7 @@ export default {
         this.approving = false;
       }
     },
-    submit() {
+    next() {
       this.confirmingData = {
         fromAddress: this.fromWallet.address,
         toAddress: this.toWallet.address,
@@ -458,6 +460,11 @@ export default {
         fee: this.fee,
       };
       this.confirmSwapVisible = true;
+    },
+    handleClosed() {
+      this.$nextTick(() => {
+        this.confirmSwapUuid = uuidv4();
+      });
     },
     handleSucceed() {
       this.transactionDetailsVisible = true;
