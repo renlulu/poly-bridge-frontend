@@ -127,7 +127,7 @@
             <span class="label">{{ $t('home.form.fee') }}</span>
             <CFlexSpan />
             <span class="fee-value">{{ fee }}</span>
-            <img class="fee-icon" src="@/assets/svg/eth-token.svg" />
+            <img class="fee-icon" :src="fromChain.icon" />
             <span class="fee-token">{{ fromToken.name }}</span>
           </div>
         </ValidationProvider>

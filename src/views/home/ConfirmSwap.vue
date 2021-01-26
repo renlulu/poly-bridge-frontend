@@ -16,7 +16,7 @@
           <div class="field">
             <div class="label">{{ $t('home.confirmSwap.from') }}</div>
             <div class="chain">
-              <img class="chain-icon" src="@/assets/svg/eth.svg" />
+              <img class="chain-icon" :src="fromChain.icon" />
               <span class="chain-name">
                 {{
                   $t('home.confirmSwap.chainName', {
@@ -33,7 +33,7 @@
           <div class="field">
             <div class="label">{{ $t('home.confirmSwap.to') }}</div>
             <div class="chain">
-              <img class="chain-icon" src="@/assets/svg/neo.svg" />
+              <img class="chain-icon" :src="toChain.icon" />
               <span class="chain-name">
                 {{
                   $t('home.confirmSwap.chainName', {
@@ -98,6 +98,9 @@ export default {
         })
       );
     },
+    fromChain() {
+      return this.confirmingData && this.$store.getters.getChain(this.confirmingData.fromChainId);
+    },
     fromToken() {
       return (
         this.tokenBasic &&
@@ -106,6 +109,9 @@ export default {
           chainId: this.confirmingData.fromChainId,
         })
       );
+    },
+    toChain() {
+      return this.confirmingData && this.$store.getters.getChain(this.confirmingData.toChainId);
     },
     toToken() {
       return (
