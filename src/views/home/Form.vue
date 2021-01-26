@@ -195,6 +195,7 @@
 import BigNumber from 'bignumber.js';
 import copy from 'clipboard-copy';
 import { v4 as uuidv4 } from 'uuid';
+import { DEFAULT_TOKEN_BASIC_NAME } from '@/utils/values';
 import { ChainId } from '@/utils/enums';
 import TransactionDetails from '@/views/transactions/Details';
 import { getWalletApi } from '@/utils/walletApi';
@@ -220,7 +221,7 @@ export default {
       connectWalletVisible: false,
       confirmSwapVisible: false,
       transactionDetailsVisible: false,
-      tokenBasicName: 'USDT',
+      tokenBasicName: DEFAULT_TOKEN_BASIC_NAME,
       fromChainId: null,
       toChainId: null,
       amount: '',

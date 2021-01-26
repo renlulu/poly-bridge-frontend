@@ -12,7 +12,7 @@
         </div>
         <div class="popular-token-basics">
           <CButton
-            v-for="tokenBasic in popularTokenBasics"
+            v-for="tokenBasic in topTokenBasics"
             :key="tokenBasic.name"
             class="popular-token-basic"
             :class="{ selected: tokenBasicName === tokenBasic.name }"
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { TOP_TOKEN_BASIC_NAMES } from '@/utils/values';
+
 export default {
   name: 'SelectTokenBasic',
   inheritAttrs: false,
@@ -63,6 +65,11 @@ export default {
       return this.tokenBasics.filter(tokenBasic => {
         return tokenBasic.name.toLowerCase().includes(this.keyword.toLowerCase());
       });
+    },
+    topTokenBasics() {
+      return TOP_TOKEN_BASIC_NAMES.map(name => this.$store.getters.getTokenBasic(name)).filter(
+        item => item,
+      );
     },
   },
   methods: {

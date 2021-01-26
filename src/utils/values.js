@@ -92,3 +92,7 @@ export const TOKEN_BASIC_ICONS = {
 };
 
 export const UNKNOWN_ICON = require('@/assets/svg/unknown.svg');
+
+export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';
+
+export const TOP_TOKEN_BASIC_NAMES = ['NEO', 'Ethereum', 'USDT', 'USDC', 'DAI'];
