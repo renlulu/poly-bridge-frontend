@@ -40,7 +40,6 @@ export const WALLETS = [
 export const CHAINS = [
   {
     id: ChainId.Poly,
-    icon: require('@/assets/svg/poly.svg'),
     explorerUrl: TARGET_MAINNET
       ? 'http://explorer.poly.network/tx/{txHash}'
       : 'http://explorer.poly.network/testnet/tx/{txHash}',
