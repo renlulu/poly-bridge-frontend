@@ -17,7 +17,7 @@ export default {
       connectWallet: 'Connect {walletName}',
     },
     footer: {
-      copyright: '© 2021 Polynetwork. All rights reserved. Privacy policy',
+      copyright: '© 2021 Polynetwork. All rights reserved.',
     },
   },
   home: {
