@@ -23,14 +23,14 @@
               </template>
               <template v-else-if="!(step.blocks >= step.needBlocks)">
                 {{
-                  $t('transactions.details.proceeding', {
+                  $t('transactions.details.processing', {
                     chainName: $formatEnum(step.chainId, { type: 'chainName' }),
                   })
                 }}
               </template>
               <template v-else>
                 {{
-                  $t('transactions.details.proceeded', {
+                  $t('transactions.details.processed', {
                     chainName: $formatEnum(step.chainId, { type: 'chainName' }),
                   })
                 }}
