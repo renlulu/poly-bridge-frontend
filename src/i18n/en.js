@@ -70,6 +70,7 @@ export default {
       toChain: 'Destination Chain',
       hash: 'Hash: {hash}',
       amount: 'Amount',
+      fee: 'Fee',
       asset: 'Asset',
       time: 'Time',
       status: 'Status',

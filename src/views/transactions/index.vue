@@ -60,12 +60,13 @@
               </CLink>
             </ElTableColumn>
             <ElTableColumn :label="$t('transactions.index.amount')" prop="amount" />
+            <ElTableColumn :label="$t('transactions.index.fee')" prop="fee" />
             <ElTableColumn :label="$t('transactions.index.asset')" prop="tokenBasicName" />
             <ElTableColumn
               #default="{row}"
               :label="$t('transactions.index.time')"
               prop="time"
-              min-width="120"
+              min-width="110"
             >
               {{ $formatTime(row.time) }}
             </ElTableColumn>
@@ -187,7 +188,7 @@ export default {
 }
 
 .content-inner {
-  width: 1090px;
+  width: 1160px;
   margin: 40px auto 20px;
   @include child-margin-v(24px);
 }
