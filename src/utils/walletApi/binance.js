@@ -1,4 +1,3 @@
-import delay from 'delay';
 import Web3 from 'web3';
 import store from '@/store';
 import { getChainApi } from '@/utils/chainApi';
