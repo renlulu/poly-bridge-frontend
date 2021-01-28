@@ -70,7 +70,7 @@ export function decimalToInteger(decimal, unit) {
   if (new BigNumber(decimal).isNaN()) {
     return null;
   }
-  return numberToBN(new BigNumber(decimal).shiftedBy(unit).dp(0)).toFixed();
+  return numberToBN(new BigNumber(decimal).shiftedBy(unit).dp(0)).toString();
 }
 
 export function objectToBase64(object) {
