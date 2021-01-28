@@ -86,6 +86,8 @@ export const CHAINS = [
   },
 ];
 
+export const UNKNOWN_ICON = require('@/assets/svg/unknown.svg');
+
 export const TOKEN_BASIC_ICONS = {
   NEO: require('@/assets/svg/neo-token.svg'),
   ETH: require('@/assets/svg/eth-token.svg'),
@@ -94,8 +96,6 @@ export const TOKEN_BASIC_ICONS = {
   DAI: require('@/assets/svg/dai.svg'),
   sUSD: require('@/assets/svg/susd.svg'),
 };
-
-export const UNKNOWN_ICON = require('@/assets/svg/unknown.svg');
 
 export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';
 

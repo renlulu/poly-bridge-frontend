@@ -12,8 +12,6 @@ export function dispatchGlobalError(error) {
   }
 }
 
-const SAME_MESSAGE_INTERVAL = 1000;
-
 let lastLocalMessage = null;
 let lastTime = 0;
 
@@ -22,8 +20,8 @@ function handleGlobalError(error) {
     if (error.expose) {
       const localMessage = error.getLocalMessage();
       if (localMessage) {
-        if (localMessage !== lastLocalMessage || Date.now() - lastTime > SAME_MESSAGE_INTERVAL) {
-          Message({ message: localMessage, type: 'error' });
+        if (localMessage !== lastLocalMessage || Date.now() - lastTime > 1000) {
+          Message({ message: localMessage, type: 'error', duration: 5000 });
           lastLocalMessage = localMessage;
           lastTime = Date.now();
         }
