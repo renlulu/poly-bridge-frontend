@@ -104,7 +104,7 @@
             required: true,
             number: true,
             positive: true,
-            maxDecimal: tokenBasic && tokenBasic.precision,
+            maxDecimals: tokenBasic && tokenBasic.decimals,
             maxValue: balance,
             minValue: { min: fee, excluded: true },
           }"
@@ -121,12 +121,12 @@
           <div v-if="balance" class="balance">
             <span class="label">{{ $t('home.form.balance') }}</span>
             <CFlexSpan />
-            <span class="value">{{ balance }} {{ fromToken.name }}</span>
+            <span class="value"> {{ $formatNumber(balance) }} {{ fromToken.name }} </span>
           </div>
           <div v-if="fee" class="fee">
             <span class="label">{{ $t('home.form.fee') }}</span>
             <CFlexSpan />
-            <span class="fee-value">{{ fee }}</span>
+            <span class="fee-value">{{ $formatNumber(fee) }}</span>
             <img class="fee-icon" :src="tokenBasic.icon" />
             <span class="fee-token">{{ fromToken.name }}</span>
           </div>

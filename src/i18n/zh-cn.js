@@ -154,7 +154,7 @@ export default {
     required: 'Required.',
     number: 'Please input a number.',
     positive: 'Please input a positive number.',
-    maxDecimal: "You've exceeded the decimal limit.",
+    maxDecimals: "You've exceeded the decimal limit.",
     maxValue: "You've exceeded the max amount.",
     minValue: 'You entered less than the minimum amount.',
     address: "You've entered an invalid address.",

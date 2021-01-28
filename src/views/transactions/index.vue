@@ -59,15 +59,14 @@
                 }}
               </CLink>
             </ElTableColumn>
-            <ElTableColumn :label="$t('transactions.index.amount')" prop="amount" />
-            <ElTableColumn :label="$t('transactions.index.fee')" prop="fee" />
+            <ElTableColumn #default="{row}" :label="$t('transactions.index.amount')">
+              {{ $formatNumber(row.amount) }}
+            </ElTableColumn>
+            <ElTableColumn #default="{row}" :label="$t('transactions.index.fee')">
+              {{ $formatNumber(row.fee) }}
+            </ElTableColumn>
             <ElTableColumn :label="$t('transactions.index.asset')" prop="tokenBasicName" />
-            <ElTableColumn
-              #default="{row}"
-              :label="$t('transactions.index.time')"
-              prop="time"
-              min-width="110"
-            >
+            <ElTableColumn #default="{row}" :label="$t('transactions.index.time')" min-width="110">
               {{ $formatTime(row.time) }}
             </ElTableColumn>
             <ElTableColumn #default="{row}" :label="$t('transactions.index.status')" align="right">

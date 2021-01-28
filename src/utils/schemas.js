@@ -9,14 +9,14 @@ export const token = model({
     'TokenBasic',
     model({
       name: alias('Name'),
-      precision: alias('Precision'),
+      decimals: alias('Precision'),
     }),
   ),
 });
 
 export const tokenBasic = model({
   name: alias('Name'),
-  precision: alias('Precision'),
+  decimals: alias('Precision'),
   tokens: alias(
     'Tokens',
     list(

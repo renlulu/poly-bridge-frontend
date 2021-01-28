@@ -24,7 +24,7 @@ extend('positive', {
   message: () => i18n.t('validations.positive'),
 });
 
-extend('maxDecimal', {
+extend('maxDecimals', {
   validate(value, { max, excluded }) {
     if (max == null) {
       return true;
@@ -34,7 +34,7 @@ extend('maxDecimal', {
     return false;
   },
   params: ['max', 'excluded'],
-  message: () => i18n.t('validations.maxDecimal'),
+  message: () => i18n.t('validations.maxDecimals'),
 });
 
 extend('maxValue', {

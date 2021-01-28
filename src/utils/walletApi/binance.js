@@ -111,11 +111,11 @@ async function getBalance({ chainId, address, tokenHash }) {
 
     if (tokenHash === '0000000000000000000000000000000000000000') {
       const result = await web3.eth.getBalance(address);
-      return integerToDecimal(result, tokenBasic.precision);
+      return integerToDecimal(result, tokenBasic.decimals);
     }
     const tokenContract = new web3.eth.Contract(require('@/assets/json/eth-erc20.json'), tokenHash);
     const result = await tokenContract.methods.balanceOf(address).call();
-    return integerToDecimal(result, tokenBasic.precision);
+    return integerToDecimal(result, tokenBasic.decimals);
   } catch (error) {
     throw convertWalletError(error);
   }
@@ -129,7 +129,7 @@ async function getAllowance({ chainId, address, tokenHash, spender }) {
     }
     const tokenContract = new web3.eth.Contract(require('@/assets/json/eth-erc20.json'), tokenHash);
     const result = await tokenContract.methods.allowance(address, `0x${spender}`).call();
-    return integerToDecimal(result, tokenBasic.precision);
+    return integerToDecimal(result, tokenBasic.decimals);
   } catch (error) {
     throw convertWalletError(error);
   }
@@ -152,7 +152,7 @@ async function getTransactionStatus({ transactionHash }) {
 async function approve({ chainId, address, tokenHash, spender, amount }) {
   try {
     const tokenBasic = store.getters.getTokenBasicByChainIdAndTokenHash({ chainId, tokenHash });
-    const amountInt = decimalToInteger(amount, tokenBasic.precision);
+    const amountInt = decimalToInteger(amount, tokenBasic.decimals);
     const tokenContract = new web3.eth.Contract(require('@/assets/json/eth-erc20.json'), tokenHash);
     return await tokenContract.methods.approve(`0x${spender}`, amountInt).send({
       from: address,
@@ -184,8 +184,8 @@ async function lock({
     );
     const toChainApi = await getChainApi(toChainId);
     const toAddressHex = toChainApi.addressToHex(toAddress);
-    const amountInt = decimalToInteger(amount, tokenBasic.precision);
-    const feeInt = decimalToInteger(fee, tokenBasic.precision);
+    const amountInt = decimalToInteger(amount, tokenBasic.decimals);
+    const feeInt = decimalToInteger(fee, tokenBasic.decimals);
 
     const result = await confirmLater(
       lockContract.methods

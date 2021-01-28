@@ -21,7 +21,7 @@ export function formatEnum(value, { type, ingoreMissing = false } = {}) {
   return value;
 }
 
-export function formatNumber(value, { decimals = 8, symbol = null, toExp = false } = {}) {
+export function formatNumber(value, { decimals = null, symbol = null, toExp = false } = {}) {
   const bn = new BigNumber(value);
   if (bn.isNaN()) return '-';
 

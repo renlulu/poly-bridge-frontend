@@ -186,8 +186,8 @@ async function lock({
 
     const toChainApi = await getChainApi(toChainId);
     const toAddressHex = toChainApi.addressToHex(toAddress);
-    const amountInt = decimalToInteger(amount, tokenBasic.precision);
-    const feeInt = decimalToInteger(fee, tokenBasic.precision);
+    const amountInt = decimalToInteger(amount, tokenBasic.decimals);
+    const feeInt = decimalToInteger(fee, tokenBasic.decimals);
 
     const params = {
       scriptHash: chain.lockContractHash,

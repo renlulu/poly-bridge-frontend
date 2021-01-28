@@ -13,7 +13,7 @@
           <div class="field">
             <div class="label">{{ $t('home.confirmSwap.amount') }}</div>
             <div class="amount">
-              <span class="amount-value">{{ confirmingData.amount }}</span>
+              <span class="amount-value">{{ $formatNumber(confirmingData.amount) }}</span>
               <span class="token-basic-name">{{ tokenBasic.name }}</span>
             </div>
           </div>
@@ -55,7 +55,7 @@
           <div class="field">
             <div class="label">{{ $t('home.confirmSwap.fee') }}</div>
             <div class="fee">
-              <span class="fee-value">{{ confirmingData.fee }}</span>
+              <span class="fee-value">{{ $formatNumber(confirmingData.fee) }}</span>
               <span class="token-basic-name">{{ fromToken.name }}</span>
             </div>
           </div>
@@ -63,7 +63,7 @@
           <div class="field">
             <div class="label">{{ $t('home.confirmSwap.receiving') }}</div>
             <div class="fee">
-              <span class="fee-value">{{ receivingAmount }}</span>
+              <span class="fee-value">{{ $formatNumber(receivingAmount) }}</span>
               <span class="token-basic-name">{{ toToken.name }}</span>
             </div>
           </div>

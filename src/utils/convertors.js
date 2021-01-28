@@ -63,14 +63,14 @@ export function integerToDecimal(integer, unit) {
   if (new BigNumber(integer).isNaN()) {
     return null;
   }
-  return new BigNumber(integer).shiftedBy(-unit).toString();
+  return new BigNumber(integer).shiftedBy(-unit).toFixed();
 }
 
 export function decimalToInteger(decimal, unit) {
   if (new BigNumber(decimal).isNaN()) {
     return null;
   }
-  return numberToBN(new BigNumber(decimal).shiftedBy(unit).dp(0)).toString();
+  return numberToBN(new BigNumber(decimal).shiftedBy(unit).dp(0)).toFixed();
 }
 
 export function objectToBase64(object) {
