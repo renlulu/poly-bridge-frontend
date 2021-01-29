@@ -3,7 +3,7 @@ const WebpackCdnPlugin = require('webpack-cdn-plugin');
 const IN_PRODUCTION = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  publicPath: '',
+  publicPath: process.env.VUE_APP_PUBLIC_PATH,
   chainWebpack: config => {
     config.devtool(!IN_PRODUCTION ? 'source-map' : false);
 
@@ -17,7 +17,7 @@ module.exports = {
             { name: 'element-ui', var: 'ELEMENT', path: 'lib/index.js' },
           ],
           prodUrl: '//cdn.jsdelivr.net/npm/:name@:version/:path',
-          publicPath: '',
+          publicPath: process.env.VUE_APP_PUBLIC_PATH,
         },
       ]);
     }
