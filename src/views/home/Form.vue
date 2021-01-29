@@ -53,7 +53,6 @@
             </div>
           </div>
 
-          <!-- TODO -->
           <CButton :disabled="!toChainId" @click="exchangeFromTo">
             <img src="@/assets/svg/exchange.svg" />
           </CButton>

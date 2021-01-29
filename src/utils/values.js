@@ -1,11 +1,9 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-unneeded-ternary */
 import { WalletName, ChainId } from './enums';
 import { TARGET_MAINNET } from './env';
 
 export const HTTP_BASE_URL = TARGET_MAINNET
-  ? 'http://40.115.153.174:30330/v1'
-  : 'http://40.115.153.174:30330/v1'; // TODO
+  ? 'https://bridge.poly.network/testnet/v1' // TODO
+  : 'https://bridge.poly.network/testnet/v1';
 
 export const WALLETS = [
   {
@@ -51,37 +49,37 @@ export const CHAINS = [
       ? 'https://etherscan.io/tx/0x{txHash}'
       : 'https://ropsten.etherscan.io/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
-      ? '0x250e76987d838a75310c34bf422ea9f1AC4Cc906'
+      ? '0x250e76987d838a75310c34bf422ea9f1AC4Cc906' // TODO
       : '0xe498fb7D00468a67A79dE5D4Ca264d3350165280',
   },
   {
-    id: ChainId.Neo, // TODO
+    id: ChainId.Neo,
     icon: require('@/assets/svg/neo.svg'),
     explorerUrl: TARGET_MAINNET
       ? 'https://neotube.io/transaction/0x{txHash}'
       : 'https://testnet.neotube.io/transaction/0x{txHash}',
     lockContractHash: TARGET_MAINNET
-      ? 'f263ca001a7fdeea43a45300c01bb99713809de7'
+      ? 'f263ca001a7fdeea43a45300c01bb99713809de7' // TODO
       : 'cd074cd290acc3d73c030784101afbcf40fd86a1',
   },
   {
-    id: ChainId.Bsc, // TODO
+    id: ChainId.Bsc,
     icon: require('@/assets/svg/bsc.svg'),
     explorerUrl: TARGET_MAINNET
       ? 'https://bscscan.com/tx/0x{txHash}'
       : 'https://testnet.bscscan.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
-      ? '0x250e76987d838a75310c34bf422ea9f1AC4Cc906'
+      ? '0x250e76987d838a75310c34bf422ea9f1AC4Cc906' // TODO
       : '0xCed7997C3e807Fcdc5ac18fFC0B8af93a15a9eE5',
   },
   {
-    id: ChainId.Heco, // TODO
+    id: ChainId.Heco,
     icon: require('@/assets/svg/heco.svg'),
     explorerUrl: TARGET_MAINNET
       ? 'https://scan.hecochain.com/tx/0x{txHash}'
       : 'https://scan-testnet.hecochain.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
-      ? '0x250e76987d838a75310c34bf422ea9f1AC4Cc906'
+      ? '0x250e76987d838a75310c34bf422ea9f1AC4Cc906' // TODO
       : '0x3c92F1E31aACA43Eb4fF8aE498C7E85618680F45',
   },
 ];
