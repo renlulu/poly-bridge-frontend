@@ -171,12 +171,12 @@ export default {
             // ignore error
           }
         }
-        this.$emit('update:visible', false);
         this.$emit('confirmed', {
           ...this.confirmingData,
           transactionHash,
           transactionStatus: status,
         });
+        this.$emit('update:visible', false);
       } finally {
         this.confirming = false;
       }
