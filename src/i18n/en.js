@@ -53,14 +53,16 @@ export default {
       walletConnected: '{walletName} Connected',
       connectWallet: 'Connect {walletName}',
     },
-    confirmSwap: {
-      title: 'Confirm Swap',
+    confirm: {
+      title: 'Confirm',
       amount: 'Amount',
       from: 'From',
       to: 'To',
       fee: 'Fee',
       chainName: '{chainName} Network',
       receiving: 'You will receive',
+      packing: 'Transaction is packing on {chainName}. Please be patient…',
+      hash: 'Hash: {hash}',
     },
   },
   transactions: {
@@ -79,12 +81,14 @@ export default {
     details: {
       title: 'Transaction Details',
       waiting: 'The transaction is waiting to be processed on the {chainName}. Please be patient…',
-      processing: 'The transaction is being processed on the {chainName}. Please be patient…',
-      processed: 'The transaction has been processed on the {chainName}.',
+      pending: 'The transaction is proceeding on the {chainName}. Please be patient…',
+      succeeded: 'The transaction is succeeded on the {chainName}.',
+      failed: 'The transaction is failed on the {chainName}.',
       confirmation: '{blocks}/{needBlocks} Confirm',
       hash: 'Hash: {hash}',
-      failedTitle: 'Error',
-      failedMessage: 'Transaction Failed',
+      failedTitle: 'Failed',
+      finishedTitle: 'Finished',
+      gotoHistory: 'Goto History',
     },
   },
   buttons: {

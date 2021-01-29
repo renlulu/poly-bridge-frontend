@@ -5,75 +5,101 @@
     :closeOnPressEscape="!confirming"
     v-on="$listeners"
   >
-    <div class="content">
-      <div class="title">{{ $t('home.confirmSwap.title') }}</div>
-      <CDivider />
-      <div v-if="confirmingData" class="scroll">
-        <div class="fields">
-          <div class="field">
-            <div class="label">{{ $t('home.confirmSwap.amount') }}</div>
-            <div class="amount">
-              <span class="amount-value">{{ $formatNumber(confirmingData.amount) }}</span>
-              <span class="token-basic-name">{{ tokenBasic.name }}</span>
+    <transition v-if="confirmingData" name="fade" mode="out-in">
+      <div class="content">
+        <div class="title">{{ $t('home.confirm.title') }}</div>
+        <CDivider />
+        <div v-if="!packing" class="scroll">
+          <div class="fields">
+            <div class="field">
+              <div class="label">{{ $t('home.confirm.amount') }}</div>
+              <div class="amount">
+                <span class="amount-value">{{ $formatNumber(confirmingData.amount) }}</span>
+                <span class="token-basic-name">{{ tokenBasic.name }}</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="label">{{ $t('home.confirm.from') }}</div>
+              <div class="chain">
+                <img class="chain-icon" :src="fromChain.icon" />
+                <span class="chain-name">
+                  {{
+                    $t('home.confirm.chainName', {
+                      chainName: $formatEnum(confirmingData.fromChainId, { type: 'chainName' }),
+                    })
+                  }}
+                </span>
+              </div>
+              <div class="address">
+                {{ confirmingData.fromAddress }}
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="label">{{ $t('home.confirm.to') }}</div>
+              <div class="chain">
+                <img class="chain-icon" :src="toChain.icon" />
+                <span class="chain-name">
+                  {{
+                    $t('home.confirm.chainName', {
+                      chainName: $formatEnum(confirmingData.toChainId, { type: 'chainName' }),
+                    })
+                  }}
+                </span>
+              </div>
+              <div class="address">
+                {{ confirmingData.toAddress }}
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="label">{{ $t('home.confirm.fee') }}</div>
+              <div class="fee">
+                <span class="fee-value">{{ $formatNumber(confirmingData.fee) }}</span>
+                <span class="token-basic-name">{{ fromToken.name }}</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="label">{{ $t('home.confirm.receiving') }}</div>
+              <div class="fee">
+                <span class="fee-value">{{ $formatNumber(receivingAmount) }}</span>
+                <span class="token-basic-name">{{ toToken.name }}</span>
+              </div>
             </div>
           </div>
 
-          <div class="field">
-            <div class="label">{{ $t('home.confirmSwap.from') }}</div>
-            <div class="chain">
-              <img class="chain-icon" :src="fromChain.icon" />
-              <span class="chain-name">
-                {{
-                  $t('home.confirmSwap.chainName', {
-                    chainName: $formatEnum(confirmingData.fromChainId, { type: 'chainName' }),
-                  })
-                }}
-              </span>
-            </div>
-            <div class="address">
-              {{ confirmingData.fromAddress }}
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="label">{{ $t('home.confirmSwap.to') }}</div>
-            <div class="chain">
-              <img class="chain-icon" :src="toChain.icon" />
-              <span class="chain-name">
-                {{
-                  $t('home.confirmSwap.chainName', {
-                    chainName: $formatEnum(confirmingData.toChainId, { type: 'chainName' }),
-                  })
-                }}
-              </span>
-            </div>
-            <div class="address">
-              {{ confirmingData.toAddress }}
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="label">{{ $t('home.confirmSwap.fee') }}</div>
-            <div class="fee">
-              <span class="fee-value">{{ $formatNumber(confirmingData.fee) }}</span>
-              <span class="token-basic-name">{{ fromToken.name }}</span>
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="label">{{ $t('home.confirmSwap.receiving') }}</div>
-            <div class="fee">
-              <span class="fee-value">{{ $formatNumber(receivingAmount) }}</span>
-              <span class="token-basic-name">{{ toToken.name }}</span>
-            </div>
-          </div>
+          <CSubmitButton :loading="confirming" @click="confirm">
+            {{ confirming ? $t('buttons.confirming') : $t('buttons.confirm') }}
+          </CSubmitButton>
         </div>
 
-        <CSubmitButton :loading="confirming" @click="confirm">
-          {{ confirming ? $t('buttons.confirming') : $t('buttons.confirm') }}
-        </CSubmitButton>
+        <div v-else class="packing">
+          <img class="packing-icon" src="@/assets/svg/pending-large.svg" />
+          <span class="packing-text">
+            {{
+              $t('home.confirm.packing', {
+                chainName: $formatEnum(confirmingData.fromChainId, { type: 'chainName' }),
+              })
+            }}
+          </span>
+          <CLink
+            class="hash"
+            :href="$format(fromChain.explorerUrl, { txHash: confirmingData.transactionHash })"
+            :disabled="!confirmingData.transactionHash"
+          >
+            {{
+              $t('home.confirm.hash', {
+                hash: $formatLongText(confirmingData.transactionHash || 'N/A', {
+                  headTailLength: 10,
+                }),
+              })
+            }}
+          </CLink>
+        </div>
       </div>
-    </div>
+    </transition>
   </CDrawer>
 </template>
 
@@ -84,7 +110,7 @@ import { SingleTransactionStatus } from '@/utils/enums';
 import { getWalletApi } from '@/utils/walletApi';
 
 export default {
-  name: 'ConfirmSwap',
+  name: 'Confirm',
   inheritAttrs: false,
   props: {
     confirmingData: Object,
@@ -92,6 +118,7 @@ export default {
   data() {
     return {
       confirming: false,
+      packing: false,
     };
   },
   computed: {
@@ -156,7 +183,14 @@ export default {
           amount: this.confirmingData.amount,
           fee: this.confirmingData.fee,
         });
-        let status;
+        this.packing = true;
+        let status = SingleTransactionStatus.Pending;
+        this.$emit('update:confirmingData', {
+          ...this.confirmingData,
+          transactionHash,
+          transactionStatus: status,
+        });
+
         // eslint-disable-next-line no-constant-condition
         while (true) {
           try {
@@ -171,14 +205,16 @@ export default {
             // ignore error
           }
         }
-        this.$emit('confirmed', {
+        this.$emit('update:confirmingData', {
           ...this.confirmingData,
           transactionHash,
           transactionStatus: status,
         });
+        this.$emit('packed');
         this.$emit('update:visible', false);
       } finally {
         this.confirming = false;
+        this.packing = false;
       }
     },
   },
@@ -267,5 +303,30 @@ export default {
 .fee-value {
   font-weight: 500;
   font-size: 14px;
+}
+
+.packing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 0;
+  @include child-margin-v(20px);
+}
+
+.packing-icon {
+  animation: rotation 2s infinite linear;
+}
+
+.packing-text {
+  font-weight: 500;
+  @include last-margin-v(60px);
+}
+
+.hash {
+  display: inline-block;
+  opacity: 0.6;
+  color: #3ec7eb;
+  font-size: 14px;
+  text-decoration: underline;
 }
 </style>

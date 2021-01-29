@@ -1,40 +1,28 @@
 <template>
   <CDrawer
     v-bind="$attrs"
-    :closeOnClickModal="!confirmedData || failed || finished"
-    :closeOnPressEscape="!confirmedData || failed || finished"
+    :closeOnClickModal="!confirmingData || failed || finished"
+    :closeOnPressEscape="!confirmingData || failed || finished"
     v-on="$listeners"
   >
-    <transition name="fade" mode="out-in">
-      <div v-if="!failed" class="content">
-        <div class="title">{{ $t('transactions.details.title') }}</div>
-        <div v-if="mergedTransaction" class="scroll">
-          <div v-for="(step, index) in mergedTransaction.steps" :key="step.chainId" class="step">
-            <div class="step-dot" :class="{ active: step.hash }" />
-            <div v-if="index !== mergedTransaction.steps.length - 1" class="step-line" />
+    <div class="content">
+      <div class="title">{{ $t('transactions.details.title') }}</div>
+      <div v-if="steps" class="scroll">
+        <div v-for="(step, index) in steps" :key="step.chainId" class="step">
+          <template v-if="step.chainId != null">
+            <img
+              class="step-icon"
+              :class="{ [getStepStatus(index)]: true }"
+              :src="statusIcons[getStepStatus(index)]"
+            />
+            <div v-if="index !== steps.length - 1" class="step-line" />
             <div class="step-title">{{ $formatEnum(step.chainId, { type: 'chainName' }) }}</div>
             <div class="description">
-              <template v-if="!step.hash">
-                {{
-                  $t('transactions.details.waiting', {
-                    chainName: $formatEnum(step.chainId, { type: 'chainName' }),
-                  })
-                }}
-              </template>
-              <template v-else-if="!(step.blocks >= step.needBlocks)">
-                {{
-                  $t('transactions.details.processing', {
-                    chainName: $formatEnum(step.chainId, { type: 'chainName' }),
-                  })
-                }}
-              </template>
-              <template v-else>
-                {{
-                  $t('transactions.details.processed', {
-                    chainName: $formatEnum(step.chainId, { type: 'chainName' }),
-                  })
-                }}
-              </template>
+              {{
+                $t(`transactions.details.${getStepStatus(index)}`, {
+                  chainName: $formatEnum(step.chainId, { type: 'chainName' }),
+                })
+              }}
             </div>
             <div class="progress">
               <ElProgress
@@ -52,7 +40,7 @@
               </span>
             </div>
             <CLink
-              class="hash"
+              class="link"
               :href="$format(getChain(step.chainId).explorerUrl, { txHash: step.hash })"
               :disabled="!step.hash"
             >
@@ -62,36 +50,28 @@
                 })
               }}
             </CLink>
-          </div>
+          </template>
+
+          <template v-else-if="step.failed">
+            <img class="step-icon failed" src="@/assets/svg/status-failed.svg" />
+            <div v-if="index !== steps.length - 1" class="step-line" />
+            <div class="failed-title">{{ $t('transactions.details.failedTitle') }}</div>
+            <CLink v-if="confirmingData" class="link" :to="{ name: 'transactions' }">
+              {{ $t('transactions.details.gotoHistory') }}
+            </CLink>
+          </template>
+
+          <template v-else-if="step.finished">
+            <img class="step-icon succeeded" src="@/assets/svg/status-succeeded.svg" />
+            <div v-if="index !== steps.length - 1" class="step-line" />
+            <div class="finished-title">{{ $t('transactions.details.finishedTitle') }}</div>
+            <CLink v-if="confirmingData" class="link" :to="{ name: 'transactions' }">
+              {{ $t('transactions.details.gotoHistory') }}
+            </CLink>
+          </template>
         </div>
       </div>
-      <div v-else class="content">
-        <div class="failed-title">{{ $t('transactions.details.failedTitle') }}</div>
-        <CDivider />
-        <div class="failed-body">
-          <img class="failed-icon" src="@/assets/svg/failed.svg" />
-          <span class="failed-text">{{ $t('transactions.details.failedMessage') }}</span>
-          <CLink
-            v-if="confirmedData"
-            class="hash"
-            :href="
-              $format(getChain(confirmedData.fromChainId).explorerUrl, {
-                txHash: confirmedData.transactionHash,
-              })
-            "
-            :disabled="!confirmedData.transactionHash"
-          >
-            {{
-              $t('transactions.details.hash', {
-                hash: $formatLongText(confirmedData.transactionHash || 'N/A', {
-                  headTailLength: 10,
-                }),
-              })
-            }}
-          </CLink>
-        </div>
-      </div>
-    </transition>
+    </div>
   </CDrawer>
 </template>
 
@@ -104,11 +84,11 @@ export default {
   inheritAttrs: false,
   props: {
     hash: String,
-    confirmedData: Object,
+    confirmingData: Object,
   },
   computed: {
     mergedHash() {
-      return this.hash || (this.confirmedData && this.confirmedData.transactionHash);
+      return this.hash || (this.confirmingData && this.confirmingData.transactionHash);
     },
     transaction() {
       return this.$store.getters.getTransaction(this.mergedHash);
@@ -116,30 +96,51 @@ export default {
     mergedTransaction() {
       return (
         this.transaction ||
-        (this.confirmedData && {
+        (this.confirmingData && {
           steps: [
             {
-              hash: this.confirmedData.transactionHash,
-              chainId: this.confirmedData.fromChainId,
+              hash: this.confirmingData.transactionHash,
+              chainId: this.confirmingData.fromChainId,
             },
             {
               chainId: ChainId.Poly,
             },
             {
-              chainId: this.confirmedData.toChainId,
+              chainId: this.confirmingData.toChainId,
             },
           ],
         })
       );
     },
+    steps() {
+      if (!this.mergedTransaction) {
+        return null;
+      }
+      let { steps } = this.mergedTransaction;
+      if (this.failed) {
+        steps = [...steps, { failed: this.failed }];
+      }
+      if (this.finished) {
+        steps = [...steps, { finished: this.finished }];
+      }
+      return steps;
+    },
     failed() {
       return (
-        this.confirmedData &&
-        this.confirmedData.transactionStatus === SingleTransactionStatus.Failed
+        this.confirmingData &&
+        this.confirmingData.transactionStatus === SingleTransactionStatus.Failed
       );
     },
     finished() {
       return this.transaction && this.transaction.status === TransactionStatus.Finished;
+    },
+    statusIcons() {
+      return {
+        waiting: require('@/assets/svg/status-waiting.svg'),
+        pending: require('@/assets/svg/status-pending.svg'),
+        succeeded: require('@/assets/svg/status-succeeded.svg'),
+        failed: require('@/assets/svg/status-failed.svg'),
+      };
     },
   },
   watch: {
@@ -158,6 +159,23 @@ export default {
   methods: {
     getChain(chainId) {
       return this.$store.getters.getChain(chainId);
+    },
+    getStepStatus(index) {
+      if (!this.steps) {
+        return null;
+      }
+      if (this.failed && index === 0) {
+        return 'failed';
+      }
+      const step = this.steps[index];
+      if (step.blocks >= step.needBlocks) {
+        return 'succeeded';
+      }
+      const lastStep = this.steps[index - 1];
+      if (!lastStep || lastStep.blocks >= lastStep.needBlocks) {
+        return 'pending';
+      }
+      return 'waiting';
     },
     async getTransaction() {
       if (this.mergedHash && this.$attrs.visible) {
@@ -214,8 +232,22 @@ export default {
   border: 1px solid #ffffff;
   border-radius: 5px;
 
-  &.active {
-    background: #3ec7eb;
+  &.processed {
+    background: green;
+  }
+
+  &.processing {
+    background: blue;
+  }
+}
+
+.step-icon {
+  position: absolute;
+  left: -31px;
+  top: 1px;
+
+  &.pending {
+    animation: rotation 2s infinite linear;
   }
 }
 
@@ -263,7 +295,7 @@ export default {
   font-size: 12px;
 }
 
-.hash {
+.link {
   display: inline-block;
   opacity: 0.6;
   color: #3ec7eb;
@@ -272,20 +304,16 @@ export default {
 }
 
 .failed-title {
-  padding: 80px 50px 20px;
+  color: #ff4141;
   font-weight: 500;
+  font-size: 24px;
+  @include next-margin-v(10px);
 }
 
-.failed-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 160px 0;
-  @include child-margin-v(20px);
-}
-
-.failed-text {
+.finished-title {
+  color: #2fd8ca;
   font-weight: 500;
-  @include last-margin-v(40px);
+  font-size: 24px;
+  @include next-margin-v(10px);
 }
 </style>

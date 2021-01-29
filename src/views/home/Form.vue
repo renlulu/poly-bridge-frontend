@@ -179,14 +179,17 @@
       :fromChainId="fromChainId"
       :toChainId="toChainId"
     />
-    <ConfirmSwap
-      :key="confirmSwapUuid"
-      :visible.sync="confirmSwapVisible"
-      :confirmingData="confirmingData"
+    <Confirm
+      :key="confirmUuid"
+      :visible.sync="confirmVisible"
+      :confirmingData.sync="confirmingData"
       @closed="handleClosed"
-      @confirmed="handleConfirmed"
+      @packed="handlePacked"
     />
-    <TransactionDetails :visible.sync="transactionDetailsVisible" :confirmedData="confirmedData" />
+    <TransactionDetails
+      :visible.sync="transactionDetailsVisible"
+      :confirmingData="confirmingData"
+    />
   </ValidationObserver>
 </template>
 
@@ -201,7 +204,7 @@ import { getWalletApi } from '@/utils/walletApi';
 import SelectTokenBasic from './SelectTokenBasic';
 import SelectChain from './SelectChain';
 import ConnectWallet from './ConnectWallet';
-import ConfirmSwap from './ConfirmSwap';
+import Confirm from './Confirm';
 
 export default {
   name: 'Form',
@@ -209,7 +212,7 @@ export default {
     SelectTokenBasic,
     SelectChain,
     ConnectWallet,
-    ConfirmSwap,
+    Confirm,
     TransactionDetails,
   },
   data() {
@@ -218,7 +221,7 @@ export default {
       selectFromChainVisible: false,
       selectToChainVisible: false,
       connectWalletVisible: false,
-      confirmSwapVisible: false,
+      confirmVisible: false,
       transactionDetailsVisible: false,
       tokenBasicName: DEFAULT_TOKEN_BASIC_NAME,
       fromChainId: null,
@@ -226,8 +229,7 @@ export default {
       amount: '',
       approving: false,
       confirmingData: null,
-      confirmSwapUuid: uuidv4(),
-      confirmedData: null,
+      confirmUuid: uuidv4(),
     };
   },
   computed: {
@@ -464,17 +466,15 @@ export default {
         amount: this.amount,
         fee: this.fee,
       };
-      this.confirmSwapVisible = true;
+      this.confirmVisible = true;
     },
     handleClosed() {
       this.$nextTick(() => {
-        this.confirmSwapUuid = uuidv4();
+        this.confirmUuid = uuidv4();
       });
     },
-    handleConfirmed(confirmedData) {
-      this.confirmedData = confirmedData;
+    handlePacked() {
       this.transactionDetailsVisible = true;
-      this.confirmingData = null;
       this.clearAmount();
     },
     clearAmount() {
