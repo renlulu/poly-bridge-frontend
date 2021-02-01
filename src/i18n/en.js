@@ -23,7 +23,7 @@ export default {
   home: {
     index: {
       slogon:
-        'In order to\nbuild the next generation\nInternet infrastructure,\nrealize interoperability\nbetween\nmultiple <em>chains</em>',
+        'To\nbuild the next generation\nInternet infrastructure,\nrealize interoperability\nbetween\nmultiple <em>chains</em>',
     },
     form: {
       title: 'Bridge',

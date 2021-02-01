@@ -223,24 +223,6 @@ export default {
   position: relative;
 }
 
-.step-dot {
-  position: absolute;
-  left: -28px;
-  top: 3px;
-  width: 8px;
-  height: 8px;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-
-  &.processed {
-    background: green;
-  }
-
-  &.processing {
-    background: blue;
-  }
-}
-
 .step-icon {
   position: absolute;
   left: -31px;
