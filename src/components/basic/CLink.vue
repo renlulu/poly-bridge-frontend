@@ -1,8 +1,15 @@
 <template>
-  <router-link v-if="$attrs.to" v-bind="$attrs" :class="b()" v-on="listeners">
+  <router-link v-if="$attrs.to" v-bind="$attrs" :target="target" :class="b()" v-on="listeners">
     <slot />
   </router-link>
-  <a v-else v-bind="$attrs" :class="b()" target="_blank" rel="noopener noreferrer" v-on="listeners">
+  <a
+    v-else
+    v-bind="$attrs"
+    :class="b()"
+    :target="target"
+    rel="noopener noreferrer"
+    v-on="listeners"
+  >
     <slot />
   </a>
 </template>
@@ -11,6 +18,12 @@
 export default {
   name: 'CLink',
   inheritAttrs: false,
+  props: {
+    target: {
+      type: String,
+      default: '_blank',
+    },
+  },
   computed: {
     listeners() {
       return {

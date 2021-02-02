@@ -4,17 +4,21 @@
       <img class="brand-logo" src="@/assets/svg/logo.svg" />
       <span class="brand-name">{{ $t('common.header.brandName') }}</span>
     </CLink>
+    <CFlexSpan />
     <Wallets />
+    <Networks />
   </div>
 </template>
 
 <script>
 import Wallets from './Wallets';
+import Networks from './Networks';
 
 export default {
   name: 'Header',
   components: {
     Wallets,
+    Networks,
   },
 };
 </script>
@@ -22,10 +26,10 @@ export default {
 <style lang="scss" scoped>
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   height: 80px;
   padding: 0 50px;
+  @include child-margin-h(20px);
 }
 
 .brand {
