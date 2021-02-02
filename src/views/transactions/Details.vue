@@ -127,12 +127,15 @@ export default {
     },
     failed() {
       return (
-        this.confirmingData &&
+        !!this.confirmingData &&
         this.confirmingData.transactionStatus === SingleTransactionStatus.Failed
       );
     },
     finished() {
-      return this.transaction && this.transaction.status === TransactionStatus.Finished;
+      return !!this.transaction && this.transaction.status === TransactionStatus.Finished;
+    },
+    closeable() {
+      return !this.confirmingData || this.failed || this.finished;
     },
     statusIcons() {
       return {

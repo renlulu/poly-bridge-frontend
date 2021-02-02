@@ -63,7 +63,7 @@ export default {
       fee: 'Fee',
       chainName: '{chainName} Network',
       receiving: 'You will receive',
-      packing: 'Transaction is packing on {chainName}. Please be patient…',
+      packing: 'Transaction is packing on {chainName}. Please be patient...',
       hash: 'Hash: {hash}',
     },
   },
@@ -82,8 +82,9 @@ export default {
     },
     details: {
       title: 'Transaction Details',
-      waiting: 'The transaction is waiting to be processed on the {chainName}. Please be patient…',
-      pending: 'The transaction is proceeding on the {chainName}. Please be patient…',
+      waiting:
+        'The transaction is waiting to be processed on the {chainName}. Please be patient...',
+      pending: 'The transaction is proceeding on the {chainName}. Please be patient...',
       succeeded: 'The transaction is succeeded on the {chainName}.',
       failed: 'The transaction is failed on the {chainName}.',
       confirmation: '{blocks}/{needBlocks} Confirm',

@@ -332,7 +332,7 @@ export default {
       return this.getAllowanceParams && this.$store.getters.getAllowance(this.getAllowanceParams);
     },
     needApproval() {
-      return this.amount && this.allowance && new BigNumber(this.amount).gt(this.allowance);
+      return !!this.amount && !!this.allowance && new BigNumber(this.amount).gt(this.allowance);
     },
     getFeeParams() {
       if (this.fromToken && this.toChainId) {
