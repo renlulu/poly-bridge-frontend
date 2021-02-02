@@ -1,0 +1,169 @@
+{
+    "TotalCount": 6,
+    "TokenBasics": [
+        {
+            "Name": "BNB",
+            "Precision": 18,
+            "Price": "42.18409678",
+            "Ind": 1,
+            "Time": 1610884844,
+            "PriceMarkets": null,
+            "Tokens": [
+                {
+                    "Hash": "0000000000000000000000000000000000000000",
+                    "ChainId": 79,
+                    "Name": "BNB",
+                    "TokenBasicName": "BNB",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                },
+                {
+                    "Hash": "09c6a1b0b32a8b2c327532518c68f9b0c54255b8",
+                    "ChainId": 2,
+                    "Name": "BNB",
+                    "TokenBasicName": "BNB",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                }
+            ]
+        },
+        {
+            "Name": "Ethereum",
+            "Precision": 18,
+            "Price": "1221.765904",
+            "Ind": 1,
+            "Time": 1610884844,
+            "PriceMarkets": null,
+            "Tokens": [
+                {
+                    "Hash": "0000000000000000000000000000000000000000",
+                    "ChainId": 2,
+                    "Name": "Ethereum",
+                    "TokenBasicName": "Ethereum",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                },
+                {
+                    "Hash": "23535b6fd46b8f867ed010bab4c2bd8ef0d0c64f",
+                    "ChainId": 4,
+                    "Name": "pnWETH",
+                    "TokenBasicName": "Ethereum",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                }
+            ]
+        },
+        {
+            "Name": "Neo",
+            "Precision": 8,
+            "Price": "23.11673738",
+            "Ind": 1,
+            "Time": 1610884844,
+            "PriceMarkets": null,
+            "Tokens": [
+                {
+                    "Hash": "17da3881ab2d050fea414c80b3fa8324d756f60e",
+                    "ChainId": 4,
+                    "Name": "nNeo",
+                    "TokenBasicName": "Neo",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                },
+                {
+                    "Hash": "7e269f2f33a97c64192e9889faeec72a6fcdb397",
+                    "ChainId": 2,
+                    "Name": "eNEO",
+                    "TokenBasicName": "Neo",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                }
+            ]
+        },
+        {
+            "Name": "USDT",
+            "Precision": 6,
+            "Price": "1.00013196",
+            "Ind": 1,
+            "Time": 1610884844,
+            "PriceMarkets": null,
+            "Tokens": [
+                {
+                    "Hash": "23f5075740c2c99c569ffd0768c383a92d1a4ad7",
+                    "ChainId": 79,
+                    "Name": "USDT",
+                    "TokenBasicName": "USDT",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                },
+                {
+                    "Hash": "ad3f96ae966ad60347f31845b7e4b333104c52fb",
+                    "ChainId": 2,
+                    "Name": "USDT",
+                    "TokenBasicName": "USDT",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                },
+                {
+                    "Hash": "b8f78d43ea9fe006c85a26b9aff67bcf69dd4fe1",
+                    "ChainId": 4,
+                    "Name": "pnUSDT",
+                    "TokenBasicName": "USDT",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                }
+            ]
+        },
+        {
+            "Name": "WBTC",
+            "Precision": 8,
+            "Price": "35141.5331",
+            "Ind": 1,
+            "Time": 1610884844,
+            "PriceMarkets": null,
+            "Tokens": [
+                {
+                    "Hash": "557563dc4ed3fd256eba55b9622f53331ab97c2f",
+                    "ChainId": 2,
+                    "Name": "WBTC",
+                    "TokenBasicName": "WBTC",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                },
+                {
+                    "Hash": "a3ce15f11d4427b6bad5630036f368a98e923e95",
+                    "ChainId": 79,
+                    "Name": "WBTC",
+                    "TokenBasicName": "WBTC",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                }
+            ]
+        },
+        {
+            "Name": "WING",
+            "Precision": 9,
+            "Price": "13.30520739",
+            "Ind": 1,
+            "Time": 1610884844,
+            "PriceMarkets": null,
+            "Tokens": [
+                {
+                    "Hash": "0a7bf54d2684885d731dc63917a3178a2a1a8d4a",
+                    "ChainId": 79,
+                    "Name": "WING",
+                    "TokenBasicName": "WING",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                },
+                {
+                    "Hash": "b60e03e6973b1d0b90a763f5b64c48ca7cb8c2d1",
+                    "ChainId": 2,
+                    "Name": "WING",
+                    "TokenBasicName": "WING",
+                    "TokenBasic": null,
+                    "TokenMaps": null
+                }
+            ]
+        }
+    ]
+}
