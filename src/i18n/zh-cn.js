@@ -11,6 +11,10 @@ export default {
     wallets: {
       connectWallet: 'Connect Wallet',
     },
+    networks: {
+      mainnet: 'MainNet',
+      testnet: 'TestNet',
+    },
     connectWallet: {
       chainName: '{chainName} Wallet',
       walletConnected: '{walletName} Connected',
