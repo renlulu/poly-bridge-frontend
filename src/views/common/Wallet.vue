@@ -1,5 +1,5 @@
 <template>
-  <div class="wallet">
+  <CCard class="wallet">
     <div class="top">
       <img :src="wallet.icon" />
       <span class="wallet-name">
@@ -12,7 +12,7 @@
         <img src="@/assets/svg/copy.svg" />
       </CButton>
     </div>
-  </div>
+  </CCard>
 </template>
 
 <script>
@@ -35,9 +35,6 @@ export default {
 <style lang="scss" scoped>
 .wallet {
   padding: 20px;
-  border-radius: 4px;
-  background: #182233;
-  box-shadow: 0px 2px 10px 7px rgba(0, 0, 0, 0.16);
   @include child-margin-v(12px);
 }
 

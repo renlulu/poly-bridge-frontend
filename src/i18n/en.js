@@ -35,6 +35,8 @@ export default {
       max: 'MAX',
       balance: 'Balance',
       fee: 'Fee',
+      feeTooltip:
+        'Fee is required to incentive the Relayer who will move the cross chain transaction, it will dynamic change according to the transaction of target chain.',
       connectWallet: 'Connect Wallet',
       historyPrefix: 'You can view your',
       historyLink: 'history',

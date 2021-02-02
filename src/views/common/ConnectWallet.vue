@@ -1,5 +1,5 @@
 <template>
-  <div class="connect-wallet">
+  <CCard>
     <div class="content">
       <div class="chains">
         <CButton
@@ -50,7 +50,7 @@
         </div>
       </transition>
     </div>
-  </div>
+  </CCard>
 </template>
 
 <script>
@@ -98,13 +98,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.connect-wallet {
-  border-radius: 4px;
-  background: #182233;
-  box-shadow: 0px 2px 10px 7px rgba(0, 0, 0, 0.16);
-  overflow: hidden;
-}
-
 .content {
   display: flex;
 }

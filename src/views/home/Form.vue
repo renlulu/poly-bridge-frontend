@@ -124,6 +124,12 @@
           </div>
           <div v-if="fee" class="fee">
             <span class="label">{{ $t('home.form.fee') }}</span>
+            <CTooltip>
+              <img class="tooltip-icon" src="@/assets/svg/question.svg" />
+              <template #content>
+                {{ $t('home.form.feeTooltip') }}
+              </template>
+            </CTooltip>
             <CFlexSpan />
             <span class="fee-value">{{ $formatNumber(fee) }}</span>
             <img class="fee-icon" :src="tokenBasic.icon" />
@@ -619,6 +625,10 @@ export default {
   display: flex;
   align-items: center;
   @include child-margin-h(4px);
+}
+
+.tooltip-icon {
+  vertical-align: baseline;
 }
 
 .fee-value {
