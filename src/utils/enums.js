@@ -11,8 +11,8 @@ export const ChainId = {
   Poly: 0,
   Eth: 2,
   Neo: TARGET_MAINNET ? 4 : 5,
-  Bsc: 79, // TODO
-  Heco: 7, // TODO
+  Bsc: TARGET_MAINNET ? 6 : 79,
+  Heco: 7,
 };
 
 export const SingleTransactionStatus = {
