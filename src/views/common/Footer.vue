@@ -1,13 +1,28 @@
 <template>
   <div class="footer">
-    <div class="copyright">
-      {{ $t('common.footer.copyright') }}
+    <div class="top">
+      <CLink href="https://github.com/polynetwork"><img src="@/assets/svg/github.svg"/></CLink>
+      <CLink href="https://discord.com/invite/y6MuEnq"><img src="@/assets/svg/discord.svg"/></CLink>
+      <CLink href="https://t.me/joinchat/Hjv5NBrfO1C2LyODQfxVDw">
+        <img src="@/assets/svg/telegram.svg" />
+      </CLink>
+      <CLink href="https://www.youtube.com/channel/UC4vFRyVgvK7RnlkkLDmp23w">
+        <img src="@/assets/svg/youtube.svg" />
+      </CLink>
+      <CLink href="mailto:contact@poly.network"><img src="@/assets/svg/email.svg"/></CLink>
+      <CLink href="https://twitter.com/PolyNetwork2"><img src="@/assets/svg/twitter.svg"/></CLink>
+      <CLink href="https://medium.com/@polynetwork"><img src="@/assets/svg/medium.svg"/></CLink>
     </div>
-    <!-- <CButton class="change-locale" @click="changeLocale">
+    <div class="bottom">
+      <div class="copyright">
+        {{ $t('common.footer.copyright') }}
+      </div>
+      <!-- <CButton class="change-locale" @click="changeLocale">
       <span v-if="$i18n.locale === 'en'">English</span>
       <span v-if="$i18n.locale === 'zh-cn'">中文</span>
       <img src="@/assets/svg/switch.svg" />
     </CButton> -->
+    </div>
   </div>
 </template>
 
@@ -24,10 +39,21 @@ export default {
 
 <style lang="scss" scoped>
 .footer {
+  padding: 40px;
+  @include child-margin-v(20px);
+}
+
+.top {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80px;
+  @include child-margin-h(12px);
+}
+
+.bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   @include child-margin-h(30px);
 }
 
