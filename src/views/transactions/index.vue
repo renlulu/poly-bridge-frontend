@@ -27,6 +27,7 @@
                     txHash: row.fromTransactionHash,
                   })
                 "
+                target="_blank"
                 :disabled="!row.fromTransactionHash"
               >
                 {{
@@ -50,6 +51,7 @@
                 :href="
                   $format(getChain(row.toChainId).explorerUrl, { txHash: row.toTransactionHash })
                 "
+                target="_blank"
                 :disabled="!row.toTransactionHash"
               >
                 {{
