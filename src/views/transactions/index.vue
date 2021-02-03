@@ -119,14 +119,14 @@ export default {
     };
   },
   computed: {
-    addressAndChainIds() {
+    addressHexs() {
       return this.$store.getters.wallets
-        .filter(wallet => wallet.address && wallet.chainId)
-        .map(wallet => ({ address: wallet.address, chainId: wallet.chainId }));
+        .filter(wallet => wallet.addressHex)
+        .map(wallet => wallet.addressHex);
     },
     getTransactionsParams() {
       return {
-        addressAndChainIds: this.addressAndChainIds,
+        addressHexs: this.addressHexs,
         page: this.page,
         pageSize: this.pageSize,
         vary: ['pageSize'],

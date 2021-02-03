@@ -1,6 +1,5 @@
 import axios from 'axios';
 import _ from 'lodash';
-import { getChainApi } from '@/utils/chainApi';
 import { HttpError } from './errors';
 import { mapTransactionToDo } from './mappers';
 import { HTTP_BASE_URL } from './values';
@@ -68,14 +67,7 @@ export default {
     });
     return result.TokenAmount;
   },
-  async getTransactions({ addressAndChainIds, page, pageSize }) {
-    const addressHexs = await Promise.all(
-      addressAndChainIds.map(async addressAndChainId => {
-        const chainApi = await getChainApi(addressAndChainId.chainId);
-        return chainApi.addressToHex(addressAndChainId.address);
-      }),
-    );
-
+  async getTransactions({ addressHexs, page, pageSize }) {
     const result = await request({
       method: 'post',
       url: 'transactionsofaddress',

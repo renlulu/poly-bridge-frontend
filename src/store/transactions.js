@@ -21,10 +21,10 @@ export default {
     },
   },
   actions: {
-    async getTransactions({ commit }, { addressAndChainIds, page, pageSize, vary }) {
-      const result = await httpApi.getTransactions({ addressAndChainIds, page, pageSize });
+    async getTransactions({ commit }, { addressHexs, page, pageSize, vary }) {
+      const result = await httpApi.getTransactions({ addressHexs, page, pageSize });
       commit('setTransactions', {
-        params: { addressAndChainIds, page, pageSize, vary },
+        params: { addressHexs, page, pageSize, vary },
         value: result,
       });
     },

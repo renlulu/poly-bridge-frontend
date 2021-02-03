@@ -1,5 +1,5 @@
 <template>
-  <router-link v-if="$attrs.to" v-bind="$attrs" :target="target" :class="b()" v-on="listeners">
+  <router-link v-if="$attrs.to" v-bind="$attrs" :class="b()" v-on="listeners">
     <slot />
   </router-link>
   <a v-else v-bind="$attrs" :class="b()" rel="noopener noreferrer" v-on="listeners">

@@ -6,6 +6,7 @@ import { decimalToInteger, toStandardHex } from '@/utils/convertors';
 import { WalletName, ChainId, SingleTransactionStatus } from '@/utils/enums';
 import { WalletError } from '@/utils/errors';
 import { TARGET_MAINNET } from '@/utils/env';
+import { tryToConvertAddressToHex } from '.';
 
 const NEOLINE_CONNECTED_KEY = 'NEOLINE_CONNECTED';
 
@@ -51,9 +52,11 @@ function convertWalletError(error) {
 async function queryState() {
   const address = (await neoDapi.getAccount()).address || null;
   const network = (await neoDapi.getNetworks()).defaultNetwork;
+  const addressHex = await tryToConvertAddressToHex(WalletName.NeoLine, address);
   store.dispatch('updateWallet', {
     name: WalletName.NeoLine,
     address,
+    addressHex,
     connected: !!address,
     chainId: NETWORK_CHAIN_ID_MAPS[network],
   });
@@ -71,11 +74,13 @@ async function init() {
         await queryState();
       }
 
-      neoDapi.addEventListener(neoDapi.EVENT.ACCOUNT_CHANGED, data => {
+      neoDapi.addEventListener(neoDapi.EVENT.ACCOUNT_CHANGED, async data => {
         const address = data.address || null;
+        const addressHex = await tryToConvertAddressToHex(WalletName.NeoLine, address);
         store.dispatch('updateWallet', {
           name: WalletName.NeoLine,
           address,
+          addressHex,
           connected: !!address,
         });
       });

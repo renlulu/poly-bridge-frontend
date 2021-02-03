@@ -7,6 +7,7 @@ import { decimalToInteger, toStandardHex } from '@/utils/convertors';
 import { WalletName, ChainId, SingleTransactionStatus } from '@/utils/enums';
 import { WalletError } from '@/utils/errors';
 import { TARGET_MAINNET } from '@/utils/env';
+import { tryToConvertAddressToHex } from '.';
 
 const NETWORK_CHAIN_ID_MAPS = {
   [TARGET_MAINNET ? 'MainNet' : 'TestNet']: ChainId.Neo,
@@ -48,9 +49,11 @@ function convertWalletError(error) {
 async function queryState() {
   const address = (await neoDapi.getAccount()).address || null;
   const network = (await neoDapi.getNetworks()).defaultNetwork;
+  const addressHex = await tryToConvertAddressToHex(WalletName.O3, address);
   store.dispatch('updateWallet', {
     name: WalletName.O3,
     address,
+    addressHex,
     connected: !!address,
     chainId: NETWORK_CHAIN_ID_MAPS[network],
   });
@@ -61,9 +64,15 @@ async function init() {
     try {
       store.dispatch('updateWallet', { name: WalletName.O3, installed: true });
 
-      neoDapi.addEventListener(neoDapi.Constants.EventName.ACCOUNT_CHANGED, data => {
+      neoDapi.addEventListener(neoDapi.Constants.EventName.ACCOUNT_CHANGED, async data => {
         const address = data.address || null;
-        store.dispatch('updateWallet', { name: WalletName.O3, address, connected: !!address });
+        const addressHex = await tryToConvertAddressToHex(WalletName.O3, address);
+        store.dispatch('updateWallet', {
+          name: WalletName.O3,
+          address,
+          addressHex,
+          connected: !!address,
+        });
       });
 
       neoDapi.addEventListener(
