@@ -5,6 +5,7 @@ import { integerToDecimal, decimalToInteger, toStandardHex } from '@/utils/conve
 import { WalletName, ChainId, SingleTransactionStatus } from '@/utils/enums';
 import { WalletError } from '@/utils/errors';
 import { TARGET_MAINNET } from '@/utils/env';
+import { tryToConvertAddressToHex } from '.';
 
 const METAMASK_CONNECTED_KEY = 'METAMASK_CONNECTED';
 
@@ -42,11 +43,13 @@ function convertWalletError(error) {
 async function queryState() {
   const accounts = await window.ethereum.request({ method: 'eth_accounts' });
   const address = accounts[0] || null;
+  const addressHex = await tryToConvertAddressToHex(WalletName.Metamask, address);
   const checksumAddress = address && web3.utils.toChecksumAddress(address);
   const network = await window.ethereum.request({ method: 'eth_chainId' });
   store.dispatch('updateWallet', {
     name: WalletName.Metamask,
     address: checksumAddress,
+    addressHex,
     connected: !!checksumAddress,
     chainId: NETWORK_CHAIN_ID_MAPS[Number(network)],
   });
@@ -64,12 +67,14 @@ async function init() {
       await queryState();
     }
 
-    window.ethereum.on('accountsChanged', accounts => {
+    window.ethereum.on('accountsChanged', async accounts => {
       const address = accounts[0] || null;
+      const addressHex = await tryToConvertAddressToHex(WalletName.Metamask, address);
       const checksumAddress = address && web3.utils.toChecksumAddress(address);
       store.dispatch('updateWallet', {
         name: WalletName.Metamask,
         address: checksumAddress,
+        addressHex,
         connected: !!checksumAddress,
       });
     });

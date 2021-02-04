@@ -1,11 +1,11 @@
 import Web3 from 'web3';
 import store from '@/store';
 import { getChainApi } from '@/utils/chainApi';
-import { integerToDecimal, decimalToInteger, isValidHex, toStandardHex } from '@/utils/convertors';
+import { integerToDecimal, decimalToInteger, toStandardHex } from '@/utils/convertors';
 import { WalletName, ChainId, SingleTransactionStatus } from '@/utils/enums';
 import { WalletError } from '@/utils/errors';
 import { TARGET_MAINNET } from '@/utils/env';
-import { formatEnum } from '@/utils/formatters';
+import { tryToConvertAddressToHex } from '.';
 
 const BINANCE_CONNECTED_KEY = 'BINANCE_CONNECTED';
 
@@ -43,20 +43,13 @@ function convertWalletError(error) {
 async function queryState() {
   const accounts = await window.BinanceChain.request({ method: 'eth_accounts' });
   const address = accounts[0] || null;
-  if (address && !isValidHex(address)) {
-    throw new WalletError('Wallet is not in correct network.', {
-      code: WalletError.CODES.INCORRECT_NETWORK,
-      detail: {
-        walletName: formatEnum(WalletName.Binance, { type: 'walletName' }),
-        chainNetworkName: formatEnum(ChainId.Bsc, { type: 'chainNetworkName' }),
-      },
-    });
-  }
+  const addressHex = await tryToConvertAddressToHex(WalletName.Binance, address);
   const checksumAddress = address && web3.utils.toChecksumAddress(address);
   const network = await window.BinanceChain.request({ method: 'eth_chainId' });
   store.dispatch('updateWallet', {
     name: WalletName.Binance,
     address: checksumAddress,
+    addressHex,
     connected: !!checksumAddress,
     chainId: NETWORK_CHAIN_ID_MAPS[Number(network)],
   });
@@ -74,12 +67,14 @@ async function init() {
       await queryState();
     }
 
-    window.BinanceChain.on('accountsChanged', accounts => {
+    window.BinanceChain.on('accountsChanged', async accounts => {
       const address = accounts[0] || null;
+      const addressHex = await tryToConvertAddressToHex(WalletName.Binance, address);
       const checksumAddress = address && web3.utils.toChecksumAddress(address);
       store.dispatch('updateWallet', {
         name: WalletName.Binance,
         address: checksumAddress,
+        addressHex,
         connected: !!checksumAddress,
       });
     });
