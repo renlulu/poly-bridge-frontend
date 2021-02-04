@@ -18,11 +18,11 @@ export default {
   actions: {
     async getBalance({ getters, commit }, { chainId, address, tokenHash }) {
       const wallet = getters.getChainConnectedWallet(chainId);
-      let balance = null;
-      if (wallet) {
-        const walletApi = await getWalletApi(wallet.name);
-        balance = await walletApi.getBalance({ chainId, address, tokenHash });
+      if (!wallet) {
+        return;
       }
+      const walletApi = await getWalletApi(wallet.name);
+      const balance = await walletApi.getBalance({ chainId, address, tokenHash });
       const oldValue = getters.getBalance({ chainId, address, tokenHash });
       if (oldValue !== balance) {
         commit('setBalance', { params: { chainId, address, tokenHash }, value: balance });
