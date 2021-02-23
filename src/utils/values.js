@@ -93,6 +93,7 @@ export const TOKEN_BASIC_ICONS = {
   USDC: require('@/assets/svg/usdc.svg'),
   DAI: require('@/assets/svg/dai.svg'),
   sUSD: require('@/assets/svg/susd.svg'),
+  CWS: require('@/assets/png/cws.png'),
 };
 
 export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';
