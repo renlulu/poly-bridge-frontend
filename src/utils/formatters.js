@@ -43,7 +43,7 @@ export function formatNumber(value, { decimals = null, symbol = null, toExp = fa
   return ret;
 }
 
-export function formatPercentage(value, { decimals = 6, displaySign = false } = {}) {
+export function formatPercentage(value, { decimals = null, displaySign = false } = {}) {
   const bn = new BigNumber(value);
   if (bn.isNaN()) return '- %';
 
