@@ -21,7 +21,7 @@
                 v-if="wallet.connected && wallet.name === fromChain.selectedWalletName"
                 class="wallet"
               >
-                <img :src="wallet.icon" />
+                <img class="wallet-icon" :src="wallet.icon" />
                 <span class="wallet-name">
                   {{
                     $t('home.connectWallet.walletConnected', {
@@ -38,7 +38,7 @@
                     })
                   }}
                 </span>
-                <img :src="wallet.icon" />
+                <img class="wallet-icon" :src="wallet.icon" />
               </CButton>
             </div>
           </div>
@@ -61,7 +61,7 @@
                 v-if="wallet.connected && wallet.name === toChain.selectedWalletName"
                 class="wallet"
               >
-                <img :src="wallet.icon" />
+                <img class="wallet-icon" :src="wallet.icon" />
                 <span class="wallet-name">
                   {{
                     $t('home.connectWallet.walletConnected', {
@@ -78,7 +78,7 @@
                     })
                   }}
                 </span>
-                <img :src="wallet.icon" />
+                <img class="wallet-icon" :src="wallet.icon" />
               </CButton>
             </div>
           </div>
@@ -199,6 +199,10 @@ export default {
   height: 34px;
   padding: 0px 16px;
   @include child-margin-h(8px);
+}
+
+.wallet-icon {
+  width: 24px;
 }
 
 .wallet-name {

@@ -1,7 +1,7 @@
 <template>
   <CCard class="wallet">
     <div class="top">
-      <img :src="wallet.icon" />
+      <img class="wallet-icon" :src="wallet.icon" />
       <span class="wallet-name">
         {{ $formatEnum(wallet.name, { type: 'walletName' }) }}
       </span>
@@ -42,6 +42,10 @@ export default {
   display: flex;
   align-items: center;
   @include child-margin-h(12px);
+}
+
+.wallet-icon {
+  width: 24px;
 }
 
 .wallet-name {

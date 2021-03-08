@@ -27,7 +27,7 @@
           </div>
           <div v-for="wallet in chainWallets" :key="wallet.name">
             <div v-if="wallet.connected && wallet.name === chain.selectedWalletName" class="wallet">
-              <img :src="wallet.icon" />
+              <img class="wallet-icon" :src="wallet.icon" />
               <span class="wallet-name">
                 {{
                   $t('common.connectWallet.walletConnected', {
@@ -44,7 +44,7 @@
                   })
                 }}
               </span>
-              <img :src="wallet.icon" />
+              <img class="wallet-icon" :src="wallet.icon" />
             </CButton>
           </div>
         </div>
@@ -124,6 +124,10 @@ export default {
   flex-direction: column;
   padding: 20px;
   @include child-margin-v(16px);
+}
+
+.wallet-icon {
+  width: 24px;
 }
 
 .chain-name {
