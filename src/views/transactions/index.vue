@@ -17,7 +17,7 @@
               min-width="150"
             >
               <div class="chain">
-                <img :src="getChain(row.fromChainId).icon" />
+                <img class="chain-icon" :src="getChain(row.fromChainId).icon" />
                 <span>{{ $formatEnum(row.fromChainId, { type: 'chainName' }) }}</span>
               </div>
               <CLink
@@ -43,7 +43,7 @@
               min-width="150"
             >
               <div class="chain">
-                <img :src="getChain(row.toChainId).icon" />
+                <img class="chain-icon" :src="getChain(row.toChainId).icon" />
                 <span>{{ $formatEnum(row.toChainId, { type: 'chainName' }) }}</span>
               </div>
               <CLink
@@ -209,6 +209,10 @@ export default {
   display: flex;
   align-items: center;
   @include child-margin-h(6px);
+}
+
+.chain-icon {
+  width: 24px;
 }
 
 .hash {

@@ -34,7 +34,7 @@
           @click="select(tokenBasic)"
         >
           <span class="token-basic-left">
-            <img :src="tokenBasic.icon" />
+            <img class="token-basic-icon" :src="tokenBasic.icon" />
             <span>{{ tokenBasic.name }}</span>
           </span>
           <img v-if="tokenBasicName === tokenBasic.name" src="@/assets/svg/check.svg" />
@@ -180,5 +180,9 @@ export default {
   display: flex;
   align-items: center;
   @include child-margin-h(8px);
+}
+
+.token-basic-icon {
+  width: 24px;
 }
 </style>

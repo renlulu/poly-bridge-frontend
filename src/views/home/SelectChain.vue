@@ -6,7 +6,7 @@
       <div class="scroll">
         <div v-for="chain in chains" :key="chain.id" class="chain" @click="select(chain)">
           <span class="chain-left">
-            <img :src="chain.icon" />
+            <img class="chain-icon" :src="chain.icon" />
             <span>{{ $formatEnum(chain.id, { type: 'chainName' }) }}</span>
           </span>
           <img v-if="chainId === chain.id" src="@/assets/svg/check.svg" />
@@ -74,5 +74,9 @@ export default {
   display: flex;
   align-items: center;
   @include child-margin-h(8px);
+}
+
+.chain-icon {
+  width: 24px;
 }
 </style>
