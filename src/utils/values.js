@@ -88,6 +88,7 @@ export const UNKNOWN_ICON = require('@/assets/svg/unknown.svg');
 
 export const TOKEN_BASIC_ICONS = {
   NEO: require('@/assets/svg/neo-token.svg'),
+  nNEO: require('@/assets/svg/neo-token.svg'),
   ETH: require('@/assets/svg/eth-token.svg'),
   USDT: require('@/assets/svg/usdt.svg'),
   USDC: require('@/assets/svg/usdc.svg'),
