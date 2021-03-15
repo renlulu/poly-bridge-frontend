@@ -98,8 +98,8 @@ export const TOKEN_BASIC_ICONS = {
   BASv2: require('@/assets/svg/basv2.svg'),
   CWS: require('@/assets/png/cws.png'),
   SHARE: require('@/assets/svg/share.svg'),
-  FLM: require('@/assets/svg/flm.svg'),
-  SWTH: require('@/assets/svg/swth.svg'),
+  Flamingo: require('@/assets/svg/flm.svg'),
+  Switcheo: require('@/assets/svg/swth.svg'),
 };
 
 export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';
