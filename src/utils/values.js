@@ -100,6 +100,8 @@ export const TOKEN_BASIC_ICONS = {
   SHARE: require('@/assets/svg/share.svg'),
   Flamingo: require('@/assets/svg/flm.svg'),
   Switcheo: require('@/assets/svg/swth.svg'),
+  FLM: require('@/assets/svg/flm.svg'),
+  SWTH: require('@/assets/svg/swth.svg'),
 };
 
 export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';
