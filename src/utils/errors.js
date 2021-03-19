@@ -44,7 +44,7 @@ export class WalletError extends BaseError {
 
   constructor(message, options = {}) {
     super(message, options);
-    this.code = options.code != null ? options.code : WalletError.UNKNOWN_ERROR;
+    this.code = options.code != null ? options.code : WalletError.CODES.UNKNOWN_ERROR;
   }
 
   getLocalMessage() {
@@ -65,7 +65,7 @@ export class ChainError extends BaseError {
 
   constructor(message, options = {}) {
     super(message, options);
-    this.code = options.code != null ? options.code : ChainError.UNKNOWN_ERROR;
+    this.code = options.code != null ? options.code : ChainError.CODES.UNKNOWN_ERROR;
   }
 
   getLocalMessage() {
@@ -88,7 +88,7 @@ export class HttpError extends BaseError {
 
   constructor(message, options = {}) {
     super(message, options);
-    this.code = options.code != null ? options.code : HttpError.UNKNOWN_ERROR;
+    this.code = options.code != null ? options.code : HttpError.CODES.UNKNOWN_ERROR;
   }
 
   getLocalMessage() {
