@@ -1,3 +1,4 @@
+/* eslint-disable */
 import store from '@/store';
 import { getChainApi } from '@/utils/chainApi';
 import { WalletError } from '@/utils/errors';
@@ -9,9 +10,10 @@ const APIS = {
   [WalletName.NeoLine]: () => import('./neoline'),
   [WalletName.O3]: () => import('./o3'),
   [WalletName.Binance]: () => import('./binance'),
+  [WalletName.Cyano]: () => import('./cyano'),
 };
 
-export async function getWalletApi(walletName) {
+export async function getWalletApi (walletName) {
   if (!APIS[walletName]) {
     throw new WalletError('Wallet is not supported', {
       code: WalletError.CODES.NOT_SUPPORTED,
@@ -20,7 +22,7 @@ export async function getWalletApi(walletName) {
   return (await APIS[walletName]()).default;
 }
 
-export async function tryToConvertAddressToHex(walletName, address) {
+export async function tryToConvertAddressToHex (walletName, address) {
   if (!address) {
     return null;
   }

@@ -71,7 +71,9 @@ export default {
 .show-all {
   @include last-margin-h(10px);
 }
-
+.wallet-icon {
+  width: 24px;
+}
 .connect-wallet-button {
   padding: 8px 20px;
   border: 1px solid #ffffff;

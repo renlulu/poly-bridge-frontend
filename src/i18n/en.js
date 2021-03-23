@@ -114,6 +114,7 @@ export default {
       [WalletName.NeoLine]: 'NeoLine',
       [WalletName.O3]: 'O3',
       [WalletName.Binance]: 'Binance',
+      [WalletName.Cyano]: 'Cyano',
     },
     chainName: {
       [ChainId.Poly]: 'Poly',
@@ -121,6 +122,7 @@ export default {
       [ChainId.Neo]: 'Neo',
       [ChainId.Bsc]: 'BSC',
       [ChainId.Heco]: 'Heco',
+      [ChainId.Ont]: 'Ontology',
     },
     chainNetworkName: {
       [ChainId.Poly]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
@@ -128,6 +130,7 @@ export default {
       [ChainId.Neo]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
       [ChainId.Bsc]: TARGET_MAINNET ? 'BSC MainNet' : 'BSC TestNet',
       [ChainId.Heco]: TARGET_MAINNET ? 'Heco MainNet' : 'Heco TestNet',
+      [ChainId.Ont]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
     },
     transactionStatus: {
       [TransactionStatus.Finished]: 'Finished',

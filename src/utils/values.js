@@ -33,6 +33,13 @@ export const WALLETS = [
     downloadUrl:
       'https://chrome.google.com/webstore/detail/binance-chain-wallet/fhbohimaelbohpjbbldcngcnapndodjp',
   },
+  {
+    name: WalletName.Cyano,
+    supportedChainIds: [ChainId.Ont],
+    icon: require('@/assets/svg/ONT.svg'),
+    downloadUrl:
+      'https://chrome.google.com/webstore/detail/cyano-wallet/dkdedlpgdmmkkfjabffeganieamfklkm',
+  },
 ];
 
 export const CHAINS = [
@@ -81,6 +88,16 @@ export const CHAINS = [
     lockContractHash: TARGET_MAINNET
       ? '0x4fE451186c0D69205ACc1fA00FD75fc6d71e47eE'
       : '0x3c92F1E31aACA43Eb4fF8aE498C7E85618680F45',
+  },
+  {
+    id: ChainId.Ont,
+    icon: require('@/assets/svg/ONT.svg'),
+    explorerUrl: TARGET_MAINNET
+      ? 'https://explorer.ont.io/transaction/{txHash}'
+      : 'https://explorer.ont.io/transaction/{txHash}/testnet',
+    lockContractHash: TARGET_MAINNET
+      ? '3854f04f0cf8ad6c81e7c865352d7b5cf82182ea'
+      : '3854f04f0cf8ad6c81e7c865352d7b5cf82182ea',
   },
 ];
 

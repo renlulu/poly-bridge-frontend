@@ -5,11 +5,13 @@ export const WalletName = {
   NeoLine: 'NeoLine',
   O3: 'O3',
   Binance: 'Binance',
+  Cyano: 'Cyano',
 };
 
 export const ChainId = {
   Poly: 0,
   Eth: 2,
+  Ont: 3,
   Neo: TARGET_MAINNET ? 4 : 5,
   Bsc: TARGET_MAINNET ? 6 : 79,
   Heco: 7,

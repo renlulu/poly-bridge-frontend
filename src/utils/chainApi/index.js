@@ -6,6 +6,7 @@ const APIS = {
   [ChainId.Neo]: () => import('./neo'),
   [ChainId.Bsc]: () => import('./eth'),
   [ChainId.Heco]: () => import('./eth'),
+  [ChainId.Ont]: () => import('./ont'),
 };
 
 export async function getChainApi(chainId) {
