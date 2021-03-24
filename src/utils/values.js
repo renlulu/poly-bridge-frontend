@@ -96,8 +96,8 @@ export const CHAINS = [
       ? 'https://explorer.ont.io/transaction/{txHash}'
       : 'https://explorer.ont.io/transaction/{txHash}/testnet',
     lockContractHash: TARGET_MAINNET
-      ? '3854f04f0cf8ad6c81e7c865352d7b5cf82182ea'
-      : '3854f04f0cf8ad6c81e7c865352d7b5cf82182ea',
+      ? 'a5c101afa9e04e9dd2c912983795005a49e02efa'
+      : 'a5c101afa9e04e9dd2c912983795005a49e02efa',
   },
 ];
 
@@ -119,6 +119,15 @@ export const TOKEN_BASIC_ICONS = {
   Switcheo: require('@/assets/svg/swth.svg'),
   FLM: require('@/assets/svg/flm.svg'),
   SWTH: require('@/assets/svg/swth.svg'),
+  ONTD: require('@/assets/svg/ONT.svg'),
+  ONTd: require('@/assets/svg/ONT.svg'),
+  WING: require('@/assets/svg/wing.svg'),
+  YFI: require('@/assets/svg/YFI.svg'),
+  UNI: require('@/assets/svg/UNI.svg'),
+  UNFI: require('@/assets/svg/UNFI.svg'),
+  WBTC: require('@/assets/svg/WBTC.svg'),
+  RENBTC: require('@/assets/svg/renBTC.svg'),
+  renBTC: require('@/assets/svg/renBTC.svg'),
 };
 
 export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';
