@@ -86,6 +86,7 @@
           </span>
           <CLink
             class="hash"
+            target="_blank"
             :href="$format(fromChain.explorerUrl, { txHash: confirmingData.transactionHash })"
             :disabled="!confirmingData.transactionHash"
           >
