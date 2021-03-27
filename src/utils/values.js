@@ -96,7 +96,7 @@ export const CHAINS = [
       ? 'https://explorer.ont.io/transaction/{txHash}'
       : 'https://explorer.ont.io/transaction/{txHash}/testnet',
     lockContractHash: TARGET_MAINNET
-      ? 'a5c101afa9e04e9dd2c912983795005a49e02efa'
+      ? 'c93837e82178d406af8c84e1841c6960af251cb5'
       : 'a5c101afa9e04e9dd2c912983795005a49e02efa',
   },
 ];
