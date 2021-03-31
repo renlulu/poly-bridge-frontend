@@ -254,6 +254,7 @@ export default {
         this.$store.getters
           .getTokensByTokenBasicName(this.tokenBasic.name)
           .map(token => this.$store.getters.getChain(token.chainId))
+          .filter(chain => chain)
       );
     },
     fromChain() {
@@ -286,7 +287,9 @@ export default {
     toChains() {
       return (
         this.tokenMaps &&
-        this.tokenMaps.map(tokenMap => this.$store.getters.getChain(tokenMap.toToken.chainId))
+        this.tokenMaps
+          .map(tokenMap => this.$store.getters.getChain(tokenMap.toToken.chainId))
+          .filter(chain => chain)
       );
     },
     toChain() {
