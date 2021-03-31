@@ -40,6 +40,12 @@ export const WALLETS = [
     downloadUrl:
       'https://chrome.google.com/webstore/detail/cyano-wallet/dkdedlpgdmmkkfjabffeganieamfklkm',
   },
+  {
+    name: WalletName.WalletConnect,
+    supportedChainIds: [ChainId.Eth],
+    icon: require('@/assets/svg/wallet-connect.svg'),
+    downloadUrl: 'https://walletconnect.org/wallets',
+  },
 ];
 
 export const CHAINS = [

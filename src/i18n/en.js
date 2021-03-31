@@ -115,6 +115,7 @@ export default {
       [WalletName.O3]: 'O3',
       [WalletName.Binance]: 'Binance',
       [WalletName.Cyano]: 'Cyano',
+      [WalletName.WalletConnect]: 'WalletConnect',
     },
     chainName: {
       [ChainId.Poly]: 'Poly',

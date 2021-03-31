@@ -101,6 +101,7 @@ export default {
 <style lang="scss" scoped>
 .content {
   display: flex;
+  min-width: 310px;
 }
 
 .chains {
@@ -123,6 +124,7 @@ export default {
 .wallets {
   display: flex;
   flex-direction: column;
+  flex: 1;
   padding: 20px;
   @include child-margin-v(16px);
 }
@@ -157,7 +159,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  min-width: 167px;
+  width: 100%;
   height: 34px;
   padding: 0px 15px;
   border-radius: 4px;

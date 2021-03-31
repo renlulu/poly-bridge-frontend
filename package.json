@@ -13,6 +13,7 @@
   "dependencies": {
     "@cityofzion/neon-js": "^4.8.1",
     "@ont-dev/ontology-dapi": "^0.5.7",
+    "@walletconnect/web3-provider": "^1.3.6",
     "axios": "^0.20.0",
     "bignumber.js": "^9.0.0",
     "bn.js": "^5.1.3",
