@@ -110,7 +110,7 @@ export default {
   },
   enums: {
     walletName: {
-      [WalletName.Metamask]: 'Metamask',
+      [WalletName.MetaMask]: 'MetaMask',
       [WalletName.NeoLine]: 'NeoLine',
       [WalletName.O3]: 'O3',
       [WalletName.Binance]: 'Binance',

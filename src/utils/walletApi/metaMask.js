@@ -43,11 +43,11 @@ function convertWalletError(error) {
 async function queryState() {
   const accounts = await window.ethereum.request({ method: 'eth_accounts' });
   const address = accounts[0] || null;
-  const addressHex = await tryToConvertAddressToHex(WalletName.Metamask, address);
+  const addressHex = await tryToConvertAddressToHex(WalletName.MetaMask, address);
   const checksumAddress = address && web3.utils.toChecksumAddress(address);
   const network = await window.ethereum.request({ method: 'eth_chainId' });
   store.dispatch('updateWallet', {
-    name: WalletName.Metamask,
+    name: WalletName.MetaMask,
     address: checksumAddress,
     addressHex,
     connected: !!checksumAddress,
@@ -61,7 +61,7 @@ async function init() {
       return;
     }
     web3 = new Web3(window.ethereum);
-    store.dispatch('updateWallet', { name: WalletName.Metamask, installed: true });
+    store.dispatch('updateWallet', { name: WalletName.MetaMask, installed: true });
 
     if (sessionStorage.getItem(METAMASK_CONNECTED_KEY) === 'true') {
       await queryState();
@@ -69,10 +69,10 @@ async function init() {
 
     window.ethereum.on('accountsChanged', async accounts => {
       const address = accounts[0] || null;
-      const addressHex = await tryToConvertAddressToHex(WalletName.Metamask, address);
+      const addressHex = await tryToConvertAddressToHex(WalletName.MetaMask, address);
       const checksumAddress = address && web3.utils.toChecksumAddress(address);
       store.dispatch('updateWallet', {
-        name: WalletName.Metamask,
+        name: WalletName.MetaMask,
         address: checksumAddress,
         addressHex,
         connected: !!checksumAddress,
@@ -81,12 +81,12 @@ async function init() {
 
     window.ethereum.on('chainChanged', network => {
       store.dispatch('updateWallet', {
-        name: WalletName.Metamask,
+        name: WalletName.MetaMask,
         chainId: NETWORK_CHAIN_ID_MAPS[Number(network)],
       });
     });
   } finally {
-    store.getters.getWallet(WalletName.Metamask).deferred.resolve();
+    store.getters.getWallet(WalletName.MetaMask).deferred.resolve();
   }
 }
 

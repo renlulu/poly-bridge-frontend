@@ -7,9 +7,9 @@ export const HTTP_BASE_URL = TARGET_MAINNET
 
 export const WALLETS = [
   {
-    name: WalletName.Metamask,
+    name: WalletName.MetaMask,
     supportedChainIds: [ChainId.Eth, ChainId.Bsc, ChainId.Heco],
-    icon: require('@/assets/svg/metamask.svg'),
+    icon: require('@/assets/svg/meta-mask.svg'),
     downloadUrl:
       'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn',
   },
