@@ -115,22 +115,18 @@ export const TOKEN_BASIC_ICONS = {
   BASv2: require('@/assets/svg/basv2.svg'),
   CWS: require('@/assets/png/cws.png'),
   SHARE: require('@/assets/svg/share.svg'),
-  Flamingo: require('@/assets/svg/flm.svg'),
-  Switcheo: require('@/assets/svg/swth.svg'),
   FLM: require('@/assets/svg/flm.svg'),
   SWTH: require('@/assets/svg/swth.svg'),
-  ONTD: require('@/assets/svg/ONT.svg'),
   ONTd: require('@/assets/svg/ONT.svg'),
   WING: require('@/assets/svg/wing.svg'),
   YFI: require('@/assets/svg/YFI.svg'),
   UNI: require('@/assets/svg/UNI.svg'),
   UNFI: require('@/assets/svg/UNFI.svg'),
   WBTC: require('@/assets/svg/WBTC.svg'),
-  RENBTC: require('@/assets/svg/renBTC.svg'),
   renBTC: require('@/assets/svg/renBTC.svg'),
   COOK: require('@/assets/svg/cook.svg'),
 };
 
 export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';
 
-export const TOP_TOKEN_BASIC_NAMES = ['NEO', 'ETH', 'USDT', 'USDC', 'DAI'];
+export const TOP_TOKEN_BASIC_NAMES = ['NEO', 'nNEO', 'ETH', 'USDT', 'USDC', 'DAI'];
