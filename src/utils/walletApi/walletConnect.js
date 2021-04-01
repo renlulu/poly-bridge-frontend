@@ -10,8 +10,6 @@ import { tryToConvertAddressToHex } from '.';
 
 const NETWORK_CHAIN_ID_MAPS = {
   [TARGET_MAINNET ? 1 : 3]: ChainId.Eth,
-  [TARGET_MAINNET ? 56 : 97]: ChainId.Bsc,
-  [TARGET_MAINNET ? 128 : 256]: ChainId.Heco,
 };
 
 let provider;
@@ -117,7 +115,6 @@ async function init() {
     }
     store.dispatch('updateWallet', { name: WalletName.WalletConnect, installed: true });
     await setupProvider();
-    await queryState();
   } finally {
     store.getters.getWallet(WalletName.WalletConnect).deferred.resolve();
   }

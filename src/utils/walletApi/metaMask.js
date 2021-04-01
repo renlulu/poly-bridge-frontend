@@ -7,7 +7,7 @@ import { WalletError } from '@/utils/errors';
 import { TARGET_MAINNET } from '@/utils/env';
 import { tryToConvertAddressToHex } from '.';
 
-const METAMASK_CONNECTED_KEY = 'METAMASK_CONNECTED';
+const META_MASK_CONNECTED_KEY = 'META_MASK_CONNECTED';
 
 const NETWORK_CHAIN_ID_MAPS = {
   [TARGET_MAINNET ? 1 : 3]: ChainId.Eth,
@@ -63,7 +63,7 @@ async function init() {
     web3 = new Web3(window.ethereum);
     store.dispatch('updateWallet', { name: WalletName.MetaMask, installed: true });
 
-    if (sessionStorage.getItem(METAMASK_CONNECTED_KEY) === 'true') {
+    if (sessionStorage.getItem(META_MASK_CONNECTED_KEY) === 'true') {
       await queryState();
     }
 
@@ -94,7 +94,7 @@ async function connect() {
   try {
     await window.ethereum.request({ method: 'eth_requestAccounts' });
     await queryState();
-    sessionStorage.setItem(METAMASK_CONNECTED_KEY, 'true');
+    sessionStorage.setItem(META_MASK_CONNECTED_KEY, 'true');
   } catch (error) {
     throw convertWalletError(error);
   }
