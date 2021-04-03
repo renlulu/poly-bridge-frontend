@@ -184,5 +184,6 @@ export default {
 
 .token-basic-icon {
   width: 24px;
+  border-radius: 12px;
 }
 </style>

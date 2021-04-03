@@ -125,6 +125,7 @@ export const TOKEN_BASIC_ICONS = {
   WBTC: require('@/assets/svg/WBTC.svg'),
   renBTC: require('@/assets/svg/renBTC.svg'),
   COOK: require('@/assets/svg/cook.svg'),
+  '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
 export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';

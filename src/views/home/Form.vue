@@ -556,6 +556,7 @@ export default {
 
 .select-token-basic-icon {
   width: 20px;
+  border-radius: 10px;
 }
 
 .select-token-basic-name {
