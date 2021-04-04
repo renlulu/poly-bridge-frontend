@@ -641,6 +641,7 @@ export default {
 
 .fee-icon {
   width: 14px;
+  border-radius: 7px;
 }
 
 .fee-token {

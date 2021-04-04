@@ -122,9 +122,12 @@ export const TOKEN_BASIC_ICONS = {
   YFI: require('@/assets/svg/YFI.svg'),
   UNI: require('@/assets/svg/UNI.svg'),
   UNFI: require('@/assets/svg/UNFI.svg'),
+  MDX: require('@/assets/svg/mdx.svg'),
   WBTC: require('@/assets/svg/WBTC.svg'),
   renBTC: require('@/assets/svg/renBTC.svg'),
   COOK: require('@/assets/svg/cook.svg'),
+  FEI: require('@/assets/png/fei.png'),
+  Tribe: require('@/assets/png/tribe.png'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
