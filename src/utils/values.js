@@ -128,6 +128,10 @@ export const TOKEN_BASIC_ICONS = {
   COOK: require('@/assets/svg/cook.svg'),
   FEI: require('@/assets/png/fei.png'),
   Tribe: require('@/assets/png/tribe.png'),
+  YNI: require('@/assets/png/yni.png'),
+  REVO: require('@/assets/svg/revo.png'),
+  revo: require('@/assets/svg/revo.png'),
+  Revo: require('@/assets/svg/revo.png'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
