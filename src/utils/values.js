@@ -132,6 +132,9 @@ export const TOKEN_BASIC_ICONS = {
   REVO: require('@/assets/svg/revo.svg'),
   revo: require('@/assets/svg/revo.svg'),
   Revo: require('@/assets/svg/revo.svg'),
+  ESS: require('@/assets/svg/ESS.svg'),
+  Bles: require('@/assets/svg/bles.svg'),
+  BLES: require('@/assets/svg/bles.svg'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
