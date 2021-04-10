@@ -10,6 +10,11 @@ const routes = [
     component: () => import('@/views/home'),
   },
   {
+    path: '/nft',
+    name: 'nft',
+    component: () => import('@/views/nft'),
+  },
+  {
     path: '/transactions',
     name: 'transactions',
     component: () => import('@/views/transactions'),
