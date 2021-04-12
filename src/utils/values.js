@@ -135,6 +135,7 @@ export const TOKEN_BASIC_ICONS = {
   ESS: require('@/assets/svg/ESS.svg'),
   Bles: require('@/assets/svg/bles.svg'),
   BLES: require('@/assets/svg/bles.svg'),
+  CVT: require('@/assets/svg/cvt.svg'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
