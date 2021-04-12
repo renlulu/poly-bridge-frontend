@@ -75,6 +75,14 @@ export default {
       hash: 'Hash: {hash}',
     },
   },
+  nft: {
+    form: {
+      chain: 'Chain',
+      items: 'Items',
+      search: 'Search',
+      result: 'results'
+    }
+  },
   transactions: {
     index: {
       title: 'The historical records',
