@@ -19,6 +19,11 @@ const routes = [
     name: 'transactions',
     component: () => import('@/views/transactions'),
   },
+  {
+    path: '/nfttransactions',
+    name: 'nfttransactions',
+    component: () => import('@/views/nfttransactions'),
+  },
 ];
 
 const router = new VueRouter({

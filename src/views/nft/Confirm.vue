@@ -1,28 +1,31 @@
 <template>
-  <CDrawer
-    v-bind="$attrs"
-    :closeOnClickModal="!confirming"
-    :closeOnPressEscape="!confirming"
-    v-on="$listeners"
-  >
-    <transition v-if="confirmingData" name="fade" mode="out-in">
+  <CDrawer v-bind="$attrs"
+           :closeOnClickModal="!confirming"
+           :closeOnPressEscape="!confirming"
+           v-on="$listeners">
+    <transition v-if="confirmingData"
+                name="fade"
+                mode="out-in">
       <div class="content">
         <div class="title">{{ $t('home.confirm.title') }}</div>
         <CDivider />
-        <div v-if="!packing" class="scroll">
+        <div v-if="!packing"
+             class="scroll">
           <div class="fields">
             <div class="field">
-              <div class="label">{{ $t('home.confirm.amount') }}</div>
-              <div class="amount">
-                <span class="amount-value">{{ $formatNumber(confirmingData.amount) }}</span>
-                <span class="token-basic-name">{{ tokenBasic.name }}</span>
+              <div class="select-nft-basic">
+                <div class="image">
+                  <img />
+                </div>
+                <div class="token-id"># {{confirmingData.nft.TokenId}}</div>
               </div>
             </div>
 
             <div class="field">
               <div class="label">{{ $t('home.confirm.from') }}</div>
               <div class="chain">
-                <img class="chain-icon" :src="fromChain.icon" />
+                <img class="chain-icon"
+                     :src="fromChain.icon" />
                 <span class="chain-name">
                   {{
                     $t('home.confirm.chainName', {
@@ -39,7 +42,8 @@
             <div class="field">
               <div class="label">{{ $t('home.confirm.to') }}</div>
               <div class="chain">
-                <img class="chain-icon" :src="toChain.icon" />
+                <img class="chain-icon"
+                     :src="toChain.icon" />
                 <span class="chain-name">
                   {{
                     $t('home.confirm.chainName', {
@@ -56,27 +60,22 @@
             <div class="field">
               <div class="label">{{ $t('home.confirm.fee') }}</div>
               <div class="fee">
-                <span class="fee-value">{{ $formatNumber(confirmingData.fee) }}</span>
-                <span class="token-basic-name">{{ fromToken.name }}</span>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="label">{{ $t('home.confirm.receiving') }}</div>
-              <div class="fee">
-                <span class="fee-value">{{ $formatNumber(receivingAmount) }}</span>
-                <span class="token-basic-name">{{ toToken.name }}</span>
+                <span class="fee-value">{{ $formatNumber(confirmingData.fee.TokenAmount) }}</span>
+                <span class="token-basic-name">{{ fromChain.nftFeeName }}</span>
               </div>
             </div>
           </div>
 
-          <CSubmitButton :loading="confirming" @click="confirm">
+          <CSubmitButton :loading="confirming"
+                         @click="confirm">
             {{ confirming ? $t('buttons.confirming') : $t('buttons.confirm') }}
           </CSubmitButton>
         </div>
 
-        <div v-else class="packing">
-          <img class="packing-icon" src="@/assets/svg/pending-large.svg" />
+        <div v-else
+             class="packing">
+          <img class="packing-icon"
+               src="@/assets/svg/pending-large.svg" />
           <span class="packing-text">
             {{
               $t('home.confirm.packing', {
@@ -84,12 +83,10 @@
               })
             }}
           </span>
-          <CLink
-            class="hash"
-            target="_blank"
-            :href="$format(fromChain.explorerUrl, { txHash: confirmingData.transactionHash })"
-            :disabled="!confirmingData.transactionHash"
-          >
+          <CLink class="hash"
+                 target="_blank"
+                 :href="$format(fromChain.explorerUrl, { txHash: confirmingData.transactionHash })"
+                 :disabled="!confirmingData.transactionHash">
             {{
               $t('home.confirm.hash', {
                 hash: $formatLongText(confirmingData.transactionHash || 'N/A', {
@@ -116,14 +113,14 @@ export default {
   props: {
     confirmingData: Object,
   },
-  data() {
+  data () {
     return {
       confirming: false,
       packing: false,
     };
   },
   computed: {
-    tokenBasic() {
+    tokenBasic () {
       return (
         this.confirmingData &&
         this.$store.getters.getTokenBasicByChainIdAndTokenHash({
@@ -132,10 +129,10 @@ export default {
         })
       );
     },
-    fromChain() {
+    fromChain () {
       return this.confirmingData && this.$store.getters.getChain(this.confirmingData.fromChainId);
     },
-    fromToken() {
+    fromToken () {
       return (
         this.tokenBasic &&
         this.$store.getters.getTokenByTokenBasicNameAndChainId({
@@ -144,10 +141,10 @@ export default {
         })
       );
     },
-    toChain() {
+    toChain () {
       return this.confirmingData && this.$store.getters.getChain(this.confirmingData.toChainId);
     },
-    toToken() {
+    toToken () {
       return (
         this.tokenBasic &&
         this.$store.getters.getTokenByTokenBasicNameAndChainId({
@@ -156,13 +153,13 @@ export default {
         })
       );
     },
-    receivingAmount() {
+    receivingAmount () {
       return (
         this.confirmingData &&
         new BigNumber(this.confirmingData.amount).minus(this.confirmingData.fee).toString()
       );
     },
-    fromWallet() {
+    fromWallet () {
       return (
         this.confirmingData &&
         this.$store.getters.getChainConnectedWallet(this.confirmingData.fromChainId)
@@ -170,19 +167,19 @@ export default {
     },
   },
   methods: {
-    async confirm() {
+    async confirm () {
       await this.$store.dispatch('ensureChainWalletReady', this.confirmingData.fromChainId);
       try {
         this.confirming = true;
         const walletApi = await getWalletApi(this.fromWallet.name);
-        const transactionHash = await walletApi.lock({
+        const transactionHash = await walletApi.nftLock({
           fromChainId: this.confirmingData.fromChainId,
           fromAddress: this.confirmingData.fromAddress,
           fromTokenHash: this.confirmingData.fromTokenHash,
           toChainId: this.confirmingData.toChainId,
           toAddress: this.confirmingData.toAddress,
-          amount: this.confirmingData.amount,
-          fee: this.confirmingData.fee,
+          id: this.confirmingData.nft.TokenId,
+          fee: this.confirmingData.fee.TokenAmount,
         });
         this.packing = true;
         let status = SingleTransactionStatus.Pending;
@@ -329,5 +326,26 @@ export default {
   color: #3ec7eb;
   font-size: 14px;
   text-decoration: underline;
+}
+
+.select-nft-basic {
+  display: flex;
+  align-items: center;
+  > .image {
+    width: 60px;
+    height: 60px;
+    background-image: url('../../assets/gif/nft.gif');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+  }
+  > .token-id {
+    margin-left: 20px;
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 20px;
+  }
 }
 </style>

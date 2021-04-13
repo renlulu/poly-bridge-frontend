@@ -5,7 +5,8 @@ export default {
     assetsBasicMap: {},
     itemsShow: {},
     items: {},
-    assetMap: {}
+    assetMap: {},
+    nftFee: {}
   },
   getters: {
     getAssetsBasics: (state) => {
@@ -20,6 +21,9 @@ export default {
     getAssetMap: (state) => {
       return state.assetMap
     },
+    getNftFee: (state) => {
+      return state.nftFee
+    },
   },
   mutations: {
     setAssetsBasics (state, value) {
@@ -33,6 +37,9 @@ export default {
     },
     setAssetMap (state, value) {
       state.assetMap = value;
+    },
+    setNftFee (state, value) {
+      state.nftFee = value;
     },
   },
   actions: {
@@ -51,6 +58,10 @@ export default {
     async getItems ({ commit }, params) {
       const res = await httpApi.getitems(params);
       commit('setItems', res.data);
+    },
+    async getNftFee ({ commit }, params) {
+      const res = await httpApi.getNftFee(params);
+      commit('setNftFee', res.data);
     },
   },
 };

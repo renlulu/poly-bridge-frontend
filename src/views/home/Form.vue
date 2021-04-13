@@ -287,7 +287,6 @@ export default {
       return this.getTokenMapsParams && this.$store.getters.getTokenMaps(this.getTokenMapsParams);
     },
     toChains () {
-      debugger
       return (
         this.tokenMaps &&
         this.tokenMaps

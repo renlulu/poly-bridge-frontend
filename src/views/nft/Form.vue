@@ -84,7 +84,7 @@
     <div class="history">
       {{ $t('home.form.historyPrefix') }}
       <CLink class="link"
-             :to="{ name: 'transactions' }">{{ $t('home.form.historyLink') }}</CLink>
+             :to="{ name: 'nfttransactions' }">{{ $t('home.form.historyLink') }}</CLink>
     </div>
 
     <SelectChain :visible.sync="selectFromChainVisible"
@@ -103,6 +103,11 @@
              :confirmingData.sync="confirmingData"
              @closed="handleClosed"
              @packed="handlePacked" />
+    <Detail :visible.sync="detailVisible"
+            :nftData.sync="nftData"
+            @openSelectToChain="openSelectToChain"
+            @openConnectWallet="openConnectWallet"
+            @openConfirm="openConfirm" />
     <TransactionDetails :visible.sync="transactionDetailsVisible"
                         :confirmingData="confirmingData" />
   </ValidationObserver>
@@ -114,12 +119,13 @@ import copy from 'clipboard-copy';
 import { v4 as uuidv4 } from 'uuid';
 import { DEFAULT_CHAIN_NAME, UNKNOWN_NFT } from '@/utils/values';
 import { ChainId } from '@/utils/enums';
-import TransactionDetails from '@/views/transactions/Details';
+import TransactionDetails from '@/views/nfttransactions/Details';
 import { getWalletApi } from '@/utils/walletApi';
 import SelectTokenBasic from './SelectTokenBasic';
 import SelectChain from './SelectChain';
 import ConnectWallet from './ConnectWallet';
 import Confirm from './Confirm';
+import Detail from './Detail';
 
 export default {
   name: 'Form',
@@ -128,6 +134,7 @@ export default {
     SelectChain,
     ConnectWallet,
     Confirm,
+    Detail,
     TransactionDetails,
   },
   data () {
@@ -138,6 +145,7 @@ export default {
       connectWalletVisible: false,
       confirmVisible: false,
       transactionDetailsVisible: false,
+      detailVisible: false,
       tokenBasicName: DEFAULT_CHAIN_NAME,
       chainBasicName: DEFAULT_CHAIN_NAME,
       fromChainId: 2,
@@ -145,9 +153,10 @@ export default {
       amount: '',
       approving: false,
       confirmingData: null,
+      nftData: null,
       confirmUuid: uuidv4(),
       itemHash: null,
-      unknowNFT: UNKNOWN_NFT
+      unknowNFT: UNKNOWN_NFT,
     };
   },
   computed: {
@@ -217,7 +226,6 @@ export default {
       return this.$store.getters.getAssetMap.DstAssets
     },
     toChains () {
-      debugger
       console.log(this.assetMap)
       return (
         this.assetMap &&
@@ -271,18 +279,8 @@ export default {
     needApproval () {
       return !!this.amount && !!this.allowance && new BigNumber(this.amount).gt(this.allowance);
     },
-    getFeeParams () {
-      if (this.fromToken && this.toChainId) {
-        return {
-          fromChainId: this.fromChainId,
-          fromTokenHash: this.fromToken.hash,
-          toChainId: this.toChainId,
-        };
-      }
-      return null;
-    },
     fee () {
-      return this.getFeeParams && this.$store.getters.getFee(this.getFeeParams);
+      return this.$store.getters.getNftFee;
     },
   },
   watch: {
@@ -317,6 +315,9 @@ export default {
     },
     fromWallet () {
       this.init()
+    },
+    toWallet () {
+      this.nftData.toWallet = this.toWallet
     }
   },
   created () {
@@ -327,11 +328,27 @@ export default {
   methods: {
     itemSelect (item) {
       this.itemHash = item.Hash
-      this.getItems(this.itemHash, null)
+      this.getItems(this.itemHash, '')
     },
-    tokenSelect (item) {
+    async tokenSelect (item) {
       this.getAssetMap()
-      this.selectToChainVisible = true
+      const walletApi = await getWalletApi(this.fromWallet.name);
+      const Approval = await walletApi.getNFTApproved({
+        fromChainId: this.fromChainId,
+        tokenHash: this.itemHash,
+        id: item.TokenId,
+      });
+      this.nftData = {
+        fromChainId: this.fromChainId,
+        toChains: this.toChains,
+        toChainId: this.toChainId,
+        nft: item,
+        assetHash: this.itemHash,
+        fromWallet: this.fromWallet,
+        toWallet: this.toWallet,
+        needApproval: Approval
+      }
+      this.detailVisible = true
     },
     init () {
       this.getItemsShow()
@@ -361,9 +378,29 @@ export default {
         Address: this.fromWallet.addressHex,
         TokenId: $TokenId,
         PageNo: 0,
-        PageSize: 10,
+        PageSize: 6,
       }
       this.$store.dispatch('getItems', params);
+    },
+    openSelectToChain () {
+      this.selectToChainVisible = true
+    },
+    openConnectWallet () {
+      this.connectWalletVisible = true
+    },
+    openConfirm () {
+      console.log(this.confirmingData)
+      this.confirmingData = {
+        fromAddress: this.fromWallet.address,
+        toAddress: this.toWallet.address,
+        fromChainId: this.fromChainId,
+        toChainId: this.toChainId,
+        fromTokenHash: this.itemHash,
+        nft: this.nftData.nft,
+        amount: 0,
+        fee: this.fee,
+      };
+      this.confirmVisible = true
     },
     changeTokenBasicName (tokenBasicName) {
       this.tokenBasicName = tokenBasicName;
@@ -378,7 +415,13 @@ export default {
     },
     changeToChainId (chainId) {
       this.toChainId = chainId;
-      this.clearAmount();
+      this.nftData.toChainId = chainId;
+      const params = {
+        SrcChainId: this.fromChainId,
+        Hash: this.fromChain.nftFeeContractHash,
+        DstChainId: this.toChainId,
+      }
+      this.$store.dispatch('getNftFee', params);
     },
     async exchangeFromTo () {
       await this.$store.dispatch('getTokenMaps', {
@@ -700,6 +743,7 @@ export default {
       border-image: linear-gradient(225deg, rgba(62, 199, 235, 1), rgba(40, 43, 219, 1)) 1 1;
     }
     .nft-item {
+      cursor: pointer;
       margin-right: 40px;
       margin-bottom: 40px;
       width: 240px;

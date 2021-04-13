@@ -153,5 +153,47 @@ export default {
       }
     )
     return result
-  }
+  },
+  async getNftFee (params) {
+    const result = await nftRequest(
+      {
+        method: 'post',
+        url: '/getfee',
+        data: {
+          SrcChainId: params.SrcChainId,
+          Hash: params.Hash,
+          DstChainId: params.DstChainId,
+        },
+      }
+    )
+    return result
+  },
+  async getNftTransactions ({ addressHexs, page, pageSize }) {
+    const result = await request({
+      method: 'post',
+      url: 'transactionsofaddress',
+      data: {
+        Addresses: addressHexs,
+        PageNo: page - 1,
+        PageSize: pageSize,
+      },
+    });
+    const transactions = deserialize(list(schemas.transaction), result.Transactions || []);
+    return {
+      items: transactions.map(mapTransactionToDo),
+      pageCount: result.TotalPage,
+    };
+  },
+  async getNftTransaction ({ hash }) {
+    const result = await nftRequest({
+      method: 'post',
+      url: 'transactionofhash',
+      data: {
+        Hash: hash,
+      },
+    });
+    debugger
+    const transaction = deserialize(schemas.transaction, result.data);
+    return mapTransactionToDo(transaction);
+  },
 };

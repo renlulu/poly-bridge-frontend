@@ -159,9 +159,10 @@ async function approve ({ chainId, address, tokenHash, spender, amount }) {
 
 async function nftApprove ({ address, tokenHash, spender, id }) {
   try {
-    const tokenID = decimalToInteger(id, 1);
+    const tokenID = decimalToInteger(id, 0);
+    debugger
     const tokenContract = new web3.eth.Contract(require('@/assets/json/eth-erc721.json'), tokenHash);
-    return await tokenContract.methods.approve(`0x${spender}`, tokenID).send({
+    return await tokenContract.methods.approve(spender, tokenID).send({
       from: address,
     });
   } catch (error) {
@@ -172,11 +173,11 @@ async function nftApprove ({ address, tokenHash, spender, id }) {
 async function getNFTApproved ({ fromChainId, tokenHash, id }) {
   try {
     const chain = store.getters.getChain(fromChainId);
-    const tokenID = decimalToInteger(id, 1);
-    const tokenContract = new web3.eth.Contract(require('@/assets/json/eth-erc20.json'), tokenHash);
+    const tokenID = decimalToInteger(id, 0);
+    const tokenContract = new web3.eth.Contract(require('@/assets/json/eth-erc721.json'), tokenHash);
     const result = await tokenContract.methods.getApproved(tokenID).call();
     console.log(result)
-    return result === chain.nftLockContractHash
+    return !(result === chain.nftLockContractHash)
   } catch (error) {
     throw convertWalletError(error);
   }
@@ -240,14 +241,15 @@ async function nftLock ({
     );
     const toChainApi = await getChainApi(toChainId);
     const toAddressHex = toChainApi.addressToHex(toAddress);
-    const tokenID = decimalToInteger(id, 1);
+    const tokenID = decimalToInteger(id, 0);
     const feeInt = decimalToInteger(fee, 18);
 
     const result = await confirmLater(
       lockContract.methods
         .lock(`0x${fromTokenHash}`, toChainId, `0x${toAddressHex}`, tokenID, NFT_FEE_TOKEN_HASH, feeInt, 0)
         .send({
-          from: fromAddress
+          from: fromAddress,
+          value: feeInt
         }),
     );
     return toStandardHex(result);
