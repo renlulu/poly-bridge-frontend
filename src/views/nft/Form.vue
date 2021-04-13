@@ -4,186 +4,93 @@
                       v-slot="{ invalid }"
                       class="form">
     <div class="card">
-      <div class="title">{{ $t('home.form.title') }}</div>
-      <div class="fields">
-        <div class="field">
-          <div class="label">{{ $t('home.form.asset') }}</div>
+      <div class="fields-row">
+        <div class="field-left">
+          <div class="label">{{ $t('nft.form.chain') }}</div>
           <CButton class="select-token-basic"
-                   @click="selectTokenBasicVisible = true">
-            <template v-if="tokenBasic">
+                   @click="selectFromChainVisible = true">
+            <template>
               <img class="select-token-basic-icon"
-                   :src="tokenBasic.icon" />
-              <span class="select-token-basic-name">{{ tokenBasicName }}</span>
+                   :src="fromChain.icon" />
+              <span class="select-token-basic-name">{{ $formatEnum(fromChain.id, { type: 'chainName' }) }}</span>
             </template>
             <CFlexSpan />
             <img src="@/assets/svg/chevron-right.svg" />
           </CButton>
-        </div>
-
-        <div class="fields-row">
-          <div class="field">
-            <div class="label">{{ $t('home.form.from') }}</div>
-            <CButton class="select-chain"
-                     :disabled="!tokenBasic"
-                     @click="selectFromChainVisible = true">
-              <div class="select-chain-content">
-                <template v-if="fromChain">
-                  <img class="select-chain-icon"
-                       :src="fromChain.icon" />
-                  <span class="select-chain-name">
-                    {{
-                      $t('home.form.chainName', {
-                        chainName: $formatEnum(fromChainId, { type: 'chainName' }),
-                      })
-                    }}
-                  </span>
-                </template>
-                <template v-else>
-                  <img class="select-chain-icon"
-                       src="@/assets/svg/from.svg" />
-                  <span class="select-chain-name">
-                    {{ $t('home.form.chainName', { chainName: $t('home.form.from') }) }}
-                  </span>
-                </template>
-                <img class="chevron-down"
-                     src="@/assets/svg/chevron-right.svg" />
-              </div>
-            </CButton>
-            <div v-if="fromWallet"
-                 class="address">
-              <span class="address-value">
-                {{ $formatLongText(fromWallet.address, { headTailLength: 6 }) }}
-              </span>
-              <CButton @click="copy(fromWallet.address)">
-                <img src="@/assets/svg/copy.svg" />
-              </CButton>
-            </div>
-          </div>
-
-          <CButton :disabled="!toChainId"
-                   @click="exchangeFromTo">
-            <img src="@/assets/svg/exchange.svg" />
-          </CButton>
-
-          <div class="field">
-            <div class="label">{{ $t('home.form.to') }}</div>
-            <CButton class="select-chain"
-                     :disabled="!toChains"
-                     @click="selectToChainVisible = true">
-              <div class="select-chain-content">
-                <template v-if="toChain">
-                  <img class="select-chain-icon"
-                       :src="toChain.icon" />
-                  <span class="select-chain-name">
-                    {{
-                      $t('home.form.chainName', {
-                        chainName: $formatEnum(toChainId, { type: 'chainName' }),
-                      })
-                    }}
-                  </span>
-                </template>
-                <template v-else>
-                  <img class="select-chain-icon"
-                       src="@/assets/svg/to.svg" />
-                  <span class="select-chain-name">
-                    {{ $t('home.form.chainName', { chainName: $t('home.form.to') }) }}
-                  </span>
-                </template>
-                <img class="chevron-down"
-                     src="@/assets/svg/chevron-right.svg" />
-              </div>
-            </CButton>
-            <div v-if="toWallet"
-                 class="address">
-              <span class="address-value">
-                {{ $formatLongText(toWallet.address, { headTailLength: 6 }) }}
-              </span>
-              <CButton @click="copy(toWallet.address)">
-                <img src="@/assets/svg/copy.svg" />
-              </CButton>
-            </div>
-          </div>
-        </div>
-
-        <ValidationProvider ref="amountValidation"
-                            tag="div"
-                            class="field"
-                            :rules="{
-            required: true,
-            number: true,
-            positive: true,
-            maxDecimals: tokenBasic && tokenBasic.decimals,
-            maxValue: balance,
-            minValue: { min: fee, excluded: true },
-          }"
-                            v-slot="{ errors }">
-          <div class="label">{{ $t('home.form.amount') }}</div>
+          <div class="label">{{ $t('nft.form.items') }}</div>
           <div class="input">
             <CInput class="input-inner"
                     v-model="amount" />
-            <CButton v-if="balance"
-                     class="use-max"
-                     @click="transferAll">
-              {{ $t('home.form.max') }}
-            </CButton>
           </div>
-          <div class="input-error">{{ errors[0] }}</div>
-          <div v-if="balance"
-               class="balance">
-            <span class="label">{{ $t('home.form.balance') }}</span>
-            <CFlexSpan />
-            <span class="value"> {{ $formatNumber(balance) }} {{ fromToken.name }} </span>
+          <div class="scroll">
+            <div v-for="item in assets"
+                 :key="item.Hash"
+                 :class="itemHash === item.Hash?'asset asset-active ':'asset'"
+                 @click="itemSelect(item)">
+              <span class="asset-left">
+                <span>{{ item.Name }}</span>
+              </span>
+              <img v-if="itemHash === item.Hash"
+                   src="@/assets/svg/check.svg" />
+            </div>
           </div>
-          <div v-if="fee"
-               class="fee">
-            <span class="label">{{ $t('home.form.fee') }}</span>
-            <CTooltip>
-              <img class="tooltip-icon"
-                   src="@/assets/svg/question.svg" />
-              <template #content>
-                {{ $t('home.form.feeTooltip') }}
-              </template>
-            </CTooltip>
-            <CFlexSpan />
-            <span class="fee-value">{{ $formatNumber(fee) }}</span>
-            <img class="fee-icon"
-                 :src="tokenBasic.icon" />
-            <span class="fee-token">{{ fromToken.name }}</span>
+        </div>
+        <div class="field-right">
+          <div class="fields-row">
+            <div class="input">
+              <CInput class="input-inner"
+                      v-model="amount" />
+            </div>
+            <div class="search-button">
+              {{$t('nft.form.search')}}
+            </div>
           </div>
-        </ValidationProvider>
+          <div class="item-content">
+            <div class="total">
+              {{itemsTotal}} {{$t('nft.form.result')}}
+            </div>
+            <div class="items-content">
+              <div v-for="item in items"
+                   class="nft-item"
+                   :key="item.TokenId"
+                   @click="tokenSelect(item)">
+                <div class="image"
+                     :src="unknowNFT">
+                </div>
+                <div class="nft-tokenid">#{{item.TokenId}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <CSubmitButton v-if="fromChain && toChain && !(fromWallet && toWallet)"
-                     @click="connectWalletVisible = true">
-        {{ $t('home.form.connectWallet') }}
-      </CSubmitButton>
-      <CSubmitButton v-else-if="!invalid && fromToken && toToken && needApproval"
-                     :loading="approving"
-                     @click="approve">
-        {{ approving ? $t('buttons.approving') : $t('buttons.approve') }}
-      </CSubmitButton>
-      <CSubmitButton v-else
-                     :disabled="invalid || !(fromToken && toToken)"
-                     @click="next">
-        {{ $t('buttons.next') }}
-      </CSubmitButton>
+      <div style="display:none">
+        <CSubmitButton v-if="fromChain && toChain && !(fromWallet && toWallet)"
+                       @click="connectWalletVisible = true">
+          {{ $t('home.form.connectWallet') }}
+        </CSubmitButton>
+        <CSubmitButton v-else-if="!invalid && fromToken && toToken && needApproval"
+                       :loading="approving"
+                       @click="approve">
+          {{ approving ? $t('buttons.approving') : $t('buttons.approve') }}
+        </CSubmitButton>
+        <CSubmitButton v-else
+                       :disabled="invalid || !(fromToken && toToken)"
+                       @click="next">
+          {{ $t('buttons.next') }}
+        </CSubmitButton>
+      </div>
     </div>
 
     <div class="history">
       {{ $t('home.form.historyPrefix') }}
       <CLink class="link"
-             :to="{ name: 'transactions' }">{{ $t('home.form.historyLink') }}</CLink>
+             :to="{ name: 'nfttransactions' }">{{ $t('home.form.historyLink') }}</CLink>
     </div>
 
-    <SelectTokenBasic :visible.sync="selectTokenBasicVisible"
-                      :tokenBasicName="tokenBasicName"
-                      @update:tokenBasicName="changeTokenBasicName"
-                      :tokenBasics="tokenBasics"
-                      :popularTokenBasics="tokenBasics" />
     <SelectChain :visible.sync="selectFromChainVisible"
                  :chainId="fromChainId"
                  @update:chainId="changeFromChainId"
-                 :chains="fromChains || []" />
+                 :chains="nftChains || []" />
     <SelectChain :visible.sync="selectToChainVisible"
                  :chainId="toChainId"
                  @update:chainId="changeToChainId"
@@ -196,6 +103,11 @@
              :confirmingData.sync="confirmingData"
              @closed="handleClosed"
              @packed="handlePacked" />
+    <Detail :visible.sync="detailVisible"
+            :nftData.sync="nftData"
+            @openSelectToChain="openSelectToChain"
+            @openConnectWallet="openConnectWallet"
+            @openConfirm="openConfirm" />
     <TransactionDetails :visible.sync="transactionDetailsVisible"
                         :confirmingData="confirmingData" />
   </ValidationObserver>
@@ -205,14 +117,15 @@
 import BigNumber from 'bignumber.js';
 import copy from 'clipboard-copy';
 import { v4 as uuidv4 } from 'uuid';
-import { DEFAULT_TOKEN_BASIC_NAME } from '@/utils/values';
+import { DEFAULT_CHAIN_NAME, UNKNOWN_NFT } from '@/utils/values';
 import { ChainId } from '@/utils/enums';
-import TransactionDetails from '@/views/transactions/Details';
+import TransactionDetails from '@/views/nfttransactions/Details';
 import { getWalletApi } from '@/utils/walletApi';
 import SelectTokenBasic from './SelectTokenBasic';
 import SelectChain from './SelectChain';
 import ConnectWallet from './ConnectWallet';
 import Confirm from './Confirm';
+import Detail from './Detail';
 
 export default {
   name: 'Form',
@@ -221,6 +134,7 @@ export default {
     SelectChain,
     ConnectWallet,
     Confirm,
+    Detail,
     TransactionDetails,
   },
   data () {
@@ -231,24 +145,46 @@ export default {
       connectWalletVisible: false,
       confirmVisible: false,
       transactionDetailsVisible: false,
-      tokenBasicName: DEFAULT_TOKEN_BASIC_NAME,
-      fromChainId: null,
+      detailVisible: false,
+      tokenBasicName: DEFAULT_CHAIN_NAME,
+      chainBasicName: DEFAULT_CHAIN_NAME,
+      fromChainId: 2,
       toChainId: null,
       amount: '',
       approving: false,
       confirmingData: null,
+      nftData: null,
       confirmUuid: uuidv4(),
+      itemHash: null,
+      unknowNFT: UNKNOWN_NFT,
     };
   },
   computed: {
-    tokenBasics () {
-      return this.$store.getters.tokenBasics;
-    },
     tokenBasic () {
       return this.$store.getters.getTokenBasic(this.tokenBasicName);
     },
+    assets () {
+      console.log(this.$store.getters.getAssetsBasics)
+      return this.$store.getters.getAssetsBasics.Assets
+    },
+    chainBasic () {
+      return this.nftChains[0]
+    },
+    itemsTotal () {
+      const itemsShowTotal = this.$store.getters.getItemsShow.Assets ? this.$store.getters.getItemsShow.Assets[0].Items.length : 0
+      const itemsTotal = this.$store.getters.getItems.TotalCount ? this.$store.getters.getItems.TotalCount : 0
+      return this.fromWallet ? itemsTotal : itemsShowTotal
+    },
+    items () {
+      const itemsShow = this.$store.getters.getItemsShow.Assets ? this.$store.getters.getItemsShow.Assets[0].Items : []
+      const items = this.$store.getters.getItems ? this.$store.getters.getItems.Items : []
+      return this.fromWallet ? items : itemsShow
+    },
     chains () {
       return this.$store.getters.chains.filter(chain => chain.id !== ChainId.Poly);
+    },
+    nftChains () {
+      return this.$store.getters.chains.filter(chain => chain.id !== ChainId.Poly && chain.id !== ChainId.Ont && chain.id !== ChainId.Neo);
     },
     fromChains () {
       return (
@@ -260,7 +196,7 @@ export default {
       );
     },
     fromChain () {
-      return this.$store.getters.getChain(this.fromChainId);
+      return this.fromChainId ? this.$store.getters.getChain(this.fromChainId) : this.chainBasic;
     },
     fromToken () {
       return (
@@ -286,11 +222,15 @@ export default {
     tokenMaps () {
       return this.getTokenMapsParams && this.$store.getters.getTokenMaps(this.getTokenMapsParams);
     },
+    assetMap () {
+      return this.$store.getters.getAssetMap.DstAssets
+    },
     toChains () {
+      console.log(this.assetMap)
       return (
-        this.tokenMaps &&
-        this.tokenMaps
-          .map(tokenMap => this.$store.getters.getChain(tokenMap.toToken.chainId))
+        this.assetMap &&
+        this.assetMap
+          .map(asset => this.$store.getters.getChain(asset.ChainId))
           .filter(chain => chain)
       );
     },
@@ -339,18 +279,8 @@ export default {
     needApproval () {
       return !!this.amount && !!this.allowance && new BigNumber(this.amount).gt(this.allowance);
     },
-    getFeeParams () {
-      if (this.fromToken && this.toChainId) {
-        return {
-          fromChainId: this.fromChainId,
-          fromTokenHash: this.fromToken.hash,
-          toChainId: this.toChainId,
-        };
-      }
-      return null;
-    },
     fee () {
-      return this.getFeeParams && this.$store.getters.getFee(this.getFeeParams);
+      return this.$store.getters.getNftFee;
     },
   },
   watch: {
@@ -376,30 +306,102 @@ export default {
         this.$store.dispatch('getAllowance', value);
       }
     },
+    assets () {
+      if (this.assets[0]) {
+        this.itemHash = this.assets[0].Hash
+        this.getItems(this.itemHash, '')
+        this.getAssetMap()
+      }
+    },
+    fromWallet () {
+      this.init()
+    },
+    toWallet () {
+      this.nftData.toWallet = this.toWallet
+    }
   },
   created () {
-    this.$store.dispatch('getTokenBasics');
-    this.interval = setInterval(() => {
-      if (
-        this.getBalanceParams &&
-        this.fromWallet &&
-        this.fromWallet.chainId === this.fromChainId
-      ) {
-        this.$store.dispatch('getBalance', this.getBalanceParams);
-      }
-      if (
-        this.getAllowanceParams &&
-        this.fromWallet &&
-        this.fromWallet.chainId === this.fromChainId
-      ) {
-        this.$store.dispatch('getAllowance', this.getAllowanceParams);
-      }
-    }, 5000);
+    this.init()
   },
   beforeDestroy () {
-    clearInterval(this.interval);
   },
   methods: {
+    itemSelect (item) {
+      this.itemHash = item.Hash
+      this.getItems(this.itemHash, '')
+    },
+    async tokenSelect (item) {
+      this.getAssetMap()
+      const walletApi = await getWalletApi(this.fromWallet.name);
+      const Approval = await walletApi.getNFTApproved({
+        fromChainId: this.fromChainId,
+        tokenHash: this.itemHash,
+        id: item.TokenId,
+      });
+      this.nftData = {
+        fromChainId: this.fromChainId,
+        toChains: this.toChains,
+        toChainId: this.toChainId,
+        nft: item,
+        assetHash: this.itemHash,
+        fromWallet: this.fromWallet,
+        toWallet: this.toWallet,
+        needApproval: Approval
+      }
+      this.detailVisible = true
+    },
+    init () {
+      this.getItemsShow()
+      this.getAssets()
+    },
+    getItemsShow () {
+      const params = {
+        id: this.fromChain.id,
+        size: 6
+      }
+      this.$store.dispatch('getItemsShow', params);
+    },
+    getAssets () {
+      this.$store.dispatch('getAssetsBasics', this.fromChain);
+    },
+    getAssetMap () {
+      const params = {
+        ChainId: this.fromChain.id,
+        Hash: this.itemHash
+      }
+      this.$store.dispatch('getAssetMap', params);
+    },
+    getItems ($Asset, $TokenId) {
+      const params = {
+        ChainId: this.fromChain.id,
+        Asset: $Asset,
+        Address: this.fromWallet.addressHex,
+        TokenId: $TokenId,
+        PageNo: 0,
+        PageSize: 6,
+      }
+      this.$store.dispatch('getItems', params);
+    },
+    openSelectToChain () {
+      this.selectToChainVisible = true
+    },
+    openConnectWallet () {
+      this.connectWalletVisible = true
+    },
+    openConfirm () {
+      console.log(this.confirmingData)
+      this.confirmingData = {
+        fromAddress: this.fromWallet.address,
+        toAddress: this.toWallet.address,
+        fromChainId: this.fromChainId,
+        toChainId: this.toChainId,
+        fromTokenHash: this.itemHash,
+        nft: this.nftData.nft,
+        amount: 0,
+        fee: this.fee,
+      };
+      this.confirmVisible = true
+    },
     changeTokenBasicName (tokenBasicName) {
       this.tokenBasicName = tokenBasicName;
       this.fromChainId = null;
@@ -409,11 +411,17 @@ export default {
     changeFromChainId (chainId) {
       this.fromChainId = chainId;
       this.toChainId = null;
-      this.clearAmount();
+      this.init()
     },
     changeToChainId (chainId) {
       this.toChainId = chainId;
-      this.clearAmount();
+      this.nftData.toChainId = chainId;
+      const params = {
+        SrcChainId: this.fromChainId,
+        Hash: this.fromChain.nftFeeContractHash,
+        DstChainId: this.toChainId,
+      }
+      this.$store.dispatch('getNftFee', params);
     },
     async exchangeFromTo () {
       await this.$store.dispatch('getTokenMaps', {
@@ -506,8 +514,9 @@ export default {
 
 .card {
   box-sizing: border-box;
-  width: 452px;
-  padding: 40px 50px 54px;
+  width: 1280px;
+  height: 900px;
+  padding: 40px;
   background: #171f31;
   box-shadow: 0px 2px 18px 7px rgba(#000000, 0.1);
   border-radius: 10px;
@@ -520,6 +529,19 @@ export default {
   @include next-margin-v(30px);
 }
 
+.field-left {
+  flex: inherit;
+  width: 300px;
+  background-color: rgba(0, 0, 0, 0.25);
+  padding: 30px 20px;
+  @include child-margin-v(10px);
+}
+
+.field-right {
+  flex: inherit;
+  width: 880px;
+  @include child-margin-v(10px);
+}
 .fields {
   @include child-margin-v(20px);
   @include next-margin-v(40px);
@@ -653,5 +675,101 @@ export default {
 .link {
   color: #2fd8ca;
   text-decoration: underline;
+}
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  @include scroll-bar(rgba(#fff, 0.2), transparent);
+}
+
+.asset {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 40px;
+  transition: all 0.3s;
+  @include child-margin-h(16px);
+
+  &:hover {
+    opacity: 0.8;
+    background: rgba(#000000, 0.3);
+  }
+}
+.asset-active {
+  opacity: 0.8;
+  background: rgba(#000000, 0.3);
+}
+
+.asset-left {
+  display: flex;
+  align-items: center;
+  @include child-margin-h(8px);
+}
+.search-button {
+  text-align: center;
+  width: 160px;
+  height: 60px;
+  background: linear-gradient(225deg, #3ec7eb 0%, #282bdb 100%);
+  border-radius: 4px;
+  font-size: 18px;
+  font-family: Avenir-Medium, Avenir;
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 60px;
+}
+.search-input {
+  flex: 1;
+}
+.field-right > .fields-row > .input {
+  flex: 1;
+}
+.item-content {
+  width: 880px;
+  height: 750px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  padding: 30px 40px;
+  box-sizing: border-box;
+  .items-content {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    .nft-item:nth-child(3n) {
+      margin-right: 0px;
+    }
+    .nft-item:hover {
+      border: 1px solid;
+      border-image: linear-gradient(225deg, rgba(62, 199, 235, 1), rgba(40, 43, 219, 1)) 1 1;
+    }
+    .nft-item {
+      cursor: pointer;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      width: 240px;
+      height: 320px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      padding: 10px;
+      display: flex;
+      flex-flow: column;
+      box-sizing: border-box;
+      .image {
+        width: 220px;
+        height: 220px;
+        background-image: url('../../assets/gif/nft.gif');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100%;
+      }
+      .nft-tokenid {
+        padding-top: 20px;
+        font-size: 14px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 20px;
+      }
+    }
+  }
 }
 </style>
