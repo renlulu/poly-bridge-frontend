@@ -42,6 +42,11 @@ export const transactionStep = model({
   needBlocks: alias('NeedBlocks'),
 });
 
+export const FeeToken = model({
+  chainId: alias('ChainId'),
+  name: alias('Name'),
+});
+
 export const transaction = model({
   hash: alias('Hash'),
   fromChainId: alias('SrcChainId'),
@@ -51,7 +56,9 @@ export const transaction = model({
   token: alias('Token', token),
   amount: alias('TransferAmount'),
   fee: alias('FeeAmount'),
+  nftFee: alias('FeeToken', FeeToken),
   time: alias('Time'),
   status: alias('State'),
+  tokenId: alias('TokenId'),
   steps: alias('TransactionState', list(transactionStep)),
 });

@@ -169,7 +169,7 @@ export default {
     return result
   },
   async getNftTransactions ({ addressHexs, page, pageSize }) {
-    const result = await request({
+    const result = await nftRequest({
       method: 'post',
       url: 'transactionsofaddress',
       data: {
@@ -178,7 +178,8 @@ export default {
         PageSize: pageSize,
       },
     });
-    const transactions = deserialize(list(schemas.transaction), result.Transactions || []);
+    const transactions = deserialize(list(schemas.transaction), result.data.Transactions || []);
+    debugger
     return {
       items: transactions.map(mapTransactionToDo),
       pageCount: result.TotalPage,
@@ -192,7 +193,6 @@ export default {
         Hash: hash,
       },
     });
-    debugger
     const transaction = deserialize(schemas.transaction, result.data);
     return mapTransactionToDo(transaction);
   },
