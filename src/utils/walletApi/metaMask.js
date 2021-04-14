@@ -160,7 +160,6 @@ async function approve ({ chainId, address, tokenHash, spender, amount }) {
 async function nftApprove ({ address, tokenHash, spender, id }) {
   try {
     const tokenID = decimalToInteger(id, 0);
-    debugger
     const tokenContract = new web3.eth.Contract(require('@/assets/json/eth-erc721.json'), tokenHash);
     return await tokenContract.methods.approve(spender, tokenID).send({
       from: address,

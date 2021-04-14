@@ -1,8 +1,10 @@
 <template>
   <Page class="transactions">
-    <img class="top-decoration" src="@/assets/svg/poly-bg.svg" />
+    <img class="top-decoration"
+         src="@/assets/svg/poly-bg.svg" />
     <div class="bottom-decoration-wrapper">
-      <img class="bottom-decoration" src="@/assets/svg/poly-bg.svg" />
+      <img class="bottom-decoration"
+           src="@/assets/svg/poly-bg.svg" />
     </div>
     <div class="content">
       <div class="content-inner">
@@ -11,25 +13,22 @@
         <div class="table-wrapper">
           <ElTable :data="transactions.items">
             <ElTableColumn width="20" />
-            <ElTableColumn
-              #default="{row}"
-              :label="$t('transactions.index.fromChain')"
-              min-width="150"
-            >
+            <ElTableColumn #default="{row}"
+                           :label="$t('transactions.index.fromChain')"
+                           min-width="150">
               <div class="chain">
-                <img class="chain-icon" :src="getChain(row.fromChainId).icon" />
+                <img class="chain-icon"
+                     :src="getChain(row.fromChainId).icon" />
                 <span>{{ $formatEnum(row.fromChainId, { type: 'chainName' }) }}</span>
               </div>
-              <CLink
-                class="hash"
-                :href="
+              <CLink class="hash"
+                     :href="
                   $format(getChain(row.fromChainId).explorerUrl, {
                     txHash: row.fromTransactionHash,
                   })
                 "
-                target="_blank"
-                :disabled="!row.fromTransactionHash"
-              >
+                     target="_blank"
+                     :disabled="!row.fromTransactionHash">
                 {{
                   $t('transactions.index.hash', {
                     hash: $formatLongText(row.fromTransactionHash || 'N/A'),
@@ -37,23 +36,20 @@
                 }}
               </CLink>
             </ElTableColumn>
-            <ElTableColumn
-              #default="{row}"
-              :label="$t('transactions.index.toChain')"
-              min-width="150"
-            >
+            <ElTableColumn #default="{row}"
+                           :label="$t('transactions.index.toChain')"
+                           min-width="150">
               <div class="chain">
-                <img class="chain-icon" :src="getChain(row.toChainId).icon" />
+                <img class="chain-icon"
+                     :src="getChain(row.toChainId).icon" />
                 <span>{{ $formatEnum(row.toChainId, { type: 'chainName' }) }}</span>
               </div>
-              <CLink
-                class="hash"
-                :href="
+              <CLink class="hash"
+                     :href="
                   $format(getChain(row.toChainId).explorerUrl, { txHash: row.toTransactionHash })
                 "
-                target="_blank"
-                :disabled="!row.toTransactionHash"
-              >
+                     target="_blank"
+                     :disabled="!row.toTransactionHash">
                 {{
                   $t('transactions.index.hash', {
                     hash: $formatLongText(row.toTransactionHash || 'N/A'),
@@ -61,25 +57,34 @@
                 }}
               </CLink>
             </ElTableColumn>
-            <ElTableColumn #default="{row}" :label="$t('transactions.index.amount')">
+            <ElTableColumn #default="{row}"
+                           :label="$t('transactions.index.amount')">
               {{ $formatNumber(row.amount) }}
             </ElTableColumn>
-            <ElTableColumn #default="{row}" :label="$t('transactions.index.fee')">
+            <ElTableColumn #default="{row}"
+                           :label="$t('transactions.index.fee')">
               {{ $formatNumber(row.fee) }}
             </ElTableColumn>
-            <ElTableColumn :label="$t('transactions.index.asset')" prop="tokenBasicName" />
-            <ElTableColumn #default="{row}" :label="$t('transactions.index.time')" min-width="110">
+            <ElTableColumn :label="$t('transactions.index.asset')"
+                           prop="tokenBasicName" />
+            <ElTableColumn #default="{row}"
+                           :label="$t('transactions.index.time')"
+                           min-width="110">
               {{ $formatTime(row.time) }}
             </ElTableColumn>
-            <ElTableColumn #default="{row}" :label="$t('transactions.index.status')" align="right">
-              <CButton class="view-details" @click="viewDetails(row)">
+            <ElTableColumn #default="{row}"
+                           :label="$t('transactions.index.status')"
+                           align="right">
+              <CButton class="view-details"
+                       @click="viewDetails(row)">
                 {{ $formatEnum(row.status, { type: 'transactionStatus' }) }}
               </CButton>
             </ElTableColumn>
             <ElTableColumn width="20" />
           </ElTable>
           <div class="pagination">
-            <CButton @click="page--" :disabled="page <= 1 || transactions.pageCount == null">
+            <CButton @click="page--"
+                     :disabled="page <= 1 || transactions.pageCount == null">
               <img src="@/assets/svg/arrow-left.svg" />
             </CButton>
             <span>{{
@@ -88,14 +93,16 @@
                 pageCount: transactions.pageCount || 1,
               })
             }}</span>
-            <CButton @click="page++" :disabled="!(page < transactions.pageCount)">
+            <CButton @click="page++"
+                     :disabled="!(page < transactions.pageCount)">
               <img src="@/assets/svg/arrow-right.svg" />
             </CButton>
           </div>
         </div>
       </div>
     </div>
-    <TransactionDetails :visible.sync="transactionDetailsVisible" :hash="transactionHash" />
+    <TransactionDetails :visible.sync="transactionDetailsVisible"
+                        :hash="transactionHash" />
   </Page>
 </template>
 
@@ -110,7 +117,7 @@ export default {
     Page,
     TransactionDetails,
   },
-  data() {
+  data () {
     return {
       transactionDetailsVisible: false,
       transactionHash: null,
@@ -119,12 +126,12 @@ export default {
     };
   },
   computed: {
-    addressHexs() {
+    addressHexs () {
       return this.$store.getters.wallets
         .filter(wallet => wallet.addressHex)
         .map(wallet => wallet.addressHex);
     },
-    getTransactionsParams() {
+    getTransactionsParams () {
       return {
         addressHexs: this.addressHexs,
         page: this.page,
@@ -132,13 +139,13 @@ export default {
         vary: ['pageSize'],
       };
     },
-    transactions() {
+    transactions () {
       return this.$store.getters.getTransactions(this.getTransactionsParams) || {};
     },
   },
   watch: {
     getTransactionsParams: {
-      handler(value, oldValue) {
+      handler (value, oldValue) {
         if (!_.isEqual(value, oldValue)) {
           this.$store.dispatch('getTransactions', value);
         }
@@ -147,10 +154,10 @@ export default {
     },
   },
   methods: {
-    getChain(chainId) {
+    getChain (chainId) {
       return this.$store.getters.getChain(chainId);
     },
-    viewDetails(transaction) {
+    viewDetails (transaction) {
       this.transactionHash = transaction.hash;
       this.transactionDetailsVisible = true;
     },

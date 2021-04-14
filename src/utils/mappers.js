@@ -1,5 +1,4 @@
 export function mapTransactionToDo (data) {
-  debugger
   const { name } = data.token ? data.token.tokenBasic : '';
   const time = data.time * 1000;
   const fromTransactionHash = data.steps[0] && data.steps[0].hash;

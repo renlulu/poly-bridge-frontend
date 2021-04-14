@@ -45,6 +45,7 @@ export default {
     },
     async getNftTransactions ({ commit }, { addressHexs, page, pageSize, vary }) {
       const result = await httpApi.getNftTransactions({ addressHexs, page, pageSize });
+      debugger
       commit('setNftTransactions', {
         params: { addressHexs, page, pageSize, vary },
         value: result,
