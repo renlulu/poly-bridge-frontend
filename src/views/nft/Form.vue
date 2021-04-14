@@ -331,6 +331,7 @@ export default {
       this.getItems(this.itemHash, '')
     },
     async tokenSelect (item) {
+      await this.$store.dispatch('ensureChainWalletReady', this.fromChainId);
       this.getAssetMap()
       const walletApi = await getWalletApi(this.fromWallet.name);
       const Approval = await walletApi.getNFTApproved({
@@ -350,9 +351,10 @@ export default {
       }
       this.detailVisible = true
     },
-    init () {
+    async init () {
       this.getItemsShow()
       this.getAssets()
+      await this.$store.dispatch('ensureChainWalletReady', this.fromChainId);
     },
     getItemsShow () {
       const params = {
