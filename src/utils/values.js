@@ -98,7 +98,7 @@ export const CHAINS = [
     icon: require('@/assets/svg/heco.svg'),
     explorerUrl: TARGET_MAINNET
       ? 'https://scan.hecochain.com/tx/0x{txHash}'
-      : 'https://scan-testnet.hecochain.com/tx/0x{txHash}',
+      : 'https://testnet.hecoinfo.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
       ? '0x4fE451186c0D69205ACc1fA00FD75fc6d71e47eE'
       : '0x3c92F1E31aACA43Eb4fF8aE498C7E85618680F45',
