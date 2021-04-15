@@ -11,7 +11,9 @@
              v-if="nftData">
           <div class="select-nft-basic">
             <div class="image">
-              <img />
+              <div class="img-wrapper">
+                <img :src="nftData.nft.Image" />
+              </div>
             </div>
             <div class="token-id"># {{nftData.nft.TokenId}}</div>
           </div>
@@ -395,5 +397,14 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;
+  .img-wrapper {
+    background-color: #000;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    img {
+      height: 100%;
+    }
+  }
 }
 </style>
