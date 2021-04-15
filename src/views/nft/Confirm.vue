@@ -15,7 +15,8 @@
             <div class="field">
               <div class="select-nft-basic">
                 <div class="image">
-                  <div class="img-wrapper">
+                  <div v-if="confirmingData.nft.Image"
+                       class="img-wrapper">
                     <img :src="confirmingData.nft.Image" />
                   </div>
                 </div>
