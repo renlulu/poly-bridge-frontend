@@ -11,7 +11,8 @@
              v-if="nftData">
           <div class="select-nft-basic">
             <div class="image">
-              <div class="img-wrapper">
+              <div v-if="nftData.nft.Image"
+                   class="img-wrapper">
                 <img :src="nftData.nft.Image" />
               </div>
             </div>

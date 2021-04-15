@@ -185,7 +185,6 @@ export default {
       return this.$store.getters.getTokenBasic(this.tokenBasicName);
     },
     assets () {
-      debugger
       console.log(this.$store.getters.getAssetsBasics)
       const assetsList = this.$store.getters.getAssetsBasics.Assets
       let list = []
@@ -347,7 +346,7 @@ export default {
       }
     },
     fromWallet () {
-      this.init()
+      //  this.init()
     },
     toWallet () {
       this.nftData.toWallet = this.toWallet
