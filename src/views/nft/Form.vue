@@ -18,7 +18,9 @@
           </CButton>
           <div class="label">{{ $t('nft.form.items') }}</div>
           <div class="input">
+            <img src="@/assets/png/search.png" />
             <CInput class="input-inner"
+                    placeholder="Filter"
                     v-model="assetsName" />
           </div>
           <div class="scroll">
@@ -36,11 +38,14 @@
         </div>
         <div class="field-right">
           <div class="fields-row">
-            <div class="input">
+            <div class="id-input input">
+              <img src="@/assets/png/search.png" />
               <CInput class="input-inner"
-                      v-model="amount" />
+                      placeholder="NFT ID"
+                      v-model="searchTokenID" />
             </div>
-            <div class="search-button">
+            <div class="search-button"
+                 @click="getItems(itemHash,searchTokenID,1)">
               {{$t('nft.form.search')}}
             </div>
           </div>
@@ -64,15 +69,15 @@
                 <div class="nft-tokenid">#{{item.TokenId}}</div>
               </div>
             </div>
-            <!-- <div class="page">
-              {{itemsTotal}}
+            <div class="pagination"
+                 v-if="fromWallet && itemsTotal > 6">
               <el-pagination layout="prev, pager, next"
                              @current-change="handleCurrentChange"
                              :current-page="currentPage"
-                             :page-size="2"
+                             :page-size="6"
                              :total="itemsTotal">
               </el-pagination>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
@@ -171,7 +176,8 @@ export default {
       itemHash: null,
       unknowNFT: UNKNOWN_NFT,
       currentPage: 1,
-      assetsName: ''
+      assetsName: '',
+      searchTokenID: ''
     };
   },
   computed: {
@@ -535,7 +541,35 @@ export default {
   },
 };
 </script>
+<style>
+.el-pagination button:disabled {
+  background-color: rgba(255, 255, 255, 0);
+}
+.el-pagination .btn-prev,
+.el-pagination .btn-next {
+  background-color: rgba(255, 255, 255, 0);
+}
+.el-pagination .btn-prev:hover,
+.el-pagination .btn-next:hover {
+  background-color: rgba(255, 255, 255, 0);
+  color: rgba(255, 255, 255, 1);
+}
+.el-pagination button {
+  background-color: rgba(255, 255, 255, 0);
+}
+.el-pager li {
+  background-color: rgba(255, 255, 255, 0);
+  color: rgba(255, 255, 255, 0.3);
+}
+.el-pager li:hover {
+  background-color: rgba(255, 255, 255, 0);
+  color: rgba(255, 255, 255, 1);
+}
 
+.el-pager li.active {
+  color: #fff;
+}
+</style>
 <style lang="scss" scoped>
 .form {
   display: flex;
@@ -547,7 +581,7 @@ export default {
 .card {
   box-sizing: border-box;
   width: 1280px;
-  height: 970px;
+  height: 1010px;
   padding: 40px;
   background: #171f31;
   box-shadow: 0px 2px 18px 7px rgba(#000000, 0.1);
@@ -758,7 +792,7 @@ export default {
 }
 .item-content {
   width: 880px;
-  height: 820px;
+  height: 860px;
   background: rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   padding: 30px 40px;
@@ -821,5 +855,31 @@ export default {
       }
     }
   }
+}
+.input {
+  position: relative;
+  padding-left: 60px;
+  box-sizing: border-box;
+  img {
+    width: 18px;
+    position: absolute;
+    left: 20px;
+    top: 18px;
+  }
+}
+.id-input {
+  position: relative;
+  padding-left: 60px;
+  box-sizing: border-box;
+  img {
+    width: 18px;
+    position: absolute;
+    left: 20px;
+    top: 23px;
+  }
+}
+.pagination {
+  text-align: right;
+  padding-bottom: 40px;
 }
 </style>
