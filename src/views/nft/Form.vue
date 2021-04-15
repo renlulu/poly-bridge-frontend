@@ -1,7 +1,6 @@
 <template>
   <ValidationObserver ref="validation"
                       tag="div"
-                      v-slot="{ invalid }"
                       class="form">
     <div class="card">
       <div class="fields-row">
@@ -20,7 +19,7 @@
           <div class="label">{{ $t('nft.form.items') }}</div>
           <div class="input">
             <CInput class="input-inner"
-                    v-model="amount" />
+                    v-model="assetsName" />
           </div>
           <div class="scroll">
             <div v-for="item in assets"
@@ -46,7 +45,8 @@
             </div>
           </div>
           <div class="item-content">
-            <div class="total">
+            <div v-if="fromWallet"
+                 class="total">
               {{itemsTotal}} {{$t('nft.form.result')}}
             </div>
             <div class="items-content">
@@ -54,16 +54,29 @@
                    class="nft-item"
                    :key="item.TokenId"
                    @click="tokenSelect(item)">
-                <div class="image"
-                     :src="unknowNFT">
+                <div class="image">
+                  <div v-if="item.Image"
+                       class="img-wrapper">
+                    <img :src="item.Image" />
+                  </div>
                 </div>
+                <div class="nft-name">{{item.Name}}</div>
                 <div class="nft-tokenid">#{{item.TokenId}}</div>
               </div>
             </div>
+            <!-- <div class="page">
+              {{itemsTotal}}
+              <el-pagination layout="prev, pager, next"
+                             @current-change="handleCurrentChange"
+                             :current-page="currentPage"
+                             :page-size="2"
+                             :total="itemsTotal">
+              </el-pagination>
+            </div> -->
           </div>
         </div>
       </div>
-      <div style="display:none">
+      <!--       <div style="display:none">
         <CSubmitButton v-if="fromChain && toChain && !(fromWallet && toWallet)"
                        @click="connectWalletVisible = true">
           {{ $t('home.form.connectWallet') }}
@@ -78,7 +91,7 @@
                        @click="next">
           {{ $t('buttons.next') }}
         </CSubmitButton>
-      </div>
+      </div> -->
     </div>
 
     <div class="history">
@@ -157,6 +170,8 @@ export default {
       confirmUuid: uuidv4(),
       itemHash: null,
       unknowNFT: UNKNOWN_NFT,
+      currentPage: 1,
+      assetsName: ''
     };
   },
   computed: {
@@ -164,8 +179,20 @@ export default {
       return this.$store.getters.getTokenBasic(this.tokenBasicName);
     },
     assets () {
+      debugger
       console.log(this.$store.getters.getAssetsBasics)
-      return this.$store.getters.getAssetsBasics.Assets
+      const assetsList = this.$store.getters.getAssetsBasics.Assets
+      let list = []
+      if (this.assetsName !== '') {
+        for (let i = 0; i < assetsList.length; i += 1) {
+          if (assetsList[i].Name.toUpperCase().indexOf(this.assetsName.toUpperCase()) > -1) {
+            list.push(assetsList[i])
+          }
+        }
+      } else {
+        list = assetsList
+      }
+      return list
     },
     chainBasic () {
       return this.nftChains[0]
@@ -309,7 +336,7 @@ export default {
     assets () {
       if (this.assets[0]) {
         this.itemHash = this.assets[0].Hash
-        this.getItems(this.itemHash, '')
+        this.getItems(this.itemHash, '', this.currentPage)
         this.getAssetMap()
       }
     },
@@ -326,9 +353,13 @@ export default {
   beforeDestroy () {
   },
   methods: {
+    handleCurrentChange (val) {
+      this.currentPage = val
+      this.getItems(this.itemHash, '', this.currentPage)
+    },
     itemSelect (item) {
       this.itemHash = item.Hash
-      this.getItems(this.itemHash, '')
+      this.getItems(this.itemHash, '', this.currentPage)
     },
     async tokenSelect (item) {
       await this.$store.dispatch('ensureChainWalletReady', this.fromChainId);
@@ -354,7 +385,6 @@ export default {
     async init () {
       this.getItemsShow()
       this.getAssets()
-      await this.$store.dispatch('ensureChainWalletReady', this.fromChainId);
     },
     getItemsShow () {
       const params = {
@@ -373,13 +403,13 @@ export default {
       }
       this.$store.dispatch('getAssetMap', params);
     },
-    getItems ($Asset, $TokenId) {
+    getItems ($Asset, $TokenId, page) {
       const params = {
         ChainId: this.fromChain.id,
         Asset: $Asset,
         Address: this.fromWallet.addressHex,
         TokenId: $TokenId,
-        PageNo: 0,
+        PageNo: page - 1,
         PageSize: 6,
       }
       this.$store.dispatch('getItems', params);
@@ -517,7 +547,7 @@ export default {
 .card {
   box-sizing: border-box;
   width: 1280px;
-  height: 900px;
+  height: 970px;
   padding: 40px;
   background: #171f31;
   box-shadow: 0px 2px 18px 7px rgba(#000000, 0.1);
@@ -728,12 +758,13 @@ export default {
 }
 .item-content {
   width: 880px;
-  height: 750px;
+  height: 820px;
   background: rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   padding: 30px 40px;
   box-sizing: border-box;
   .items-content {
+    height: 720px;
     margin-top: 20px;
     display: flex;
     flex-wrap: wrap;
@@ -762,9 +793,26 @@ export default {
         background-repeat: no-repeat;
         background-position: center;
         background-size: 100%;
+        .img-wrapper {
+          width: 100%;
+          height: 100%;
+          background-color: #000000;
+          text-align: center;
+          img {
+            height: 100%;
+          }
+        }
+      }
+      .nft-name {
+        padding-top: 20px;
+        font-size: 14px;
+        font-family: PingFangSC-Regular, PingFang SC;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 20px;
       }
       .nft-tokenid {
-        padding-top: 20px;
+        padding-top: 5px;
         font-size: 14px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;

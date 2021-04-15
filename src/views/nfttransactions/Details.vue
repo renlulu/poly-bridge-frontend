@@ -57,7 +57,7 @@
             <div class="failed-title">{{ $t('transactions.details.failedTitle') }}</div>
             <CLink v-if="confirmingData"
                    class="link"
-                   :to="{ name: 'transactions' }">
+                   :to="{ name: 'nfttransactions' }">
               {{ $t('transactions.details.gotoHistory') }}
             </CLink>
           </template>
@@ -70,7 +70,7 @@
             <div class="finished-title">{{ $t('transactions.details.finishedTitle') }}</div>
             <CLink v-if="confirmingData"
                    class="link"
-                   :to="{ name: 'transactions' }">
+                   :to="{ name: 'nfttransactions' }">
               {{ $t('transactions.details.gotoHistory') }}
             </CLink>
           </template>
