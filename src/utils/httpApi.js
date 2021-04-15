@@ -179,9 +179,10 @@ export default {
       },
     });
     const transactions = deserialize(list(schemas.transaction), result.data.Transactions || []);
+    debugger
     return {
       items: transactions.map(mapTransactionToDo),
-      pageCount: result.TotalPage,
+      pageCount: result.data.TotalPage,
     };
   },
   async getNftTransaction ({ hash }) {
