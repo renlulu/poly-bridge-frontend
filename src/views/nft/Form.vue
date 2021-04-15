@@ -49,7 +49,8 @@
               {{$t('nft.form.search')}}
             </div>
           </div>
-          <div class="item-content">
+          <div class="item-content"
+               v-loading="itemLoading">
             <div v-if="fromWallet"
                  class="total">
               {{itemsTotal}} {{$t('nft.form.result')}}
@@ -177,7 +178,8 @@ export default {
       unknowNFT: UNKNOWN_NFT,
       currentPage: 1,
       assetsName: '',
-      searchTokenID: ''
+      searchTokenID: '',
+      itemLoading: false
     };
   },
   computed: {
@@ -211,6 +213,12 @@ export default {
       const itemsShow = this.$store.getters.getItemsShow.Assets ? this.$store.getters.getItemsShow.Assets[0].Items : []
       const items = this.$store.getters.getItems ? this.$store.getters.getItems.Items : []
       return this.fromWallet ? items : itemsShow
+    },
+    itemsShow () {
+      return this.$store.getters.getItemsShow.Assets
+    },
+    itemsTrue () {
+      return this.$store.getters.getItems
     },
     chains () {
       return this.$store.getters.chains.filter(chain => chain.id !== ChainId.Poly);
@@ -346,7 +354,17 @@ export default {
       }
     },
     fromWallet () {
-      //  this.init()
+      this.getItems(this.itemHash, '', 1)
+      this.getAssetMap()
+    },
+    items () {
+      console.log(this.items)
+    },
+    itemsShow () {
+      this.itemLoading = false
+    },
+    itemsTrue () {
+      this.itemLoading = false
     },
     toWallet () {
       this.nftData.toWallet = this.toWallet
@@ -392,6 +410,7 @@ export default {
       this.getAssets()
     },
     getItemsShow () {
+      this.itemLoading = true
       const params = {
         id: this.fromChain.id,
         size: 6
@@ -409,6 +428,9 @@ export default {
       this.$store.dispatch('getAssetMap', params);
     },
     getItems ($Asset, $TokenId, page) {
+      if (this.fromWallet) {
+        this.itemLoading = true
+      }
       const params = {
         ChainId: this.fromChain.id,
         Asset: $Asset,
@@ -567,6 +589,12 @@ export default {
 
 .el-pager li.active {
   color: #fff;
+}
+.el-loading-mask {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.el-loading-spinner .path {
+  stroke: #3ec7eb;
 }
 </style>
 <style lang="scss" scoped>

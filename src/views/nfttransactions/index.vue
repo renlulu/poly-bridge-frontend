@@ -142,6 +142,7 @@ export default {
       };
     },
     transactions () {
+      console.log(this.$store.getters.getNftTransactions(this.getTransactionsParams) || {})
       return this.$store.getters.getNftTransactions(this.getTransactionsParams) || {};
     },
   },
