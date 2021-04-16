@@ -1,7 +1,13 @@
 <template>
-  <CButton v-bind="$attrs" :class="b()" :disabled="loading || $attrs.disabled" v-on="$listeners">
-    <img v-if="loading" :class="b('loading-icon')" src="@/assets/svg/pending.svg" />
-    <span><slot /></span>
+  <CButton v-bind="$attrs"
+           :class="b()"
+           :disabled="loading || $attrs.disabled"
+           v-on="$listeners">
+    <img v-if="loading"
+         :class="b('loading-icon')"
+         src="@/assets/svg/pending.svg" />
+    <span>
+      <slot /></span>
   </CButton>
 </template>
 
@@ -25,7 +31,7 @@ export default {
   width: stretch;
   height: 40px;
   border-radius: 4px;
-  background: linear-gradient(133deg, #2fd8ca 0%, #19a2bd 100%);
+  background: linear-gradient(225deg, #3ec7eb 0%, #282bdb 100%);
   font-weight: 500;
   font-size: 14px;
   text-transform: uppercase;
