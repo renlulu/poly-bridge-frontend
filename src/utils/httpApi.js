@@ -125,21 +125,35 @@ export default {
     return result
   },
   async getitems (params) {
-    const result = await nftRequest(
-      {
-        method: 'post',
-        url: '/items',
+    try {
+      const result = await nftRequest(
+        {
+          method: 'post',
+          url: '/items',
+          data: {
+            ChainId: params.ChainId,
+            Asset: params.Asset,
+            Address: params.Address,
+            TokenId: params.TokenId,
+            PageNo: params.PageNo,
+            PageSize: params.PageSize,
+          },
+        }
+      )
+      return result
+    } catch (error) {
+      console.log(error)
+      const res = {
         data: {
-          ChainId: params.ChainId,
-          Asset: params.Asset,
-          Address: params.Address,
-          TokenId: params.TokenId,
-          PageNo: params.PageNo,
-          PageSize: params.PageSize,
-        },
+          Items: [],
+          PageNo: 0,
+          PageSize: 6,
+          TotalCount: 0,
+          TotalPage: 0,
+        }
       }
-    )
-    return result
+      return res
+    };
   },
   async getItemsShow (params) {
     const result = await nftRequest(

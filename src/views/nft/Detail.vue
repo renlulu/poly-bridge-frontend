@@ -91,7 +91,7 @@
                      src="@/assets/svg/chevron-right.svg" />
               </div>
             </CButton>
-            <div v-if="nftData && nftData.toWallet"
+            <div v-if="nftData.toWallet"
                  class="address">
               <span class="address-value">
                 {{ $formatLongText(nftData.toWallet.address, { headTailLength: 6 }) }}
