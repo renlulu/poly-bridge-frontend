@@ -122,7 +122,8 @@
              :confirmingData.sync="confirmingData"
              @closed="handleClosed"
              @packed="handlePacked" />
-    <Detail :visible.sync="detailVisible"
+    <Detail v-if="detailVisible"
+            :visible.sync="detailVisible"
             :nftData.sync="nftData"
             @openSelectToChain="openSelectToChain"
             @openConnectWallet="openConnectWallet"
@@ -385,7 +386,10 @@ export default {
       this.getItems(this.itemHash, '', this.currentPage)
     },
     async tokenSelect (item) {
-      await this.$store.dispatch('ensureChainWalletReady', this.fromChainId);
+      if (!this.fromWallet) {
+        this.connectWalletVisible = true
+      }
+      const a = await this.$store.dispatch('ensureChainWalletReady', this.fromChainId);
       this.getAssetMap()
       const walletApi = await getWalletApi(this.fromWallet.name);
       const Approval = await walletApi.getNFTApproved({
@@ -591,7 +595,7 @@ export default {
   color: #fff;
 }
 .el-loading-mask {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0);
 }
 .el-loading-spinner .path {
   stroke: #3ec7eb;
