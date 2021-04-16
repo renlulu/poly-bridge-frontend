@@ -57,6 +57,9 @@ export default {
     },
     async getItems ({ commit }, params) {
       const res = await httpApi.getitems(params);
+      if (res.data.Items.length < 1) {
+        res.data.TotalCount = 0
+      }
       commit('setItems', res.data);
     },
     async getNftFee ({ commit }, params) {

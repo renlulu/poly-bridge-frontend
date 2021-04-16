@@ -17,7 +17,7 @@
             <img src="@/assets/svg/chevron-right.svg" />
           </CButton>
           <div class="label margin-top-40">{{ $t('nft.form.items') }}</div>
-          <div class="input">
+          <div class="input asset-input">
             <img src="@/assets/png/search.png" />
             <CInput class="input-inner"
                     placeholder="Filter"
@@ -670,7 +670,7 @@ export default {
   display: flex;
   align-items: center;
   width: stretch;
-  height: 40px;
+  height: 60px;
   padding: 0 14px;
   background: rgba(#000000, 0.26);
   border-radius: 4px;
@@ -792,12 +792,14 @@ export default {
 
   &:hover {
     opacity: 0.8;
+    color: #3ec7eb;
     background: rgba(#000000, 0.3);
   }
 }
 .asset-active {
   opacity: 0.8;
-  background: rgba(#000000, 0.3);
+  color: #3ec7eb;
+  background: rgba(#000000, 0);
 }
 
 .asset-left {
@@ -806,6 +808,7 @@ export default {
   @include child-margin-h(8px);
 }
 .search-button {
+  cursor: pointer;
   text-align: center;
   width: 160px;
   height: 60px;
@@ -816,6 +819,11 @@ export default {
   font-weight: 500;
   color: #ffffff;
   line-height: 60px;
+  transition: all ease 0.3s;
+}
+.search-button:hover {
+  opacity: 0.8;
+  transition: all ease 0.3s;
 }
 .search-input {
   flex: 1;
@@ -905,12 +913,27 @@ export default {
   position: relative;
   padding-left: 60px;
   box-sizing: border-box;
+  border: 2px solid rgba(255, 255, 255, 0);
+  transition: all ease 0.3s;
   img {
     width: 18px;
     position: absolute;
     left: 20px;
-    top: 23px;
+    top: 20px;
   }
+}
+.id-input:focus-within {
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  transition: all ease 0.3s;
+}
+.asset-input {
+  box-sizing: border-box;
+  border: 2px solid rgba(255, 255, 255, 0);
+  transition: all ease 0.3s;
+}
+.asset-input:focus-within {
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  transition: all ease 0.3s;
 }
 .pagination {
   text-align: right;

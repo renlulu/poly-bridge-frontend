@@ -117,6 +117,7 @@
         {{ approving ? $t('buttons.approving') : $t('buttons.approve') }}
       </CSubmitButton>
       <CSubmitButton v-else
+                     class="s-button"
                      @click="next">
         {{ $t('buttons.next') }}
       </CSubmitButton>
