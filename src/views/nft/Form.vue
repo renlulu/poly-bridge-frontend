@@ -16,7 +16,7 @@
             <CFlexSpan />
             <img src="@/assets/svg/chevron-right.svg" />
           </CButton>
-          <div class="label">{{ $t('nft.form.items') }}</div>
+          <div class="label margin-top-40">{{ $t('nft.form.items') }}</div>
           <div class="input">
             <img src="@/assets/png/search.png" />
             <CInput class="input-inner"
@@ -32,7 +32,8 @@
                 <span>{{ item.Name }}</span>
               </span>
               <img v-if="itemHash === item.Hash"
-                   src="@/assets/svg/check.svg" />
+                   style="color:#fff"
+                   src="@/assets/svg/check-w.svg" />
             </div>
           </div>
         </div>
@@ -637,6 +638,7 @@ export default {
 .field-right {
   flex: inherit;
   width: 880px;
+  margin-left: 20px !important;
   @include child-margin-v(10px);
 }
 .fields {
@@ -784,7 +786,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   height: 56px;
-  padding: 0 40px;
+  padding: 0 20px;
   transition: all 0.3s;
   @include child-margin-h(16px);
 
@@ -822,12 +824,13 @@ export default {
   flex: 1;
 }
 .item-content {
-  width: 880px;
+  width: 860px;
   height: 860px;
   background: rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   padding: 30px 40px;
   box-sizing: border-box;
+  margin-top: 20px !important;
   .items-content {
     height: 720px;
     margin-top: 20px;
@@ -844,7 +847,7 @@ export default {
       cursor: pointer;
       margin-right: 40px;
       margin-bottom: 40px;
-      width: 240px;
+      width: 230px;
       height: 320px;
       border: 1px solid rgba(255, 255, 255, 0.09);
       padding: 10px;
@@ -852,8 +855,8 @@ export default {
       flex-flow: column;
       box-sizing: border-box;
       .image {
-        width: 220px;
-        height: 220px;
+        width: 210px;
+        height: 210px;
         background-image: url('../../assets/gif/nft.gif');
         background-repeat: no-repeat;
         background-position: center;
@@ -912,5 +915,8 @@ export default {
 .pagination {
   text-align: right;
   padding-bottom: 40px;
+}
+.margin-top-40 {
+  margin-top: 40px !important;
 }
 </style>
