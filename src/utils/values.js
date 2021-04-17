@@ -141,6 +141,7 @@ export const TOKEN_BASIC_ICONS = {
   cETH: require('@/assets/svg/ceth.svg'),
   FLUX: require('@/assets/svg/flux.svg'),
   CVT: require('@/assets/svg/cvt.svg'),
+  KEL: require('@/assets/png/kel.png'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
