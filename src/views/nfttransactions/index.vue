@@ -57,19 +57,21 @@
                 }}
               </CLink>
             </ElTableColumn>
-            <ElTableColumn #default="{row}"
-                           :label="$t('transactions.index.amount')">
-              {{ $formatNumber(row.amount) }}
+            <ElTableColumn :label="$t('transactions.index.amount')">
+              1
             </ElTableColumn>
             <ElTableColumn #default="{row}"
+                           min-width="150"
                            :label="$t('transactions.index.fee')">
-              {{ $formatNumber(row.fee) }}
+              {{ $formatNumber(row.fee) }} {{row.nftFee.name}}
             </ElTableColumn>
-            <ElTableColumn :label="$t('transactions.index.asset')"
-                           prop="tokenBasicName" />
             <ElTableColumn #default="{row}"
-                           :label="$t('transactions.index.time')"
-                           min-width="110">
+                           :label="$t('transactions.index.asset')"
+                           prop="tokenBasicName">
+              #{{row.tokenId}}
+            </ElTableColumn>
+            <ElTableColumn #default="{row}"
+                           :label="$t('transactions.index.time')">
               {{ $formatTime(row.time) }}
             </ElTableColumn>
             <ElTableColumn #default="{row}"
@@ -140,14 +142,15 @@ export default {
       };
     },
     transactions () {
-      return this.$store.getters.getTransactions(this.getTransactionsParams) || {};
+      console.log(this.$store.getters.getNftTransactions(this.getTransactionsParams) || {})
+      return this.$store.getters.getNftTransactions(this.getTransactionsParams) || {};
     },
   },
   watch: {
     getTransactionsParams: {
       handler (value, oldValue) {
         if (!_.isEqual(value, oldValue)) {
-          this.$store.dispatch('getTransactions', value);
+          this.$store.dispatch('getNftTransactions', value);
         }
       },
       immediate: true,

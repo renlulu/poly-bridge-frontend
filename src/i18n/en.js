@@ -15,6 +15,10 @@ export default {
       mainnet: 'MainNet',
       testnet: 'TestNet',
     },
+    menu: {
+      token: 'Token Asset',
+      nft: 'NFT Asset'
+    },
     connectWallet: {
       chainName: '{chainName} Wallet',
       walletConnected: '{walletName} Connected',
@@ -70,6 +74,14 @@ export default {
       packing: 'Transaction is packing on {chainName}. Please be patient...',
       hash: 'Hash: {hash}',
     },
+  },
+  nft: {
+    form: {
+      chain: 'Chain',
+      items: 'Items',
+      search: 'Search',
+      result: 'results'
+    }
   },
   transactions: {
     index: {
