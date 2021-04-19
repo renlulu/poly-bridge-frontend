@@ -43,12 +43,13 @@
               <img src="@/assets/png/search.png" />
               <CInput class="input-inner"
                       placeholder="NFT ID"
-                      v-model="searchTokenID" />
+                      v-model="searchTokenID"
+                      v-on:keyup.enter="getItems(itemHash,searchTokenID,1)" />
             </div>
-            <div class="search-button"
+            <!--             <div class="search-button"
                  @click="getItems(itemHash,searchTokenID,1)">
               {{$t('nft.form.search')}}
-            </div>
+            </div> -->
           </div>
           <div class="item-content"
                v-loading="itemLoading">
@@ -418,7 +419,7 @@ export default {
       this.itemLoading = true
       const params = {
         id: this.fromChain.id,
-        size: 6
+        size: 12
       }
       this.$store.dispatch('getItemsShow', params);
     },
@@ -433,6 +434,7 @@ export default {
       this.$store.dispatch('getAssetMap', params);
     },
     getItems ($Asset, $TokenId, page) {
+      debugger
       if (this.fromWallet) {
         this.itemLoading = true
       }
@@ -442,7 +444,7 @@ export default {
         Address: this.fromWallet.addressHex,
         TokenId: $TokenId,
         PageNo: page - 1,
-        PageSize: 6,
+        PageSize: 9,
       }
       this.$store.dispatch('getItems', params);
     },
@@ -613,8 +615,8 @@ export default {
 .card {
   box-sizing: border-box;
   width: 1280px;
-  height: 1010px;
-  padding: 40px;
+  min-height: 1055px;
+  padding: 20px;
   background: #171f31;
   box-shadow: 0px 2px 18px 7px rgba(#000000, 0.1);
   border-radius: 10px;
@@ -632,12 +634,13 @@ export default {
   width: 300px;
   background-color: rgba(0, 0, 0, 0.25);
   padding: 30px 20px;
+  box-sizing: border-box;
   @include child-margin-v(10px);
 }
 
 .field-right {
   flex: inherit;
-  width: 880px;
+  width: 920px;
   margin-left: 20px !important;
   @include child-margin-v(10px);
 }
@@ -670,7 +673,7 @@ export default {
   display: flex;
   align-items: center;
   width: stretch;
-  height: 60px;
+  height: 48px;
   padding: 0 14px;
   background: rgba(#000000, 0.26);
   border-radius: 4px;
@@ -728,7 +731,7 @@ export default {
 
 .input {
   display: flex;
-  padding: 18px 14px;
+  padding: 9px 14px;
   background: rgba(#000000, 0.26);
   border-radius: 4px;
 }
@@ -776,6 +779,7 @@ export default {
   text-decoration: underline;
 }
 .scroll {
+  margin-top: 20px !important;
   flex: 1;
   overflow-y: auto;
   @include scroll-bar(rgba(#fff, 0.2), transparent);
@@ -785,7 +789,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
+  height: 48px;
   padding: 0 20px;
   transition: all 0.3s;
   @include child-margin-h(16px);
@@ -832,19 +836,20 @@ export default {
   flex: 1;
 }
 .item-content {
-  width: 860px;
-  height: 860px;
+  width: 920px;
+  min-height: 985px;
   background: rgba(0, 0, 0, 0.25);
   border-radius: 4px;
-  padding: 30px 40px;
+  padding: 30px 20px;
   box-sizing: border-box;
   margin-top: 20px !important;
   .items-content {
-    height: 720px;
     margin-top: 20px;
+    height: 855px;
     display: flex;
     flex-wrap: wrap;
-    .nft-item:nth-child(3n) {
+    align-content: flex-start;
+    .nft-item:nth-child(4n) {
       margin-right: 0px;
     }
     .nft-item:hover {
@@ -853,18 +858,18 @@ export default {
     }
     .nft-item {
       cursor: pointer;
-      margin-right: 40px;
-      margin-bottom: 40px;
-      width: 230px;
-      height: 320px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      width: 205px;
+      height: 265px;
       border: 1px solid rgba(255, 255, 255, 0.09);
       padding: 10px;
       display: flex;
       flex-flow: column;
       box-sizing: border-box;
       .image {
-        width: 210px;
-        height: 210px;
+        width: 185px;
+        height: 185px;
         background-image: url('../../assets/gif/nft.gif');
         background-repeat: no-repeat;
         background-position: center;
@@ -906,12 +911,14 @@ export default {
     width: 18px;
     position: absolute;
     left: 20px;
-    top: 18px;
+    top: 9px;
   }
 }
 .id-input {
   position: relative;
   padding-left: 60px;
+  padding-top: 19px;
+  padding-bottom: 19px;
   box-sizing: border-box;
   border: 2px solid rgba(255, 255, 255, 0);
   transition: all ease 0.3s;
@@ -937,7 +944,6 @@ export default {
 }
 .pagination {
   text-align: right;
-  padding-bottom: 40px;
 }
 .margin-top-40 {
   margin-top: 40px !important;
