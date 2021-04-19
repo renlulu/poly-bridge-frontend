@@ -97,7 +97,7 @@ export const CHAINS = [
     id: ChainId.Heco,
     icon: require('@/assets/svg/heco.svg'),
     explorerUrl: TARGET_MAINNET
-      ? 'https://scan.hecochain.com/tx/0x{txHash}'
+      ? 'https://hecoinfo.com/tx/0x{txHash}'
       : 'https://testnet.hecoinfo.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
       ? '0x4fE451186c0D69205ACc1fA00FD75fc6d71e47eE'
@@ -161,6 +161,9 @@ export const TOKEN_BASIC_ICONS = {
   cETH: require('@/assets/svg/ceth.svg'),
   FLUX: require('@/assets/svg/flux.svg'),
   CVT: require('@/assets/svg/cvt.svg'),
+  KEL: require('@/assets/png/kel.png'),
+  SHIB: require('@/assets/png/shib.png'),
+  Shib: require('@/assets/png/shib.png'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
