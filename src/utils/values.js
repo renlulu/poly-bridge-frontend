@@ -97,11 +97,7 @@ export const CHAINS = [
     id: ChainId.Heco,
     icon: require('@/assets/svg/heco.svg'),
     explorerUrl: TARGET_MAINNET
-<<<<<<< HEAD
       ? 'https://hecoinfo.com/tx/0x{txHash}'
-=======
-      ? 'https://scan.hecochain.com/tx/0x{txHash}'
->>>>>>> bd9b585c5c1dab0f9799be732f44ffc664acd0aa
       : 'https://testnet.hecoinfo.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
       ? '0x4fE451186c0D69205ACc1fA00FD75fc6d71e47eE'

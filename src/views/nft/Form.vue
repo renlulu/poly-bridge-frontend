@@ -67,6 +67,10 @@
                        class="img-wrapper">
                     <img :src="item.Image" />
                   </div>
+                  <div v-else
+                       class="img-wrapper-unknow">
+                    <img :src="unknowNFT" />
+                  </div>
                 </div>
                 <div class="nft-name">{{item.Name}}</div>
                 <div class="nft-tokenid">#{{item.TokenId}}</div>
@@ -178,11 +182,11 @@ export default {
       nftData: null,
       confirmUuid: uuidv4(),
       itemHash: null,
-      unknowNFT: UNKNOWN_NFT,
+      unknowNFT: require('../../assets/svg/back.svg'),
       currentPage: 1,
       assetsName: '',
       searchTokenID: '',
-      itemLoading: false
+      itemLoading: false,
     };
   },
   computed: {
@@ -444,7 +448,7 @@ export default {
         Address: this.fromWallet.addressHex,
         TokenId: $TokenId,
         PageNo: page - 1,
-        PageSize: 9,
+        PageSize: 10,
       }
       this.$store.dispatch('getItems', params);
     },
@@ -870,14 +874,23 @@ export default {
       .image {
         width: 185px;
         height: 185px;
-        background-image: url('../../assets/gif/nft.gif');
+        background-image: url('../../assets/svg/back.svg');
+        background: rgba(0, 0, 0, 0.3);
         background-repeat: no-repeat;
         background-position: center;
-        background-size: 100%;
         .img-wrapper {
           width: 100%;
           height: 100%;
           background-color: #000000;
+          text-align: center;
+          img {
+            height: 100%;
+          }
+        }
+        .img-wrapper-unknow {
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.3);
           text-align: center;
           img {
             height: 100%;
