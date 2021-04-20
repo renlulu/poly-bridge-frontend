@@ -144,6 +144,7 @@ export const TOKEN_BASIC_ICONS = {
   KEL: require('@/assets/png/kel.png'),
   SHIB: require('@/assets/png/shib.png'),
   Shib: require('@/assets/png/shib.png'),
+  STACK: require('@/assets/png/stack.png'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
