@@ -423,7 +423,7 @@ export default {
       this.itemLoading = true
       const params = {
         id: this.fromChain.id,
-        size: 12
+        size: 10
       }
       this.$store.dispatch('getItemsShow', params);
     },
