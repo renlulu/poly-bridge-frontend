@@ -212,12 +212,12 @@ export default {
       return this.nftChains[0]
     },
     itemsTotal () {
-      const itemsShowTotal = this.$store.getters.getItemsShow.Assets ? this.$store.getters.getItemsShow.Assets[0].Items.length : 0
       const itemsTotal = this.$store.getters.getItems.TotalCount ? this.$store.getters.getItems.TotalCount : 0
-      return this.fromWallet ? itemsTotal : itemsShowTotal
+      return itemsTotal
     },
     items () {
-      const itemsShow = this.$store.getters.getItemsShow.Assets ? this.$store.getters.getItemsShow.Assets[0].Items : []
+      const AssetsShow = this.$store.getters.getItemsShow.Assets ? this.$store.getters.getItemsShow.Assets : []
+      const itemsShow = AssetsShow[0] ? AssetsShow[0].Items : []
       const items = this.$store.getters.getItems ? this.$store.getters.getItems.Items : []
       return this.fromWallet ? items : itemsShow
     },
@@ -445,7 +445,7 @@ export default {
       const params = {
         ChainId: this.fromChain.id,
         Asset: $Asset,
-        Address: this.fromWallet.addressHex,
+        Address: this.fromWallet ? this.fromWallet.addressHex : '',
         TokenId: $TokenId,
         PageNo: page - 1,
         PageSize: 10,
