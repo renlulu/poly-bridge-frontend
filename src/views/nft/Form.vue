@@ -194,7 +194,6 @@ export default {
       return this.$store.getters.getTokenBasic(this.tokenBasicName);
     },
     assets () {
-      console.log(this.$store.getters.getAssetsBasics)
       const assetsList = this.$store.getters.getAssetsBasics.Assets
       let list = []
       if (this.assetsName !== '') {
@@ -273,7 +272,6 @@ export default {
       return this.$store.getters.getAssetMap.DstAssets
     },
     toChains () {
-      console.log(this.assetMap)
       return (
         this.assetMap &&
         this.assetMap
@@ -356,13 +354,14 @@ export default {
     assets () {
       if (this.assets[0]) {
         this.itemHash = this.assets[0].Hash
-        this.getItems(this.itemHash, '', this.currentPage)
-        this.getAssetMap()
+        if (this.fromWallet) {
+          this.getItems(this.itemHash, '', this.currentPage)
+          this.getAssetMap()
+        }
       }
     },
     fromWallet () {
-      this.getItems(this.itemHash, '', 1)
-      this.getAssetMap()
+      this.init()
     },
     items () {
       console.log(this.items)
@@ -416,6 +415,7 @@ export default {
       this.detailVisible = true
     },
     async init () {
+      this.currentPage = 1
       this.getItemsShow()
       this.getAssets()
     },
@@ -438,9 +438,10 @@ export default {
       this.$store.dispatch('getAssetMap', params);
     },
     getItems ($Asset, $TokenId, page) {
-      debugger
       if (this.fromWallet) {
         this.itemLoading = true
+      } else {
+        return
       }
       const params = {
         ChainId: this.fromChain.id,
@@ -459,7 +460,6 @@ export default {
       this.connectWalletVisible = true
     },
     openConfirm () {
-      console.log(this.confirmingData)
       this.confirmingData = {
         fromAddress: this.fromWallet.address,
         toAddress: this.toWallet.address,
