@@ -147,6 +147,7 @@ export const TOKEN_BASIC_ICONS = {
   STACK: require('@/assets/png/stack.png'),
   CC: require('@/assets/png/ccswap.png'),
   PLF: require('@/assets/png/plf.png'),
+  ISM: require('@/assets/jpg/ism.jpg'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
