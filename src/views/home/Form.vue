@@ -157,11 +157,22 @@
                      @click="connectWalletVisible = true">
         {{ $t('home.form.connectWallet') }}
       </CSubmitButton>
-      <CSubmitButton v-else-if="!invalid && fromToken && toToken && needApproval"
-                     :loading="approving"
-                     @click="approve">
-        {{ approving ? $t('buttons.approving') : $t('buttons.approve') }}
-      </CSubmitButton>
+      <div v-else-if="!invalid && fromToken && toToken && needApproval"
+           class="approve-wrapper">
+        <el-checkbox v-model="approveInfinityChecked">{{ $t('home.form.approveInfinity') }}
+          <CTooltip>
+            <img class="tooltip-icon"
+                 src="@/assets/svg/question.svg" />
+            <template #content>
+              {{ $t('home.form.approveInfinitytip') }}
+            </template>
+          </CTooltip>
+        </el-checkbox>
+        <CSubmitButton :loading="approving"
+                       @click="approve">
+          {{ approving ? $t('buttons.approving') : $t('buttons.approve') }}
+        </CSubmitButton>
+      </div>
       <CSubmitButton v-else
                      :disabled="invalid || !(fromToken && toToken)"
                      @click="next">
@@ -237,6 +248,7 @@ export default {
       amount: '',
       approving: false,
       confirmingData: null,
+      approveInfinityChecked: false,
       confirmUuid: uuidv4(),
     };
   },
@@ -439,10 +451,10 @@ export default {
     },
     async approve () {
       await this.$store.dispatch('ensureChainWalletReady', this.fromChainId);
+      const InfinityAmount = 9999999999999
       try {
         this.approving = true;
         const walletApi = await getWalletApi(this.fromWallet.name);
-
         if (!new BigNumber(this.allowance).isZero()) {
           await walletApi.approve({
             chainId: this.fromChainId,
@@ -458,7 +470,7 @@ export default {
           address: this.fromWallet.address,
           tokenHash: this.fromToken.hash,
           spender: this.fromChain.lockContractHash,
-          amount: this.amount,
+          amount: this.approveInfinityChecked ? InfinityAmount : this.amount,
         });
 
         await this.$store.dispatch('getAllowance', this.getAllowanceParams);
@@ -495,7 +507,44 @@ export default {
   },
 };
 </script>
-
+<style>
+.el-checkbox__inner {
+  background-color: rgba(0, 0, 0, 0);
+  border-color: #606266;
+  border-radius: 7px;
+}
+.el-checkbox__label:hover {
+  color: #606266;
+  transition: all ease 0.3s;
+}
+.el-checkbox__input.is-checked {
+  background-color: rgba(0, 0, 0, 0);
+}
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: rgba(0, 0, 0, 0);
+  border-color: #606266;
+  border-radius: 7px;
+}
+.el-checkbox__input.is-focus .el-checkbox__inner {
+  background-color: rgba(0, 0, 0, 0);
+  border-color: #606266;
+  border-radius: 7px;
+}
+.el-checkbox__input.is-checked + .el-checkbox__label {
+  color: #606266;
+  transition: all ease 0.3s;
+}
+.el-checkbox__inner:hover {
+  border-color: #606266;
+}
+.el-checkbox__inner {
+  border-radius: 7px;
+  transition: all ease 0.3s;
+}
+.el-checkbox__label {
+  transition: all ease 0.3s;
+}
+</style>
 <style lang="scss" scoped>
 .form {
   display: flex;
@@ -653,5 +702,10 @@ export default {
 .link {
   color: #2fd8ca;
   text-decoration: underline;
+}
+.approve-wrapper {
+  label {
+    margin-bottom: 10px;
+  }
 }
 </style>
