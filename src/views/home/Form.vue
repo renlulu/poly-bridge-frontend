@@ -547,7 +547,7 @@ export default {
   transition: all ease 0.3s;
 }
 .tooltip-icon {
-  vertical-align: middle;
+  vertical-align: middle !important;
 }
 </style>
 <style lang="scss" scoped>
