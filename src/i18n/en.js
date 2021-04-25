@@ -44,7 +44,8 @@ export default {
       connectWallet: 'Connect Wallet',
       historyPrefix: 'You can view your',
       historyLink: 'history',
-      approveInfinity: 'After checking, approve the infinite token usage, this behavior may be risky, please judge according to the actual situation',
+      approveInfinitytip: 'After checking, approve the infinite token usage, this behavior may be risky, please judge according to the actual situation',
+      approveInfinity: 'Approve Infinity',
     },
     selectTokenBasic: {
       title: 'Select Asset',

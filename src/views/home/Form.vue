@@ -164,7 +164,7 @@
             <img class="tooltip-icon"
                  src="@/assets/svg/question.svg" />
             <template #content>
-              {{ $t('home.form.approveInfinity') }}
+              {{ $t('home.form.approveInfinitytip') }}
             </template>
           </CTooltip>
         </el-checkbox>
