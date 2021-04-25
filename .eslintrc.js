@@ -14,6 +14,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'max-classes-per-file': 'off',
     'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'no-debugger': 'off',
     'no-param-reassign': ['error', { props: false }],
     'no-unused-vars': ['warn', { args: 'none' }],
     'vue/no-unused-components': 'warn',

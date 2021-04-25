@@ -9,6 +9,7 @@ import transactions from './transactions';
 import balances from './balances';
 import allowances from './allowances';
 import fees from './fees';
+import nftAssetsBasics from './nftAssetsBasics';
 
 Vue.use(Vuex);
 
@@ -23,5 +24,6 @@ export default new Vuex.Store({
     balances,
     allowances,
     fees,
+    nftAssetsBasics
   },
 });

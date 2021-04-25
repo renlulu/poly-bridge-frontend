@@ -15,6 +15,10 @@ export default {
       mainnet: 'MainNet',
       testnet: 'TestNet',
     },
+    menu: {
+      token: 'Token Asset',
+      nft: 'NFT Asset'
+    },
     connectWallet: {
       chainName: '{chainName} Wallet',
       walletConnected: '{walletName} Connected',

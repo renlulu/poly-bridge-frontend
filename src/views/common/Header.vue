@@ -1,10 +1,13 @@
 <template>
   <div class="header">
-    <CLink class="brand" :to="{ name: 'home' }">
-      <img class="brand-logo" src="@/assets/svg/logo.svg" />
+    <CLink class="brand"
+           :to="{ name: 'home' }">
+      <img class="brand-logo"
+           src="@/assets/svg/logo.svg" />
       <span class="brand-name">{{ $t('common.header.brandName') }}</span>
     </CLink>
     <CFlexSpan />
+    <Menu />
     <Wallets />
     <Networks />
   </div>
@@ -13,12 +16,14 @@
 <script>
 import Wallets from './Wallets';
 import Networks from './Networks';
+import Menu from './Menu';
 
 export default {
   name: 'Header',
   components: {
     Wallets,
     Networks,
+    Menu,
   },
 };
 </script>

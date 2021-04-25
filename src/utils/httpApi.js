@@ -2,12 +2,17 @@ import axios from 'axios';
 import _ from 'lodash';
 import { HttpError } from './errors';
 import { mapTransactionToDo } from './mappers';
-import { HTTP_BASE_URL } from './values';
+import { HTTP_BASE_URL, HTTP_NFT_BASE_URL } from './values';
 import * as schemas from './schemas';
 import { deserialize, list } from './serializr';
 
 const request = axios.create({
   baseURL: HTTP_BASE_URL,
+  headers: { 'content-type': 'application/json' },
+});
+
+const nftRequest = axios.create({
+  baseURL: HTTP_NFT_BASE_URL,
   headers: { 'content-type': 'application/json' },
 });
 
@@ -37,13 +42,13 @@ request.interceptors.response.use(
 );
 
 export default {
-  async getTokenBasics() {
+  async getTokenBasics () {
     const result = await request({ method: 'post', url: '/tokenbasics', data: {} });
     const tokenBasics = deserialize(list(schemas.tokenBasic), result.TokenBasics || []);
     const tokens = _.flatMap(tokenBasics, tokenBasic => tokenBasic.tokens || []);
     return { tokenBasics, tokens };
   },
-  async getTokenMaps({ fromChainId, fromTokenHash }) {
+  async getTokenMaps ({ fromChainId, fromTokenHash }) {
     const result = await request({
       method: 'post',
       url: '/tokenmap',
@@ -55,7 +60,7 @@ export default {
     const tokenMaps = deserialize(list(schemas.tokenMap), result.TokenMaps);
     return tokenMaps;
   },
-  async getFee({ fromChainId, fromTokenHash, toChainId }) {
+  async getFee ({ fromChainId, fromTokenHash, toChainId }) {
     const result = await request({
       method: 'post',
       url: '/getfee',
@@ -67,7 +72,7 @@ export default {
     });
     return result.TokenAmount;
   },
-  async getTransactions({ addressHexs, page, pageSize }) {
+  async getTransactions ({ addressHexs, page, pageSize }) {
     const result = await request({
       method: 'post',
       url: 'transactionsofaddress',
@@ -83,7 +88,7 @@ export default {
       pageCount: result.TotalPage,
     };
   },
-  async getTransaction({ hash }) {
+  async getTransaction ({ hash }) {
     const result = await request({
       method: 'post',
       url: 'transactionofhash',
@@ -92,6 +97,117 @@ export default {
       },
     });
     const transaction = deserialize(schemas.transaction, result);
+    return mapTransactionToDo(transaction);
+  },
+  async getAssets (id) {
+    const result = await nftRequest(
+      {
+        method: 'post',
+        url: '/assets',
+        data: {
+          ChainId: id,
+        },
+      }
+    )
+    return result
+  },
+  async getAssetMap (params) {
+    const result = await nftRequest(
+      {
+        method: 'post',
+        url: '/asset',
+        data: {
+          ChainId: params.ChainId,
+          Hash: params.Hash
+        },
+      }
+    )
+    return result
+  },
+  async getitems (params) {
+    try {
+      const result = await nftRequest(
+        {
+          method: 'post',
+          url: '/items',
+          data: {
+            ChainId: params.ChainId,
+            Asset: params.Asset,
+            Address: params.Address,
+            TokenId: params.TokenId,
+            PageNo: params.PageNo,
+            PageSize: params.PageSize,
+          },
+        }
+      )
+      return result
+    } catch (error) {
+      console.log(error)
+      const res = {
+        data: {
+          Items: [],
+          PageNo: 0,
+          PageSize: 6,
+          TotalCount: 0,
+          TotalPage: 0,
+        }
+      }
+      return res
+    };
+  },
+  async getItemsShow (params) {
+    const result = await nftRequest(
+      {
+        method: 'post',
+        url: '/assetshow',
+        data: {
+          ChainId: params.id,
+          Size: params.size,
+        },
+      }
+    )
+    return result
+  },
+  async getNftFee (params) {
+    const result = await nftRequest(
+      {
+        method: 'post',
+        url: '/getfee',
+        data: {
+          SrcChainId: params.SrcChainId,
+          Hash: params.Hash,
+          DstChainId: params.DstChainId,
+        },
+      }
+    )
+    return result
+  },
+  async getNftTransactions ({ addressHexs, page, pageSize }) {
+    const result = await nftRequest({
+      method: 'post',
+      url: 'transactionsofaddress',
+      data: {
+        Addresses: addressHexs,
+        PageNo: page - 1,
+        PageSize: pageSize,
+      },
+    });
+    const transactions = deserialize(list(schemas.transaction), result.data.Transactions || []);
+    debugger
+    return {
+      items: transactions.map(mapTransactionToDo),
+      pageCount: result.data.TotalPage,
+    };
+  },
+  async getNftTransaction ({ hash }) {
+    const result = await nftRequest({
+      method: 'post',
+      url: 'transactionofhash',
+      data: {
+        Hash: hash,
+      },
+    });
+    const transaction = deserialize(schemas.transaction, result.data);
     return mapTransactionToDo(transaction);
   },
 };

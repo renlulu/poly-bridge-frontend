@@ -1,5 +1,7 @@
 <template>
-  <button v-bind="$attrs" :class="b({ fade })" v-on="$listeners">
+  <button v-bind="$attrs"
+          :class="b({ fade })"
+          v-on="$listeners">
     <slot />
   </button>
 </template>
