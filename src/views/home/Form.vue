@@ -519,10 +519,12 @@ export default {
 }
 .el-checkbox__input.is-checked {
   background-color: rgba(0, 0, 0, 0);
+  border-color: rgba(0, 0, 0, 0);
+  border-radius: 7px;
 }
 .el-checkbox__input.is-checked .el-checkbox__inner {
-  background-color: rgba(0, 0, 0, 0);
-  border-color: #606266;
+  background-color: #282bdb !important;
+  border-color: rgba(0, 0, 0, 0) !important;
   border-radius: 7px;
 }
 .el-checkbox__input.is-focus .el-checkbox__inner {
@@ -543,6 +545,9 @@ export default {
 }
 .el-checkbox__label {
   transition: all ease 0.3s;
+}
+.tooltip-icon {
+  vertical-align: middle;
 }
 </style>
 <style lang="scss" scoped>
