@@ -395,10 +395,10 @@ export default {
 .image {
   width: 60px;
   height: 60px;
-  background-image: url('../../assets/gif/nft.gif');
+  background-image: url('../../assets/svg/back.svg');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100%;
+  background-size: contain;
   .img-wrapper {
     background-color: #000;
     text-align: center;
