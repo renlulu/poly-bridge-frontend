@@ -77,7 +77,7 @@
               </div>
             </div>
             <div class="pagination"
-                 v-if="fromWallet && itemsTotal > 6">
+                 v-if="fromWallet && itemsTotal > 10">
               <el-pagination layout="prev, pager, next"
                              @current-change="handleCurrentChange"
                              :current-page="currentPage"
