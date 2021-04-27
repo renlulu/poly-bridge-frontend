@@ -5,6 +5,10 @@ export const HTTP_BASE_URL = TARGET_MAINNET
   ? 'https://bridge.poly.network/v1'
   : 'https://bridge.poly.network/testnet/v1';
 
+export const HTTP_NFT_BASE_URL = TARGET_MAINNET
+  ? 'https://bridge.poly.network/nft/v1'
+  : 'https://bridge.poly.network/testnet/nft/v1';
+
 export const WALLETS = [
   {
     name: WalletName.MetaMask,
@@ -58,6 +62,11 @@ export const CHAINS = [
     lockContractHash: TARGET_MAINNET
       ? '0x2aA63cd0b28FB4C31fA8e4E95Ec11815Be07b9Ac'
       : '0xe498fb7D00468a67A79dE5D4Ca264d3350165280',
+    nftLockContractHash: TARGET_MAINNET
+      ? '0x940300dc3Fc26e3A330a300be766184C0b5Fe019'
+      : '0x940300dc3Fc26e3A330a300be766184C0b5Fe019',
+    nftFeeContractHash: '0000000000000000000000000000000000000000',
+    nftFeeName: 'ETH'
   },
   {
     id: ChainId.Neo,
@@ -78,6 +87,11 @@ export const CHAINS = [
     lockContractHash: TARGET_MAINNET
       ? '0xE3D0FB6E3cB5DA61EB18b06D035052441009d1E6'
       : '0xCed7997C3e807Fcdc5ac18fFC0B8af93a15a9eE5',
+    nftLockContractHash: TARGET_MAINNET
+      ? '0x61E289D43C1FEA7598786557A2F309979ad144D3'
+      : '0x61E289D43C1FEA7598786557A2F309979ad144D3',
+    nftFeeContractHash: '0000000000000000000000000000000000000000',
+    nftFeeName: 'BNB'
   },
   {
     id: ChainId.Heco,
@@ -88,6 +102,11 @@ export const CHAINS = [
     lockContractHash: TARGET_MAINNET
       ? '0x4fE451186c0D69205ACc1fA00FD75fc6d71e47eE'
       : '0x3c92F1E31aACA43Eb4fF8aE498C7E85618680F45',
+    nftLockContractHash: TARGET_MAINNET
+      ? '0xbaBaAF5CF7f63437755aAAFE7a4106463c5cD540'
+      : '0xbaBaAF5CF7f63437755aAAFE7a4106463c5cD540',
+    nftFeeContractHash: '0000000000000000000000000000000000000000',
+    nftFeeName: 'HT'
   },
   {
     id: ChainId.Ont,
@@ -102,6 +121,7 @@ export const CHAINS = [
 ];
 
 export const UNKNOWN_ICON = require('@/assets/svg/unknown.svg');
+export const UNKNOWN_NFT = require('@/assets/png/nft.png');
 
 export const TOKEN_BASIC_ICONS = {
   NEO: require('@/assets/svg/neo-token.svg'),
@@ -153,5 +173,6 @@ export const TOKEN_BASIC_ICONS = {
 };
 
 export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';
+export const DEFAULT_CHAIN_NAME = 'ETH';
 
 export const TOP_TOKEN_BASIC_NAMES = ['NEO', 'nNEO', 'ETH', 'USDT', 'USDC', 'DAI'];
