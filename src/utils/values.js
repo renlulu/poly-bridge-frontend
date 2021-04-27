@@ -52,11 +52,17 @@ export const CHAINS = [
     explorerUrl: TARGET_MAINNET
       ? 'http://explorer.poly.network/tx/{txHash}'
       : 'http://explorer.poly.network/testnet/tx/{txHash}',
+    nftexplorerUrl: TARGET_MAINNET
+      ? 'http://explorer.poly.network/nfttx/{txHash}'
+      : 'http://explorer.poly.network/testnet/nfttx/{txHash}',
   },
   {
     id: ChainId.Eth,
     icon: require('@/assets/svg/eth.svg'),
     explorerUrl: TARGET_MAINNET
+      ? 'https://etherscan.io/tx/0x{txHash}'
+      : 'https://ropsten.etherscan.io/tx/0x{txHash}',
+    nftexplorerUrl: TARGET_MAINNET
       ? 'https://etherscan.io/tx/0x{txHash}'
       : 'https://ropsten.etherscan.io/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
@@ -84,6 +90,9 @@ export const CHAINS = [
     explorerUrl: TARGET_MAINNET
       ? 'https://bscscan.com/tx/0x{txHash}'
       : 'https://testnet.bscscan.com/tx/0x{txHash}',
+    nftexplorerUrl: TARGET_MAINNET
+      ? 'https://bscscan.com/tx/0x{txHash}'
+      : 'https://testnet.bscscan.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
       ? '0xE3D0FB6E3cB5DA61EB18b06D035052441009d1E6'
       : '0xCed7997C3e807Fcdc5ac18fFC0B8af93a15a9eE5',
@@ -97,6 +106,9 @@ export const CHAINS = [
     id: ChainId.Heco,
     icon: require('@/assets/svg/heco.svg'),
     explorerUrl: TARGET_MAINNET
+      ? 'https://hecoinfo.com/tx/0x{txHash}'
+      : 'https://testnet.hecoinfo.com/tx/0x{txHash}',
+    nftexplorerUrl: TARGET_MAINNET
       ? 'https://hecoinfo.com/tx/0x{txHash}'
       : 'https://testnet.hecoinfo.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET

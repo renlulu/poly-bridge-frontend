@@ -38,7 +38,7 @@
               </span>
             </div>
             <CLink class="link"
-                   :href="$format(getChain(step.chainId).explorerUrl, { txHash: step.hash })"
+                   :href="$format(getChain(step.chainId).nftexplorerUrl, { txHash: step.hash })"
                    target="_blank"
                    :disabled="!step.hash">
               {{
