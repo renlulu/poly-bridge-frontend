@@ -546,6 +546,9 @@ export default {
 .el-checkbox__label {
   transition: all ease 0.3s;
 }
+.tooltip-icon {
+  vertical-align: middle !important;
+}
 </style>
 <style lang="scss" scoped>
 .form {
