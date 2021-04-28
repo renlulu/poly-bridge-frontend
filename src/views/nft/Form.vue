@@ -65,7 +65,14 @@
                 <div class="image">
                   <div v-if="item.Image"
                        class="img-wrapper">
-                    <img :src="item.Image" />
+                    <img :id="'img'+item.TokenId"
+                         :src="item.Image"
+                         :onload="showVideo(item.TokenId)" />
+                    <video :id="'video'+item.TokenId"
+                           :src="item.Image"
+                           controls="controls">
+                      您的浏览器不支持 video 标签。
+                    </video>
                   </div>
                   <div v-else
                        class="img-wrapper-unknow">
@@ -382,6 +389,20 @@ export default {
   beforeDestroy () {
   },
   methods: {
+    showVideo ($id) {
+      console.log($id)
+      let id1 = 'img'
+      id1 = id1.concat($id)
+      let id2 = 'video'
+      id2 = id2.concat($id)
+      /*       if (document.getElementById(id1)) {
+              debugger
+              document.getElementById(id1).style.display = "none"
+            }
+            if (document.getElementById(id2)) {
+              document.getElementById(id2).style.display = "block"
+            } */
+    },
     handleCurrentChange (val) {
       this.currentPage = val
       this.getItems(this.itemHash, '', this.currentPage)
@@ -873,7 +894,7 @@ export default {
       box-sizing: border-box;
       .image {
         width: 185px;
-        height: 185px;
+        min-height: 185px;
         background-image: url('../../assets/svg/back.svg');
         background: rgba(0, 0, 0, 0.3);
         background-repeat: no-repeat;
@@ -884,7 +905,17 @@ export default {
           background-color: #000000;
           text-align: center;
           img {
+            width: 100%;
             height: 100%;
+            object-position: 50% 50%;
+            object-fit: contain;
+          }
+          video {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-position: 50% 50%;
+            object-fit: contain;
           }
         }
         .img-wrapper-unknow {
@@ -894,24 +925,36 @@ export default {
           text-align: center;
           img {
             height: 100%;
+            object-position: 50% 50%;
+            object-fit: contain;
           }
         }
       }
       .nft-name {
-        padding-top: 20px;
+        margin-top: 15px;
         font-size: 14px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: rgba(255, 255, 255, 0.6);
         line-height: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 183px;
+        height: 33px;
       }
       .nft-tokenid {
-        padding-top: 5px;
+        margin-top: 5px;
         font-size: 14px;
         font-family: PingFangSC-Regular, PingFang SC;
         font-weight: 400;
         color: rgba(255, 255, 255, 0.6);
         line-height: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 183px;
+        height: 33px;
       }
     }
   }
