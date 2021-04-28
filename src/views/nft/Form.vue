@@ -67,7 +67,7 @@
                        class="img-wrapper">
                     <img :id="'img'+item.TokenId"
                          :src="item.Image"
-                         :onload="showVideo(item.TokenId)" />
+                         :onerror="defaultImg" />
                     <video :id="'video'+item.TokenId"
                            :src="item.Image"
                            controls="controls">
@@ -194,6 +194,7 @@ export default {
       assetsName: '',
       searchTokenID: '',
       itemLoading: false,
+      defaultImg: 'this.src="'.concat(require('../../assets/svg/back.svg'), '"')
     };
   },
   computed: {
@@ -390,18 +391,30 @@ export default {
   },
   methods: {
     showVideo ($id) {
-      console.log($id)
+      console.log($id.concat('error'))
       let id1 = 'img'
       id1 = id1.concat($id)
       let id2 = 'video'
       id2 = id2.concat($id)
-      /*       if (document.getElementById(id1)) {
-              debugger
-              document.getElementById(id1).style.display = "none"
-            }
-            if (document.getElementById(id2)) {
-              document.getElementById(id2).style.display = "block"
-            } */
+      if (document.getElementById(id1)) {
+        document.getElementById(id1).style.display = "none"
+      }
+      if (document.getElementById(id2)) {
+        document.getElementById(id2).style.display = "block"
+      }
+    },
+    showImg ($id) {
+      console.log($id.concat('done'))
+      let id1 = 'img'
+      id1 = id1.concat($id)
+      let id2 = 'video'
+      id2 = id2.concat($id)
+      if (document.getElementById(id1)) {
+        document.getElementById(id1).style.display = "block"
+      }
+      if (document.getElementById(id2)) {
+        document.getElementById(id2).style.display = "none"
+      }
     },
     handleCurrentChange (val) {
       this.currentPage = val
