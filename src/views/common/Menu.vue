@@ -1,11 +1,11 @@
 <template>
   <div class="menu">
-    <CLink href="/"
+    <CLink :to="{ name: 'home' }"
            :class="$route.name == 'home' ? 'active item': 'item'"
            target="_self">
       {{ $t('common.menu.token') }}
     </CLink>
-    <CLink href="/nft"
+    <CLink :to="{ name: 'nft' }"
            :class="$route.name == 'nft' ? 'active item': 'item'"
            target="_self">
       {{ $t('common.menu.nft') }}
