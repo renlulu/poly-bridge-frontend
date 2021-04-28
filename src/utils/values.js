@@ -180,7 +180,10 @@ export const TOKEN_BASIC_ICONS = {
   CC: require('@/assets/png/ccswap.png'),
   PLF: require('@/assets/png/plf.png'),
   ISM: require('@/assets/jpg/ism.jpg'),
+  BBANK: require('@/assets/jpg/bbank.jpg'),
   DOWS: require('@/assets/svg/shadows.svg'),
+  PLUT: require('@/assets/svg/plut.svg'),
+  mBTM: require('@/assets/svg/mbtm.svg'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
