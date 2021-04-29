@@ -69,6 +69,9 @@
                          :src="item.Image"
                          :onerror="defaultImg" />
                     <video :id="'video'+item.TokenId"
+                           autoplay="autoplay"
+                           loop="loop"
+                           muted="muted"
                            :src="item.Image">
                       您的浏览器不支持 video 标签。
                     </video>
