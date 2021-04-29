@@ -69,8 +69,10 @@
                          :src="item.Image"
                          :onerror="defaultImg" />
                     <video :id="'video'+item.TokenId"
-                           :src="item.Image"
-                           controls="controls">
+                           autoplay="autoplay"
+                           loop="loop"
+                           muted="muted"
+                           :src="item.Image">
                       您的浏览器不支持 video 标签。
                     </video>
                   </div>
@@ -917,14 +919,21 @@ export default {
           height: 100%;
           background-color: #000000;
           text-align: center;
+          position: relative;
           img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-position: 50% 50%;
             object-fit: contain;
+            z-index: 10;
           }
           video {
-            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-position: 50% 50%;
