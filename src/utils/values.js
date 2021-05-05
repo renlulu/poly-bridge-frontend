@@ -185,6 +185,7 @@ export const TOKEN_BASIC_ICONS = {
   DOWS: require('@/assets/svg/shadows.svg'),
   PLUT: require('@/assets/svg/plut.svg'),
   mBTM: require('@/assets/svg/mbtm.svg'),
+  LEV: require('@/assets/svg/lev.svg'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
