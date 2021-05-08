@@ -455,10 +455,11 @@ export default {
       try {
         this.approving = true;
         const walletApi = await getWalletApi(this.fromWallet.name);
-        const InfinityAmount = await walletApi.getTotalSupply({
+        const totalSupply = await walletApi.getTotalSupply({
           chainId: this.fromChainId,
           tokenHash: this.fromToken.hash
         });
+        const InfinityAmount = totalSupply > 0 ? totalSupply : 9999999999999
         if (!new BigNumber(this.allowance).isZero()) {
           await walletApi.approve({
             chainId: this.fromChainId,
