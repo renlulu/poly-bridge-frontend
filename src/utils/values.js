@@ -52,6 +52,9 @@ export const CHAINS = [
     explorerUrl: TARGET_MAINNET
       ? 'http://explorer.poly.network/tx/{txHash}'
       : 'http://explorer.poly.network/testnet/tx/{txHash}',
+    nftexplorerUrl: TARGET_MAINNET
+      ? 'http://explorer.poly.network/nfttx/{txHash}'
+      : 'http://explorer.poly.network/testnet/nfttx/{txHash}',
   },
   {
     id: ChainId.Eth,
@@ -59,11 +62,14 @@ export const CHAINS = [
     explorerUrl: TARGET_MAINNET
       ? 'https://etherscan.io/tx/0x{txHash}'
       : 'https://ropsten.etherscan.io/tx/0x{txHash}',
+    nftexplorerUrl: TARGET_MAINNET
+      ? 'https://etherscan.io/tx/0x{txHash}'
+      : 'https://ropsten.etherscan.io/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
       ? '0x2aA63cd0b28FB4C31fA8e4E95Ec11815Be07b9Ac'
       : '0xe498fb7D00468a67A79dE5D4Ca264d3350165280',
     nftLockContractHash: TARGET_MAINNET
-      ? '0x940300dc3Fc26e3A330a300be766184C0b5Fe019'
+      ? '0xe5204d62361A353C665668C858Ea213070CA159c'
       : '0x940300dc3Fc26e3A330a300be766184C0b5Fe019',
     nftFeeContractHash: '0000000000000000000000000000000000000000',
     nftFeeName: 'ETH'
@@ -84,11 +90,14 @@ export const CHAINS = [
     explorerUrl: TARGET_MAINNET
       ? 'https://bscscan.com/tx/0x{txHash}'
       : 'https://testnet.bscscan.com/tx/0x{txHash}',
+    nftexplorerUrl: TARGET_MAINNET
+      ? 'https://bscscan.com/tx/0x{txHash}'
+      : 'https://testnet.bscscan.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
       ? '0xE3D0FB6E3cB5DA61EB18b06D035052441009d1E6'
       : '0xCed7997C3e807Fcdc5ac18fFC0B8af93a15a9eE5',
     nftLockContractHash: TARGET_MAINNET
-      ? '0x61E289D43C1FEA7598786557A2F309979ad144D3'
+      ? '0xe2bD9dD8FAF5C4C2087Ab82eC7E63F619CcAa152'
       : '0x61E289D43C1FEA7598786557A2F309979ad144D3',
     nftFeeContractHash: '0000000000000000000000000000000000000000',
     nftFeeName: 'BNB'
@@ -99,11 +108,14 @@ export const CHAINS = [
     explorerUrl: TARGET_MAINNET
       ? 'https://hecoinfo.com/tx/0x{txHash}'
       : 'https://testnet.hecoinfo.com/tx/0x{txHash}',
+    nftexplorerUrl: TARGET_MAINNET
+      ? 'https://hecoinfo.com/tx/0x{txHash}'
+      : 'https://testnet.hecoinfo.com/tx/0x{txHash}',
     lockContractHash: TARGET_MAINNET
       ? '0x4fE451186c0D69205ACc1fA00FD75fc6d71e47eE'
       : '0x3c92F1E31aACA43Eb4fF8aE498C7E85618680F45',
     nftLockContractHash: TARGET_MAINNET
-      ? '0xbaBaAF5CF7f63437755aAAFE7a4106463c5cD540'
+      ? '0xe2bD9dD8FAF5C4C2087Ab82eC7E63F619CcAa152'
       : '0xbaBaAF5CF7f63437755aAAFE7a4106463c5cD540',
     nftFeeContractHash: '0000000000000000000000000000000000000000',
     nftFeeName: 'HT'
@@ -167,7 +179,13 @@ export const TOKEN_BASIC_ICONS = {
   STACK: require('@/assets/png/stack.png'),
   CC: require('@/assets/png/ccswap.png'),
   PLF: require('@/assets/png/plf.png'),
+  TSX: require('@/assets/png/tsx.png'),
   ISM: require('@/assets/jpg/ism.jpg'),
+  BBANK: require('@/assets/jpg/bbank.jpg'),
+  DOWS: require('@/assets/svg/shadows.svg'),
+  PLUT: require('@/assets/svg/plut.svg'),
+  mBTM: require('@/assets/svg/mbtm.svg'),
+  LEV: require('@/assets/svg/lev.svg'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
