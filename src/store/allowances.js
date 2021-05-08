@@ -11,12 +11,12 @@ export default {
       state.allowanceMap[getStoreKey({ chainId, address, tokenHash, spender })],
   },
   mutations: {
-    setAllowance(state, { params, value }) {
+    setAllowance (state, { params, value }) {
       Vue.set(state.allowanceMap, getStoreKey(params), value);
     },
   },
   actions: {
-    async getAllowance({ getters, commit }, { chainId, address, tokenHash, spender }) {
+    async getAllowance ({ getters, commit }, { chainId, address, tokenHash, spender }) {
       const wallet = getters.getChainConnectedWallet(chainId);
       let allowance = null;
       if (wallet) {

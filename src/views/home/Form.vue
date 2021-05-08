@@ -451,10 +451,14 @@ export default {
     },
     async approve () {
       await this.$store.dispatch('ensureChainWalletReady', this.fromChainId);
-      const InfinityAmount = 9999999999999
+      // const InfinityAmount = 9999999999999
       try {
         this.approving = true;
         const walletApi = await getWalletApi(this.fromWallet.name);
+        const InfinityAmount = await walletApi.getTotalSupply({
+          chainId: this.fromChainId,
+          tokenHash: this.fromToken.hash
+        });
         if (!new BigNumber(this.allowance).isZero()) {
           await walletApi.approve({
             chainId: this.fromChainId,
