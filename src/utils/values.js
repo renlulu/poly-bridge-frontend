@@ -44,6 +44,16 @@ export const WALLETS = [
     downloadUrl:
       'https://chrome.google.com/webstore/detail/cyano-wallet/dkdedlpgdmmkkfjabffeganieamfklkm',
   },
+  ...(TARGET_MAINNET
+    ? [
+        {
+          name: WalletName.WalletConnect,
+          supportedChainIds: [ChainId.Eth],
+          icon: require('@/assets/svg/wallet-connect.svg'),
+          downloadUrl: 'https://walletconnect.org/wallets',
+        },
+      ]
+    : []),
 ];
 
 export const CHAINS = [
@@ -72,7 +82,7 @@ export const CHAINS = [
       ? '0xe5204d62361A353C665668C858Ea213070CA159c'
       : '0x940300dc3Fc26e3A330a300be766184C0b5Fe019',
     nftFeeContractHash: '0000000000000000000000000000000000000000',
-    nftFeeName: 'ETH'
+    nftFeeName: 'ETH',
   },
   {
     id: ChainId.Neo,
@@ -100,7 +110,7 @@ export const CHAINS = [
       ? '0xe2bD9dD8FAF5C4C2087Ab82eC7E63F619CcAa152'
       : '0x61E289D43C1FEA7598786557A2F309979ad144D3',
     nftFeeContractHash: '0000000000000000000000000000000000000000',
-    nftFeeName: 'BNB'
+    nftFeeName: 'BNB',
   },
   {
     id: ChainId.Heco,
@@ -118,7 +128,7 @@ export const CHAINS = [
       ? '0xe2bD9dD8FAF5C4C2087Ab82eC7E63F619CcAa152'
       : '0xbaBaAF5CF7f63437755aAAFE7a4106463c5cD540',
     nftFeeContractHash: '0000000000000000000000000000000000000000',
-    nftFeeName: 'HT'
+    nftFeeName: 'HT',
   },
   {
     id: ChainId.Ont,

@@ -11,6 +11,7 @@ const APIS = {
   [WalletName.O3]: () => import('./o3'),
   [WalletName.Binance]: () => import('./binance'),
   [WalletName.Cyano]: () => import('./cyano'),
+  [WalletName.WalletConnect]: () => import('./walletConnect'),
 };
 
 export async function getWalletApi (walletName) {

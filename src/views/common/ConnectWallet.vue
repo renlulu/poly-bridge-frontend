@@ -2,37 +2,35 @@
 <template>
   <CCard>
     <div class="content">
-      <div class="chains"
-           v-if="$route.name == 'home'">
-        <CButton v-for="chain in chains"
-                 :key="chain.id"
-                 class="chain"
-                 :class="{ selected: chainIdWithDefault === chain.id }"
-                 @click="chainId = chain.id"
-                 @mouseover="chainId = chain.id">
-          <img class="chain-icon"
-               :src="chain.icon" />
+      <div class="chains" v-if="$route.name == 'home'">
+        <CButton
+          v-for="chain in chains"
+          :key="chain.id"
+          class="chain"
+          :class="{ selected: chainIdWithDefault === chain.id }"
+          @click="chainId = chain.id"
+          @mouseover="chainId = chain.id"
+        >
+          <img class="chain-icon" :src="chain.icon" />
         </CButton>
       </div>
-      <div class="chains"
-           v-if="$route.name == 'nft'">
-        <CButton v-for="chain in nftChains"
-                 :key="chain.id"
-                 class="chain"
-                 :class="{ selected: chainIdWithDefault === chain.id }"
-                 @click="chainId = chain.id"
-                 @mouseover="chainId = chain.id">
-          <img class="chain-icon"
-               :src="chain.icon" />
+      <div class="chains" v-if="$route.name == 'nft'">
+        <CButton
+          v-for="chain in nftChains"
+          :key="chain.id"
+          class="chain"
+          :class="{ selected: chainIdWithDefault === chain.id }"
+          @click="chainId = chain.id"
+          @mouseover="chainId = chain.id"
+        >
+          <img class="chain-icon" :src="chain.icon" />
         </CButton>
       </div>
 
       <CDivider direction="vertical" />
 
-      <transition name="fade"
-                  mode="out-in">
-        <div class="wallets"
-             :key="chain.id">
+      <transition name="fade" mode="out-in">
+        <div class="wallets" :key="chain.id">
           <div class="chain-name">
             {{
               $t('common.connectWallet.chainName', {
@@ -40,12 +38,9 @@
               })
             }}
           </div>
-          <div v-for="wallet in chainWallets"
-               :key="wallet.name">
-            <div v-if="wallet.connected && wallet.name === chain.selectedWalletName"
-                 class="wallet">
-              <img class="wallet-icon"
-                   :src="wallet.icon" />
+          <div v-for="wallet in chainWallets" :key="wallet.name">
+            <div v-if="wallet.connected && wallet.name === chain.selectedWalletName" class="wallet">
+              <img class="wallet-icon" :src="wallet.icon" />
               <span class="wallet-name">
                 {{
                   $t('common.connectWallet.walletConnected', {
@@ -54,9 +49,7 @@
                 }}
               </span>
             </div>
-            <CButton v-else
-                     class="connect"
-                     @click="connect(chain, wallet)">
+            <CButton v-else class="connect" @click="connect(chain, wallet)">
               <span class="wallet-name">
                 {{
                   $t('common.connectWallet.connectWallet', {
@@ -64,8 +57,7 @@
                   })
                 }}
               </span>
-              <img class="wallet-icon"
-                   :src="wallet.icon" />
+              <img class="wallet-icon" :src="wallet.icon" />
             </CButton>
           </div>
         </div>
@@ -80,30 +72,32 @@ import { getWalletApi } from '@/utils/walletApi';
 
 export default {
   name: 'ConnectWallet',
-  data () {
+  data() {
     return {
       chainId: 0,
     };
   },
   computed: {
-    chains () {
+    chains() {
       return this.$store.getters.chains.filter(chain => chain.id !== ChainId.Poly);
     },
-    nftChains () {
-      return this.$store.getters.chains.filter(chain => chain.id !== ChainId.Poly && chain.id !== ChainId.Ont && chain.id !== ChainId.Neo);
+    nftChains() {
+      return this.$store.getters.chains.filter(
+        chain => chain.id !== ChainId.Poly && chain.id !== ChainId.Ont && chain.id !== ChainId.Neo,
+      );
     },
-    chainIdWithDefault () {
+    chainIdWithDefault() {
       return this.chainId ? this.chainId : this.chains[0].id;
     },
-    chain () {
+    chain() {
       return this.$store.getters.getChain(this.chainIdWithDefault);
     },
-    chainWallets () {
+    chainWallets() {
       return this.$store.getters.getWalletsByChainId(this.chainIdWithDefault);
     },
   },
   methods: {
-    async connect (chain, wallet) {
+    async connect(chain, wallet) {
       if (wallet.installed) {
         if (!wallet.connected) {
           const walletApi = await getWalletApi(wallet.name);
@@ -124,6 +118,7 @@ export default {
 <style lang="scss" scoped>
 .content {
   display: flex;
+  min-width: 310px;
 }
 
 .chains {
@@ -146,6 +141,7 @@ export default {
 .wallets {
   display: flex;
   flex-direction: column;
+  flex: 1;
   padding: 20px;
   @include child-margin-v(16px);
 }
@@ -180,7 +176,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  min-width: 167px;
+  width: 100%;
   height: 34px;
   padding: 0px 15px;
   border-radius: 4px;

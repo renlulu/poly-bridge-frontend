@@ -6,6 +6,7 @@ export const WalletName = {
   O3: 'O3',
   Binance: 'Binance',
   Cyano: 'Cyano',
+  WalletConnect: 'WalletConnnect',
 };
 
 export const ChainId = {

@@ -17,7 +17,7 @@ export default {
     },
     menu: {
       token: 'Token Asset',
-      nft: 'NFT Asset'
+      nft: 'NFT Asset',
     },
     connectWallet: {
       chainName: '{chainName} Wallet',
@@ -48,7 +48,8 @@ export default {
       connectWallet: 'Connect Wallet',
       historyPrefix: 'You can view your',
       historyLink: 'history',
-      approveInfinitytip: 'After checking, approve the infinite token usage, this behavior may be risky, please judge according to the actual situation',
+      approveInfinitytip:
+        'After checking, approve the infinite token usage, this behavior may be risky, please judge according to the actual situation',
       approveInfinity: 'Approve Infinity',
     },
     selectTokenBasic: {
@@ -82,8 +83,8 @@ export default {
       chain: 'Chain',
       items: 'Items',
       search: 'Search',
-      result: 'results'
-    }
+      result: 'results',
+    },
   },
   transactions: {
     index: {
@@ -129,6 +130,7 @@ export default {
       [WalletName.O3]: 'O3',
       [WalletName.Binance]: 'Binance',
       [WalletName.Cyano]: 'Cyano',
+      [WalletName.WalletConnect]: 'WalletConnect',
     },
     chainName: {
       [ChainId.Poly]: 'Poly',
