@@ -8,6 +8,8 @@ import { WalletError } from '@/utils/errors';
 import { TARGET_MAINNET } from '@/utils/env';
 import { tryToConvertAddressToHex } from '.';
 
+const NFT_FEE_TOKEN_HASH = '0x0000000000000000000000000000000000000000';
+
 const NETWORK_CHAIN_ID_MAPS = {
   [TARGET_MAINNET ? 1 : 3]: ChainId.Eth,
 };
@@ -159,6 +161,20 @@ async function getAllowance({ chainId, address, tokenHash, spender }) {
   }
 }
 
+async function getTotalSupply({ chainId, tokenHash }) {
+  try {
+    const tokenBasic = store.getters.getTokenBasicByChainIdAndTokenHash({ chainId, tokenHash });
+    if (tokenHash === '0000000000000000000000000000000000000000') {
+      return null;
+    }
+    const tokenContract = new web3.eth.Contract(require('@/assets/json/eth-erc20.json'), tokenHash);
+    const result = await tokenContract.methods.totalSupply().call();
+    return integerToDecimal(result, tokenBasic.decimals);
+  } catch (error) {
+    throw convertWalletError(error);
+  }
+}
+
 async function getTransactionStatus({ transactionHash }) {
   try {
     const transactionReceipt = await web3.eth.getTransactionReceipt(`0x${transactionHash}`);
@@ -181,6 +197,36 @@ async function approve({ chainId, address, tokenHash, spender, amount }) {
     return await tokenContract.methods.approve(`0x${spender}`, amountInt).send({
       from: address,
     });
+  } catch (error) {
+    throw convertWalletError(error);
+  }
+}
+
+async function nftApprove({ address, tokenHash, spender, id }) {
+  try {
+    const tokenID = decimalToInteger(id, 0);
+    const tokenContract = new web3.eth.Contract(
+      require('@/assets/json/eth-erc721.json'),
+      tokenHash,
+    );
+    return await tokenContract.methods.approve(spender, tokenID).send({
+      from: address,
+    });
+  } catch (error) {
+    throw convertWalletError(error);
+  }
+}
+
+async function getNFTApproved({ fromChainId, tokenHash, id }) {
+  try {
+    const chain = store.getters.getChain(fromChainId);
+    const tokenID = decimalToInteger(id, 0);
+    const tokenContract = new web3.eth.Contract(
+      require('@/assets/json/eth-erc721.json'),
+      tokenHash,
+    );
+    const result = await tokenContract.methods.getApproved(tokenID).call();
+    return !(result === chain.nftLockContractHash);
   } catch (error) {
     throw convertWalletError(error);
   }
@@ -226,6 +272,41 @@ async function lock({
   }
 }
 
+async function nftLock({ fromChainId, fromAddress, fromTokenHash, toChainId, toAddress, id, fee }) {
+  try {
+    const chain = store.getters.getChain(fromChainId);
+
+    const lockContract = new web3.eth.Contract(
+      require('@/assets/json/eth-nft-lock.json'),
+      chain.nftLockContractHash,
+    );
+    const toChainApi = await getChainApi(toChainId);
+    const toAddressHex = toChainApi.addressToHex(toAddress);
+    const tokenID = decimalToInteger(id, 0);
+    const feeInt = decimalToInteger(fee, 18);
+
+    const result = await confirmLater(
+      lockContract.methods
+        .lock(
+          `0x${fromTokenHash}`,
+          toChainId,
+          `0x${toAddressHex}`,
+          tokenID,
+          NFT_FEE_TOKEN_HASH,
+          feeInt,
+          0,
+        )
+        .send({
+          from: fromAddress,
+          value: feeInt,
+        }),
+    );
+    return toStandardHex(result);
+  } catch (error) {
+    throw convertWalletError(error);
+  }
+}
+
 export default {
   install: init,
   connect,
@@ -234,4 +315,8 @@ export default {
   getTransactionStatus,
   approve,
   lock,
+  nftLock,
+  nftApprove,
+  getTotalSupply,
+  getNFTApproved,
 };
