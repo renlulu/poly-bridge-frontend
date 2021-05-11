@@ -181,6 +181,7 @@ export const TOKEN_BASIC_ICONS = {
   PLF: require('@/assets/png/plf.png'),
   TSX: require('@/assets/png/tsx.png'),
   O3: require('@/assets/png/o3.png'),
+  KISHU: require('@/assets/png/kishu.png'),
   ISM: require('@/assets/jpg/ism.jpg'),
   BBANK: require('@/assets/jpg/bbank.jpg'),
   DOWS: require('@/assets/svg/shadows.svg'),
