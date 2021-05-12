@@ -190,6 +190,7 @@ export const TOKEN_BASIC_ICONS = {
   LEV: require('@/assets/svg/lev.svg'),
   XTM: require('@/assets/svg/xtm.svg'),
   XTF: require('@/assets/svg/xtf.svg'),
+  TAP: require('@/assets/svg/tap.svg'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
 };
 
