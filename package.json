@@ -13,6 +13,7 @@
   "dependencies": {
     "@cityofzion/neon-js": "^4.8.1",
     "@ont-dev/ontology-dapi": "^0.5.7",
+    "@zilliqa-js/zilliqa": "^2.3.0-alpha.0",
     "axios": "^0.20.0",
     "bignumber.js": "^9.0.0",
     "bn.js": "^5.1.3",

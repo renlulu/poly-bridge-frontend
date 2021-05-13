@@ -119,6 +119,7 @@ export default {
       [WalletName.O3]: 'O3',
       [WalletName.Binance]: 'Binance',
       [WalletName.Cyano]: 'Cyano',
+      [WalletName.ZilPay]: 'ZilPay'
     },
     chainName: {
       [ChainId.Poly]: 'Poly',
@@ -127,6 +128,7 @@ export default {
       [ChainId.Bsc]: 'BSC',
       [ChainId.Heco]: 'Heco',
       [ChainId.Ont]: 'Ontology',
+      [ChainId.Zil]: 'Zilliqa',
     },
     chainNetworkName: {
       [ChainId.Poly]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
@@ -135,6 +137,7 @@ export default {
       [ChainId.Bsc]: TARGET_MAINNET ? 'BSC MainNet' : 'BSC TestNet',
       [ChainId.Heco]: TARGET_MAINNET ? 'Heco MainNet' : 'Heco TestNet',
       [ChainId.Ont]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
+      [ChainId.Zil]: TARGET_MAINNET ? 'MainNet' : 'TestNet',
     },
     transactionStatus: {
       [TransactionStatus.Finished]: 'Finished',

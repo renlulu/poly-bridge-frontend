@@ -15,6 +15,7 @@ export const ChainId = {
   Neo: TARGET_MAINNET ? 4 : 5,
   Bsc: TARGET_MAINNET ? 6 : 79,
   Heco: 7,
+  Zilliqa: 110,
 };
 
 export const SingleTransactionStatus = {

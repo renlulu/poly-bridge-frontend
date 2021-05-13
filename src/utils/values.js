@@ -1,9 +1,14 @@
 import { WalletName, ChainId } from './enums';
 import { TARGET_MAINNET } from './env';
 
+// export const HTTP_BASE_URL = TARGET_MAINNET
+//   ? 'https://bridge.poly.network/v1'
+//   : 'https://bridge.poly.network/testnet/v1';
+
 export const HTTP_BASE_URL = TARGET_MAINNET
-  ? 'https://bridge.poly.network/v1'
-  : 'https://bridge.poly.network/testnet/v1';
+  ? 'http://localhost:8080/v1'
+  : 'http://localhost:8080/v1';
+
 
 export const HTTP_NFT_BASE_URL = TARGET_MAINNET
   ? 'https://bridge.poly.network/nft/v1'
