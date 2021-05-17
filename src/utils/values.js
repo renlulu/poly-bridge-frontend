@@ -52,7 +52,7 @@ export const WALLETS = [
   {
     name: WalletName.ZilPay,
     supportedChainIds: [ChainId.Zilliqa],
-    icon: require('@/assets/svg/ONT.svg'),
+    icon: require('@/assets/svg/zil.svg'),
     downloadUrl:
       'https://chrome.google.com/webstore/detail/zilpay/klnaejjgbibmhlephnhpmaofohgkpgkd',
   }
@@ -144,7 +144,7 @@ export const CHAINS = [
   },
   {
     id: ChainId.Zilliqa,
-    icon: require('@/assets/svg/ONT.svg'),
+    icon: require('@/assets/svg/zil.svg'),
     explorerUrl: TARGET_MAINNET
       ? 'https://viewblock.io/zilliqa/tx/{txHash}'
       : 'https://viewblock.io/zilliqa/tx/{txHash}?network=testnet',
@@ -214,6 +214,7 @@ export const TOKEN_BASIC_ICONS = {
   XTF: require('@/assets/svg/xtf.svg'),
   TAP: require('@/assets/svg/tap.svg'),
   '8PAY': require('@/assets/jpg/8pay.jpg'),
+  Zilliqa: require('@/assets/svg/zil.svg'),
 };
 
 export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';
