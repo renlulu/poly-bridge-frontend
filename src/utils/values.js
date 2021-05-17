@@ -49,6 +49,13 @@ export const WALLETS = [
     downloadUrl:
       'https://chrome.google.com/webstore/detail/cyano-wallet/dkdedlpgdmmkkfjabffeganieamfklkm',
   },
+  {
+    name: WalletName.ZilPay,
+    supportedChainIds: [ChainId.Zilliqa],
+    icon: require('@/assets/svg/ONT.svg'),
+    downloadUrl:
+      'https://chrome.google.com/webstore/detail/zilpay/klnaejjgbibmhlephnhpmaofohgkpgkd',
+  }
 ];
 
 export const CHAINS = [
@@ -135,6 +142,16 @@ export const CHAINS = [
       ? 'c93837e82178d406af8c84e1841c6960af251cb5'
       : 'a5c101afa9e04e9dd2c912983795005a49e02efa',
   },
+  {
+    id: ChainId.Zilliqa,
+    icon: require('@/assets/svg/ONT.svg'),
+    explorerUrl: TARGET_MAINNET
+      ? 'https://viewblock.io/zilliqa/tx/{txHash}'
+      : 'https://viewblock.io/zilliqa/tx/{txHash}?network=testnet',
+    lockContractHash: TARGET_MAINNET
+      ? '6f30b0a840e9f093267cfd57b80ca2ff691a7b86'
+      : '6f30b0a840e9f093267cfd57b80ca2ff691a7b86',
+  },
 ];
 
 export const UNKNOWN_ICON = require('@/assets/svg/unknown.svg');
@@ -202,4 +219,4 @@ export const TOKEN_BASIC_ICONS = {
 export const DEFAULT_TOKEN_BASIC_NAME = 'USDT';
 export const DEFAULT_CHAIN_NAME = 'ETH';
 
-export const TOP_TOKEN_BASIC_NAMES = ['NEO', 'nNEO', 'ETH', 'USDT', 'USDC', 'DAI'];
+export const TOP_TOKEN_BASIC_NAMES = ['NEO', 'nNEO', 'ETH', 'ZIL', 'USDT', 'USDC', 'DAI'];

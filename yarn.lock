@@ -2333,7 +2333,7 @@
     mock-socket "^9.0.2"
     websocket "^1.0.28"
 
-"@zilliqa-js/util@2.2.0":
+"@zilliqa-js/util@2.2.0", "@zilliqa-js/util@^2.2.0":
   version "2.2.0"
   resolved "https://registry.nlark.com/@zilliqa-js/util/download/@zilliqa-js/util-2.2.0.tgz#6f64adc5494596c93dd0eff566f830b316eba677"
   integrity sha1-b2StxUlFlsk90O/1Zvgwsxbrpnc=

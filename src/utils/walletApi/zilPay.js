@@ -1,4 +1,3 @@
-
 import store from '@/store';
 import { integerToDecimal, decimalToInteger, toStandardHex } from '@/utils/convertors';
 import { WalletError } from '@/utils/errors';
@@ -21,12 +20,13 @@ function convertWalletError (error) {
   }
 
 async function queryState () {
-    const defauleAccount = await window.zilPay.wallet.defauleAccount;
-    const checksumAddress = defauleAccount.base16;
+    const defaultAccount = await window.zilPay.wallet.defaultAccount;
+    console.log("default account: ", defaultAccount);
+    const checksumAddress = defaultAccount.base16;
     const addressHex = await tryToConvertAddressToHex(WalletName.ZilPay,checksumAddress);
     store.dispatch('updateWallet', {
         name: WalletName.ZilPay,
-        address: defauleAccount.base16,
+        address: defaultAccount.base16,
         addressHex,
         connected: !!checksumAddress,
         // todo wait zilpay expose chain id, so hard code here
