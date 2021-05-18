@@ -31,14 +31,12 @@ async function queryState () {
     const addressHex = await tryToConvertAddressToHex(WalletName.ZilPay,checksumAddress);
     const blockchainInfo = await window.zilPay.blockchain.getBlockChainInfo();
     const { url } = blockchainInfo.req;
-    console.log(url);
     store.dispatch('updateWallet', {
         name: WalletName.ZilPay,
         address: defaultAccount.base16,
         addressHex,
         connected: !!checksumAddress,
-        // todo wait zilpay expose chain id, so hard code here
-        chainId: 110,
+        chainId: NETWORK_CHAIN_ID_MAPS[url],
     });
 }
 
@@ -55,6 +53,8 @@ async function init () {
         }
 
         const accountStreamChanged = window.zilPay.wallet.observableAccount();
+        const blockchainInfo = await window.zilPay.blockchain.getBlockChainInfo();
+        const { url } = blockchainInfo.req;
         accountStreamChanged.subscribe(async account => {
             const checksumAddress = account.base16;
             const addressHex = await tryToConvertAddressToHex(WalletName.ZILPay, checksumAddress);
@@ -63,8 +63,7 @@ async function init () {
                 address: account.base16,
                 addressHex,
                 connected: !!checksumAddress,
-                // todo wait zilpay expose chain id, so hard code here
-                chainId: 110,
+                chainId: NETWORK_CHAIN_ID_MAPS[url]
             });
         });
 
@@ -167,7 +166,7 @@ async function lock ({
         const amountInt = decimalToInteger(amount, tokenBasic.decimals);
         const zeroAmount = web3.utils.units.toQa(0, web3.utils.units.Units.Zil);
         const feeInt = decimalToInteger(fee, tokenBasic.decimals);
-        const tx = await lockProxy.call(
+        const result = await lockProxy.call(
             'lock',
             [
                 {
@@ -197,11 +196,13 @@ async function lock ({
                 gasLimit: window.zilPay.utils.Long.fromNumber(50000)
             },
             true
-        );
+        ).then(([tx,contract]) => {
+            // todo should I return any value here, and where it will come?
+            console.log('tx: ',tx);
+        });
       } catch (error) {
         throw convertWalletError(error);
       }
-      
   }
 
 

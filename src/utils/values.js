@@ -149,8 +149,8 @@ export const CHAINS = [
       ? 'https://viewblock.io/zilliqa/tx/{txHash}'
       : 'https://viewblock.io/zilliqa/tx/{txHash}?network=testnet',
     lockContractHash: TARGET_MAINNET
-      ? '6f30b0a840e9f093267cfd57b80ca2ff691a7b86'
-      : '6f30b0a840e9f093267cfd57b80ca2ff691a7b86',
+      ? 'ff9d8d6fad9a3853a6203aebe3e5e55e1f3c13da'
+      : 'ff9d8d6fad9a3853a6203aebe3e5e55e1f3c13da',
   },
 ];
 
